@@ -139,3 +139,93 @@ $(document).on('click', '.step-tab', function() {
     currentStep = parseInt($(this).data('step'));
     updateStepUI();
 });
+
+// Widget tab click
+$(document).on('click', '.widget-tab', function() {
+    const tab = $(this).data('tab');
+    $('.widget-tab').removeClass('text-accent-600 border-accent-500 bg-accent-50').addClass('text-slate-500');
+    $(this).removeClass('text-slate-500').addClass('text-accent-600 border-accent-500 bg-accent-50');
+    $('.widget-tab-content').addClass('hidden');
+    $('#widget-tab-' + tab).removeClass('hidden');
+});
+
+// Test Chat Panel
+function openTestChat(assistantId, assistantName) {
+    $('#testChatPanel').removeClass('translate-x-full');
+    $('#testChatOverlay').removeClass('hidden');
+}
+
+function closeTestChat() {
+    $('#testChatPanel').addClass('translate-x-full');
+    $('#testChatOverlay').addClass('hidden');
+}
+
+function sendTestMessage() {
+    const input = $('#testChatInput');
+    const message = input.val().trim();
+    if (!message) return;
+
+    const messagesContainer = $('#testChatMessages');
+
+    // Add user message
+    messagesContainer.append(`
+        <div class="flex items-start gap-3 justify-end">
+            <div class="bg-accent-500 rounded-lg p-3 max-w-[80%]">
+                <p class="text-sm text-white">${message}</p>
+            </div>
+            <div class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-user text-slate-500 text-sm"></i>
+            </div>
+        </div>
+    `);
+
+    input.val('');
+    messagesContainer.scrollTop(messagesContainer[0].scrollHeight);
+
+    // Simulate AI response (in real implementation, this would call the API)
+    setTimeout(() => {
+        messagesContainer.append(`
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-accent-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-accent-600 text-sm"></i>
+                </div>
+                <div class="bg-slate-100 rounded-lg p-3 max-w-[80%]">
+                    <p class="text-sm text-slate-700">Mulțumesc pentru mesaj! Un operator va reveni cu un răspuns în curând.</p>
+                </div>
+            </div>
+        `);
+        messagesContainer.scrollTop(messagesContainer[0].scrollHeight);
+    }, 1000);
+}
+
+// Enter key for test chat
+$(document).on('keypress', '#testChatInput', function(e) {
+    if (e.which === 13) {
+        sendTestMessage();
+    }
+});
+
+// Modal functions for new pages
+function openKBModal() {
+    alert('Knowledge Base modal - to be implemented');
+}
+
+function openWASenderModal() {
+    alert('WhatsApp Sender modal - to be implemented');
+}
+
+function openWATemplateModal() {
+    alert('WhatsApp Template modal - to be implemented');
+}
+
+function openPhoneModal() {
+    alert('Phone Number modal - to be implemented');
+}
+
+function openWebhookModal() {
+    alert('Webhook modal - to be implemented');
+}
+
+function openCustomDashboardModal() {
+    alert('Custom Dashboard builder - to be implemented');
+}

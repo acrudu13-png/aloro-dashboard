@@ -96,6 +96,38 @@
                 <i class="fas fa-bullhorn w-4 text-slate-400 text-sm"></i>
                 <span class="nav-text text-sm font-medium">Campaigns</span>
             </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="conversations">
+                <i class="fas fa-comments w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Conversations</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="knowledge-bases">
+                <i class="fas fa-database w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Knowledge Bases</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="custom-dashboards">
+                <i class="fas fa-layer-group w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Custom Dashboards</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="phone-numbers">
+                <i class="fas fa-sim-card w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Phone Numbers</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="whatsapp-senders">
+                <i class="fab fa-whatsapp w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">WhatsApp Senders</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="whatsapp-templates">
+                <i class="fas fa-file-alt w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">WhatsApp Templates</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="web-widget">
+                <i class="fas fa-code w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Web Widget</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="post-call-webhooks">
+                <i class="fas fa-link w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Post-call Webhooks</span>
+            </a>
         </div>
         <div class="mt-4 pt-4 border-t border-slate-100 sidebar-section">
             <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Configuration</p>
@@ -519,7 +551,11 @@
                     </div>
                     <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
                         <span class="text-xs text-slate-400">847 calls · Updated 2d ago</span>
-                        <button onclick="openAssistantModal('debt')" class="text-accent-600 text-sm font-medium hover:underline">Edit</button>
+                        <div class="flex items-center gap-3">
+                            <button onclick="event.stopPropagation(); openTestChat('debt', 'Debt Collection')" class="text-green-600 text-xs font-medium hover:underline"><i class="fas fa-comment-alt mr-1"></i>Test Chat</button>
+                            <button onclick="event.stopPropagation()" class="text-purple-600 text-xs font-medium hover:underline"><i class="fas fa-code mr-1"></i>Widget</button>
+                            <button onclick="event.stopPropagation(); openAssistantModal('debt')" class="text-accent-600 text-xs font-medium hover:underline">Edit</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -549,7 +585,11 @@
                     </div>
                     <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
                         <span class="text-xs text-slate-400">312 calls · Updated 1w ago</span>
-                        <button onclick="openAssistantModal('sales')" class="text-accent-600 text-sm font-medium hover:underline">Edit</button>
+                        <div class="flex items-center gap-3">
+                            <button onclick="event.stopPropagation(); openTestChat('sales', 'Sales Outreach')" class="text-green-600 text-xs font-medium hover:underline"><i class="fas fa-comment-alt mr-1"></i>Test Chat</button>
+                            <button onclick="event.stopPropagation()" class="text-purple-600 text-xs font-medium hover:underline"><i class="fas fa-code mr-1"></i>Widget</button>
+                            <button onclick="event.stopPropagation(); openAssistantModal('sales')" class="text-accent-600 text-xs font-medium hover:underline">Edit</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -739,11 +779,1079 @@
             <p class="text-sm text-slate-500 mb-5">Create and manage outbound calling campaigns</p>
             <button class="bg-accent-500 text-white px-5 py-2 rounded-lg text-sm font-medium">Create Campaign</button>
         </div>
+
+    <!-- Conversations Page -->
+    <div id="page-conversations" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Conversations</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Text-based interactions from all channels</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <select class="bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600">
+                    <option>All Sources</option>
+                    <option>Test Chat</option>
+                    <option>Web Widget</option>
+                    <option>WhatsApp</option>
+                </select>
+                <button class="bg-white border border-slate-200 text-slate-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-50">
+                    <i class="fas fa-download mr-2"></i>Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Total Conversations</p>
+                <p class="text-xl font-semibold text-slate-800 mt-1">487</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Test Chat</p>
+                <p class="text-xl font-semibold text-orange-600 mt-1">124</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Web Widget</p>
+                <p class="text-xl font-semibold text-purple-600 mt-1">203</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">WhatsApp</p>
+                <p class="text-xl font-semibold text-green-600 mt-1">160</p>
+            </div>
+        </div>
+
+        <!-- Conversations List -->
+        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Source</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Customer</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Assistant</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Messages</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tokens</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-20"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row border-t border-slate-50 cursor-pointer">
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded"><i class="fab fa-whatsapp mr-1"></i>WhatsApp</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">+40 722 123 456</td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4 text-sm text-slate-700">12</td>
+                        <td class="py-3 px-4 text-sm text-slate-500">1,234</td>
+                        <td class="py-3 px-4 text-sm text-slate-500">Today, 14:22</td>
+                        <td class="py-3 px-4"><button class="text-accent-600 text-sm hover:underline">View</button></td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50 cursor-pointer">
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-xs font-medium rounded"><i class="fas fa-code mr-1"></i>Web Widget</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">Visitor #4521</td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Sales Outreach</td>
+                        <td class="py-3 px-4 text-sm text-slate-700">8</td>
+                        <td class="py-3 px-4 text-sm text-slate-500">892</td>
+                        <td class="py-3 px-4 text-sm text-slate-500">Today, 11:45</td>
+                        <td class="py-3 px-4"><button class="text-accent-600 text-sm hover:underline">View</button></td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50 cursor-pointer">
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-orange-50 text-orange-700 text-xs font-medium rounded"><i class="fas fa-flask mr-1"></i>Test Chat</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">Internal Test</td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4 text-sm text-slate-700">5</td>
+                        <td class="py-3 px-4 text-sm text-slate-500">456</td>
+                        <td class="py-3 px-4 text-sm text-slate-500">Yesterday, 16:30</td>
+                        <td class="py-3 px-4"><button class="text-accent-600 text-sm hover:underline">View</button></td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50 cursor-pointer">
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded"><i class="fab fa-whatsapp mr-1"></i>WhatsApp</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">+40 733 987 654</td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4 text-sm text-slate-700">18</td>
+                        <td class="py-3 px-4 text-sm text-slate-500">2,103</td>
+                        <td class="py-3 px-4 text-sm text-slate-500">Feb 22, 09:15</td>
+                        <td class="py-3 px-4"><button class="text-accent-600 text-sm hover:underline">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="px-4 py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+                <p class="text-sm text-slate-500">Showing 4 of 487 conversations</p>
+                <div class="flex items-center gap-1">
+                    <button class="px-2.5 py-1 text-sm text-slate-500 hover:bg-white rounded"><i class="fas fa-chevron-left"></i></button>
+                    <button class="px-2.5 py-1 text-sm text-accent-600 bg-white rounded font-medium">1</button>
+                    <button class="px-2.5 py-1 text-sm text-slate-500 hover:bg-white rounded">2</button>
+                    <button class="px-2.5 py-1 text-sm text-slate-500 hover:bg-white rounded">3</button>
+                    <button class="px-2.5 py-1 text-sm text-slate-500 hover:bg-white rounded"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
 
-</main>
+    <!-- Knowledge Bases Page -->
+    <div id="page-knowledge-bases" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Knowledge Bases</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Document and website indexing for AI reference</p>
+            </div>
+            <button onclick="openKBModal()" class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                <i class="fas fa-plus mr-2"></i>New Knowledge Base
+            </button>
+        </div>
 
-<!-- Assistant Creation/Edit Modal -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Product Documentation KB -->
+            <div class="card-hover bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-book text-green-600"></i>
+                        </div>
+                        <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">Product Documentation</h3>
+                    <p class="text-sm text-slate-500 mb-3">FAQs, policies, procedures</p>
+                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 mb-3">
+                        <span><i class="fas fa-file-alt mr-1"></i>12 documents</span>
+                        <span><i class="fas fa-link mr-1"></i>3 URLs</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">Updated 2 days ago</span>
+                        <div class="flex items-center gap-2">
+                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-edit text-sm"></i></button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debt Collection Scripts KB -->
+            <div class="card-hover bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-contract text-blue-600"></i>
+                        </div>
+                        <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">Debt Collection Scripts</h3>
+                    <p class="text-sm text-slate-500 mb-3">Legal scripts and compliance docs</p>
+                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 mb-3">
+                        <span><i class="fas fa-file-alt mr-1"></i>8 documents</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">Updated 1 week ago</span>
+                        <div class="flex items-center gap-2">
+                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-edit text-sm"></i></button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Processing KB -->
+            <div class="card-hover bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-hourglass-half text-amber-600"></i>
+                        </div>
+                        <span class="px-2 py-0.5 bg-amber-50 text-amber-700 text-xs font-medium rounded"><i class="fas fa-spinner fa-spin mr-1"></i>Processing</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">New Policy Updates</h3>
+                    <p class="text-sm text-slate-500 mb-3">Recently uploaded policy documents</p>
+                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 mb-3">
+                        <span><i class="fas fa-file-alt mr-1"></i>5 documents</span>
+                        <span><i class="fas fa-spinner fa-spin mr-1"></i>Indexing...</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">Started 5 min ago</span>
+                        <div class="flex items-center gap-2">
+                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-edit text-sm"></i></button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Failed KB -->
+            <div class="card-hover bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-red-600"></i>
+                        </div>
+                        <span class="px-2 py-0.5 bg-red-50 text-red-700 text-xs font-medium rounded">Failed</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">Legacy Docs</h3>
+                    <p class="text-sm text-slate-500 mb-3">Old documentation archive</p>
+                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 mb-3">
+                        <span><i class="fas fa-file-alt mr-1"></i>3 documents</span>
+                        <span class="text-red-500"><i class="fas fa-times mr-1"></i>Parse error</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">Failed 2 hours ago</span>
+                        <div class="flex items-center gap-2">
+                            <button class="text-accent-600 text-sm font-medium hover:underline">Retry</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create New -->
+            <div onclick="openKBModal()" class="card-hover bg-white rounded-lg border-2 border-dashed border-slate-200 flex items-center justify-center hover:border-accent-300 cursor-pointer min-h-[180px]">
+                <div class="text-center py-8">
+                    <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-plus text-slate-400"></i>
+                    </div>
+                    <p class="text-sm font-medium text-slate-600">Create new knowledge base</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Senders Page -->
+    <div id="page-whatsapp-senders" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">WhatsApp Senders</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Manage WhatsApp Business phone numbers</p>
+            </div>
+            <button onclick="openWASenderModal()" class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                <i class="fas fa-plus mr-2"></i>Add Sender
+            </button>
+        </div>
+
+        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Number</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Display Name</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Type</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Quality</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Messages</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-24"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">+40 751 234 567</td>
+                        <td class="py-3 px-4 text-sm text-slate-700">Telerenta Support</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded">Platform</span></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded"><i class="fas fa-check-circle mr-1"></i>Online</span></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded">High</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">2,341</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">Edit</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">+40 722 987 654</td>
+                        <td class="py-3 px-4 text-sm text-slate-700">Telerenta Sales</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-xs rounded">External</span></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded"><i class="fas fa-check-circle mr-1"></i>Online</span></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 text-xs rounded">Medium</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">876</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">Edit</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">+40 733 111 222</td>
+                        <td class="py-3 px-4 text-sm text-slate-700">New Business Line</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded">Platform</span></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 text-xs font-medium rounded"><i class="fas fa-clock mr-1"></i>Pending</span></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded">New</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-400">—</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">Verify</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Status Legend -->
+        <div class="mt-4 bg-slate-50 rounded-lg p-4">
+            <p class="text-xs font-semibold text-slate-500 uppercase mb-2">Status Legend</p>
+            <div class="flex flex-wrap gap-4 text-xs">
+                <span><span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-1"></span>Online — Fully operational</span>
+                <span><span class="inline-block w-2 h-2 bg-blue-500 rounded-full mr-1"></span>Connecting — Being initialized</span>
+                <span><span class="inline-block w-2 h-2 bg-amber-500 rounded-full mr-1"></span>Pending — Awaiting verification</span>
+                <span><span class="inline-block w-2 h-2 bg-slate-400 rounded-full mr-1"></span>Offline — Manually disabled</span>
+                <span><span class="inline-block w-2 h-2 bg-red-500 rounded-full mr-1"></span>Suspended — Meta policy violation</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Templates Page -->
+    <div id="page-whatsapp-templates" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">WhatsApp Templates</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Pre-approved message templates for business-initiated conversations</p>
+            </div>
+            <button onclick="openWATemplateModal()" class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                <i class="fas fa-plus mr-2"></i>Create Template
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Total Templates</p>
+                <p class="text-xl font-semibold text-slate-800 mt-1">12</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Approved</p>
+                <p class="text-xl font-semibold text-green-600 mt-1">8</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Pending Review</p>
+                <p class="text-xl font-semibold text-amber-600 mt-1">3</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Rejected</p>
+                <p class="text-xl font-semibold text-red-600 mt-1">1</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Template Name</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Language</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Sender</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-24"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">payment_reminder</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded">Utility</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">Romanian</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded"><i class="fas fa-check mr-1"></i>Approved</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">+40 751 234 567</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">View</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">promise_confirmation</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded">Utility</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">Romanian</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded"><i class="fas fa-check mr-1"></i>Approved</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">+40 751 234 567</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">View</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">promotional_offer</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-xs rounded">Marketing</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">Romanian</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 text-xs font-medium rounded"><i class="fas fa-clock mr-1"></i>Pending</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">+40 722 987 654</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">View</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">otp_verification</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded">Authentication</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">Romanian</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded"><i class="fas fa-check mr-1"></i>Approved</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">+40 751 234 567</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">View</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">discount_alert</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-xs rounded">Marketing</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">Romanian</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-red-50 text-red-700 text-xs font-medium rounded"><i class="fas fa-times mr-1"></i>Rejected</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">+40 722 987 654</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">View</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Web Widget Config Page -->
+    <div id="page-web-widget" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Web Widget</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Configure your embeddable chat/voice widget</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="bg-white border border-slate-200 text-slate-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-50">
+                    <i class="fas fa-eye mr-2"></i>Preview
+                </button>
+                <button class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                    <i class="fas fa-code mr-2"></i>Get Embed Code
+                </button>
+            </div>
+        </div>
+
+        <!-- Widget Tabs -->
+        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <div class="flex border-b border-slate-200">
+                <button class="widget-tab px-4 py-3 text-sm font-medium text-accent-600 border-b-2 border-accent-500 bg-accent-50" data-tab="general">General</button>
+                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="button">Button</button>
+                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="header">Header & Modal</button>
+                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="chat">Chat Settings</button>
+                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="voice">Voice Settings</button>
+                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="form">Pre-chat Form</button>
+            </div>
+
+            <!-- General Tab -->
+            <div id="widget-tab-general" class="widget-tab-content p-6">
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Widget Mode *</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                            <option>Voice & Chat (hybrid)</option>
+                            <option>Chat Only</option>
+                            <option>Voice Only</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Widget Size</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                            <option>Standard (compact)</option>
+                            <option>Extra Large (half-screen)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Position</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                            <option>Bottom Right</option>
+                            <option>Bottom Left</option>
+                            <option>Bottom Center</option>
+                            <option>Top Right</option>
+                            <option>Top Left</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Primary Color</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" value="#3b82f6" class="w-10 h-10 rounded border border-slate-200 cursor-pointer">
+                            <input type="text" value="#3b82f6" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm font-mono">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Button Style</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                            <option>Round (default)</option>
+                            <option>Square</option>
+                            <option>Pill</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="flex items-center gap-2 cursor-pointer mt-6">
+                            <input type="checkbox" class="w-4 h-4 text-accent-600 rounded">
+                            <span class="text-sm text-slate-700">Auto-open on page load</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Tab -->
+            <div id="widget-tab-button" class="widget-tab-content p-6 hidden">
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Custom Avatar Image</label>
+                        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                            <div class="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-robot text-accent-600"></i>
+                            </div>
+                            <button class="text-accent-600 text-sm font-medium hover:underline">Upload Image</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Button Main Text</label>
+                        <input type="text" value="Chat with us" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Button Sub Text</label>
+                        <input type="text" value="We typically reply in minutes" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Tab Labels</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" value="Voice" placeholder="Voice tab" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                            <input type="text" value="Chat" placeholder="Chat tab" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Tab -->
+            <div id="widget-tab-header" class="widget-tab-content p-6 hidden">
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Header Title</label>
+                        <input type="text" value="Telerenta Support" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Header Subtitle</label>
+                        <input type="text" value="Online • Typically replies in minutes" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Modal Title</label>
+                        <input type="text" value="How can we help?" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Start Button Text</label>
+                        <input type="text" value="Start Conversation" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Modal Description</label>
+                        <textarea rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">Welcome! Our AI assistant is here to help you 24/7.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Settings Tab -->
+            <div id="widget-tab-chat" class="widget-tab-content p-6 hidden">
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Input Placeholder</label>
+                        <input type="text" value="Type your message..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Send Button Label</label>
+                        <input type="text" value="Send" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="w-4 h-4 text-accent-600 rounded">
+                            <span class="text-sm text-slate-700">Show function calls in chat</span>
+                        </label>
+                        <p class="text-xs text-slate-400 ml-6 mt-1">Display tool/API calls made by the assistant</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voice Settings Tab -->
+            <div id="widget-tab-voice" class="widget-tab-content p-6 hidden">
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Microphone Selection</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                            <option>Default System Microphone</option>
+                            <option>Specific device...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Voice Preferences</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                            <option>Same as Assistant</option>
+                            <option>Custom voice...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pre-chat Form Tab -->
+            <div id="widget-tab-form" class="widget-tab-content p-6 hidden">
+                <div class="mb-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" checked class="w-4 h-4 text-accent-600 rounded">
+                        <span class="text-sm font-medium text-slate-700">Enable Pre-chat Form</span>
+                    </label>
+                    <p class="text-xs text-slate-400 ml-6 mt-1">Collect visitor information before starting conversation</p>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                        <div class="flex-1 grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-xs text-slate-500 mb-1">Field Name</label>
+                                <input type="text" value="name" class="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-500 mb-1">Label</label>
+                                <input type="text" value="Your Name" class="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-500 mb-1">Required</label>
+                                <select class="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                    <option selected>Yes</option>
+                                    <option>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="text-slate-400 hover:text-red-500"><i class="fas fa-trash text-sm"></i></button>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                        <div class="flex-1 grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-xs text-slate-500 mb-1">Field Name</label>
+                                <input type="text" value="email" class="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-500 mb-1">Label</label>
+                                <input type="text" value="Email Address" class="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-500 mb-1">Required</label>
+                                <select class="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                    <option selected>Yes</option>
+                                    <option>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="text-slate-400 hover:text-red-500"><i class="fas fa-trash text-sm"></i></button>
+                    </div>
+                </div>
+                <button class="mt-3 w-full py-2 border-2 border-dashed border-slate-300 rounded-lg text-sm text-slate-500 hover:border-accent-300 hover:text-accent-600">
+                    <i class="fas fa-plus mr-2"></i>Add Field
+                </button>
+            </div>
+        </div>
+
+        <!-- Embed Code Preview -->
+        <div class="mt-6 bg-white rounded-lg border border-slate-200 p-5">
+            <h3 class="text-sm font-semibold text-slate-700 mb-3">Embed Code</h3>
+            <pre class="bg-slate-900 text-green-400 p-4 rounded-lg text-sm overflow-x-auto"><code>&lt;script src="https://widget.aloro.ai/v1.js" data-assistant-id="asst_abc123"&gt;&lt;/script&gt;</code></pre>
+            <button class="mt-3 text-accent-600 text-sm font-medium hover:underline">
+                <i class="fas fa-copy mr-1"></i>Copy to clipboard
+            </button>
+        </div>
+    </div>
+
+    <!-- Phone Numbers Page -->
+    <div id="page-phone-numbers" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Phone Numbers</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Manage dedicated, SIP, and caller ID numbers</p>
+            </div>
+            <button onclick="openPhoneModal()" class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                <i class="fas fa-plus mr-2"></i>Add Number
+            </button>
+        </div>
+
+        <!-- Number Types Info -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-phone text-blue-600"></i>
+                    <span class="text-sm font-semibold text-blue-800">Dedicated Numbers</span>
+                </div>
+                <p class="text-xs text-blue-700">Full inbound + outbound. From $3.99/mo</p>
+            </div>
+            <div class="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-network-wired text-purple-600"></i>
+                    <span class="text-sm font-semibold text-purple-800">SIP Integration</span>
+                </div>
+                <p class="text-xs text-purple-700">Use your PBX/VOIP. $0.00045/min AI bridging</p>
+            </div>
+            <div class="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-id-card text-amber-600"></i>
+                    <span class="text-sm font-semibold text-amber-800">Caller ID</span>
+                </div>
+                <p class="text-xs text-amber-700">Outbound only with your existing number</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Number</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Type</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Assigned To</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Monthly Cost</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-24"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">+40 751 234 567</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded">Dedicated</span></td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">$3.99</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">Edit</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">+40 752 987 654</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded">Dedicated</span></td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Sales Outreach</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">$3.99</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">Edit</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">sip://pbx.telerenta.ro</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-xs rounded">SIP</span></td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Connected</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">Usage-based</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">Edit</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4 text-sm text-slate-700 font-medium">+40 722 111 222</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 text-xs rounded">Caller ID</span></td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Sales Outreach</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Verified</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-600">Usage-based</td>
+                        <td class="py-3 px-4">
+                            <button class="text-accent-600 text-sm hover:underline mr-2">Edit</button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-ellipsis-v"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Post-Call Webhooks Page -->
+    <div id="page-post-call-webhooks" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Post-Call Webhooks</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Configure webhooks to receive call data after completion</p>
+            </div>
+            <button onclick="openWebhookModal()" class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                <i class="fas fa-plus mr-2"></i>Add Webhook
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Webhook List -->
+            <div class="space-y-4">
+                <!-- Webhook 1 -->
+                <div class="bg-white rounded-lg border border-slate-200 p-5">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-800">CRM Integration</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Update Hubspot with call outcomes</p>
+                        </div>
+                        <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span>
+                    </div>
+                    <div class="bg-slate-50 rounded p-2 mb-3">
+                        <code class="text-xs text-slate-600">https://api.hubapi.com/webhooks/aloro</code>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-3 text-xs text-slate-500">
+                        <span class="flex items-center gap-1"><i class="fas fa-check text-green-500"></i>Completed calls only</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-check text-green-500"></i>Include recording</span>
+                    </div>
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+                        <span class="text-xs text-slate-400">Last triggered: 2 hours ago</span>
+                        <div class="flex items-center gap-2">
+                            <button class="text-accent-600 text-sm font-medium hover:underline">Test</button>
+                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-edit text-sm"></i></button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Webhook 2 -->
+                <div class="bg-white rounded-lg border border-slate-200 p-5">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-800">Slack Notifications</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Post escalations to Slack channel</p>
+                        </div>
+                        <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span>
+                    </div>
+                    <div class="bg-slate-50 rounded p-2 mb-3">
+                        <code class="text-xs text-slate-600">https://hooks.slack.com/services/T00/B00/xxx</code>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-3 text-xs text-slate-500">
+                        <span class="flex items-center gap-1"><i class="fas fa-times text-slate-400"></i>All calls</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-times text-slate-400"></i>No recording</span>
+                    </div>
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+                        <span class="text-xs text-slate-400">Last triggered: 30 min ago</span>
+                        <div class="flex items-center gap-2">
+                            <button class="text-accent-600 text-sm font-medium hover:underline">Test</button>
+                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-edit text-sm"></i></button>
+                            <button class="text-slate-400 hover:text-red-500"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create New -->
+                <div onclick="openWebhookModal()" class="bg-white rounded-lg border-2 border-dashed border-slate-200 flex items-center justify-center hover:border-accent-300 cursor-pointer py-8">
+                    <div class="text-center">
+                        <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-plus text-slate-400"></i>
+                        </div>
+                        <p class="text-sm font-medium text-slate-600">Add new webhook</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Webhook Payload Preview -->
+            <div class="bg-white rounded-lg border border-slate-200 p-5">
+                <h3 class="text-sm font-semibold text-slate-700 mb-3">Sample Payload</h3>
+                <pre class="bg-slate-900 text-green-400 p-4 rounded-lg text-xs overflow-x-auto max-h-96"><code>{
+  "call_id": "call_abc123",
+  "phone": "+40 744 987 654",
+  "assistant_id": "asst_xyz",
+  "assistant_name": "Debt Collection",
+  "status": "completed",
+  "duration_seconds": 272,
+  "started_at": "2026-02-24T11:15:00Z",
+  "ended_at": "2026-02-24T11:19:32Z",
+  "variables": {
+    "call_outcome": "promise",
+    "promise_date": "2026-03-05",
+    "amount_discussed": 245.00,
+    "escalation_reason": null
+  },
+  "transcript": "AI: Bună ziua...",
+  "recording_url": "https://storage.aloro.ai/...",
+  "campaign_id": "camp_123",
+  "lead_id": "lead_456"
+}</code></pre>
+                <div class="mt-3 flex items-center gap-2">
+                    <button class="text-accent-600 text-sm font-medium hover:underline">
+                        <i class="fas fa-copy mr-1"></i>Copy JSON
+                    </button>
+                    <span class="text-slate-300">|</span>
+                    <button class="text-accent-600 text-sm font-medium hover:underline">
+                        <i class="fas fa-file-alt mr-1"></i>Full Documentation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Dashboards Page -->
+    <div id="page-custom-dashboards" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Custom Dashboards</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Build custom analytics with drag-and-drop widgets</p>
+            </div>
+            <button onclick="openCustomDashboardModal()" class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                <i class="fas fa-plus mr-2"></i>Create Dashboard
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Executive Overview Dashboard -->
+            <div class="card-hover bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tachometer-alt text-accent-600"></i>
+                        </div>
+                        <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">Executive Overview</h3>
+                    <p class="text-sm text-slate-500 mb-3">High-level KPIs for leadership</p>
+                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 mb-3">
+                        <span><i class="fas fa-chart-bar mr-1"></i>4 widgets</span>
+                        <span><i class="fas fa-clock mr-1"></i>30-day range</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">Last viewed: Today</span>
+                        <button class="text-accent-600 text-sm font-medium hover:underline">Open</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debt Collection Performance Dashboard -->
+            <div class="card-hover bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-hand-holding-usd text-green-600"></i>
+                        </div>
+                        <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">Debt Collection</h3>
+                    <p class="text-sm text-slate-500 mb-3">Promise rates and recovery metrics</p>
+                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 mb-3">
+                        <span><i class="fas fa-chart-bar mr-1"></i>6 widgets</span>
+                        <span><i class="fas fa-clock mr-1"></i>7-day range</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">Last viewed: Yesterday</span>
+                        <button class="text-accent-600 text-sm font-medium hover:underline">Open</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Team Dashboard -->
+            <div class="card-hover bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-users text-purple-600"></i>
+                        </div>
+                        <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">Sales Team</h3>
+                    <p class="text-sm text-slate-500 mb-3">Lead qualification and appointments</p>
+                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 mb-3">
+                        <span><i class="fas fa-chart-bar mr-1"></i>5 widgets</span>
+                        <span><i class="fas fa-clock mr-1"></i>14-day range</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">Last viewed: 2 days ago</span>
+                        <button class="text-accent-600 text-sm font-medium hover:underline">Open</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create New -->
+            <div onclick="openCustomDashboardModal()" class="card-hover bg-white rounded-lg border-2 border-dashed border-slate-200 flex items-center justify-center hover:border-accent-300 cursor-pointer min-h-[180px]">
+                <div class="text-center py-8">
+                    <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-plus text-slate-400"></i>
+                    </div>
+                    <p class="text-sm font-medium text-slate-600">Create new dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Widget Types Info -->
+        <div class="mt-6 bg-slate-50 rounded-lg p-5">
+            <h3 class="text-sm font-semibold text-slate-700 mb-4">Available Widget Types</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white rounded-lg p-4 border border-slate-200">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                            <i class="fas fa-hashtag text-blue-600 text-sm"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-800">Stat Widgets</span>
+                    </div>
+                    <p class="text-xs text-slate-500">Single metrics with optional comparison and mini charts</p>
+                </div>
+                <div class="bg-white rounded-lg p-4 border border-slate-200">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-8 h-8 bg-green-100 rounded flex items-center justify-center">
+                            <i class="fas fa-chart-line text-green-600 text-sm"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-800">Chart Widgets</span>
+                    </div>
+                    <p class="text-xs text-slate-500">8 chart types: line, bar, area, pie, donut, polar, radar, radial</p>
+                </div>
+                <div class="bg-white rounded-lg p-4 border border-slate-200">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-8 h-8 bg-purple-100 rounded flex items-center justify-center">
+                            <i class="fas fa-table text-purple-600 text-sm"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-800">Table Widgets</span>
+                    </div>
+                    <p class="text-xs text-slate-500">Detailed records with sorting, filtering, and pagination</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Chat Slide-over Panel -->
+    <div id="testChatPanel" class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl z-50 transform translate-x-full transition-transform duration-300">
+        <div class="h-full flex flex-col">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4 border-b border-slate-200">
+                <div>
+                    <h2 class="text-lg font-semibold text-slate-800">Test Chat</h2>
+                    <p class="text-sm text-slate-500">Debt Collection Agent</p>
+                </div>
+                <button onclick="closeTestChat()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="testChatMessages">
+                <!-- AI Message -->
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-accent-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-accent-600 text-sm"></i>
+                    </div>
+                    <div class="bg-slate-100 rounded-lg p-3 max-w-[80%]">
+                        <p class="text-sm text-slate-700">Bună ziua! Vă contactăm din partea Telerenta cu privire la plata în întârziere pentru dispozitivul închiriat. Cu cine am onoarea să vorbesc?</p>
+                    </div>
+                </div>
+
+                <!-- User Message -->
+                <div class="flex items-start gap-3 justify-end">
+                    <div class="bg-accent-500 rounded-lg p-3 max-w-[80%]">
+                        <p class="text-sm text-white">Da, eu sunt. Scuze, am uitat să plătesc.</p>
+                    </div>
+                    <div class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user text-slate-500 text-sm"></i>
+                    </div>
+                </div>
+
+                <!-- AI Message -->
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-accent-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-accent-600 text-sm"></i>
+                    </div>
+                    <div class="bg-slate-100 rounded-lg p-3 max-w-[80%]">
+                        <p class="text-sm text-slate-700">Nu face nimic, înțeleg perfect că se poate întâmpla. Suma datorată este de 245 EUR. Când credeți că ați putea efectua plata?</p>
+                    </div>
+                </div>
+
+                <!-- Tool Call Indicator -->
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-cog text-slate-400 text-sm"></i>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 max-w-[80%]">
+                        <p class="text-xs text-amber-700 font-medium"><i class="fas fa-tools mr-1"></i>Function Call: check_account_balance</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 border-t border-slate-200">
+                <div class="flex items-center gap-2">
+                    <input type="text" id="testChatInput" placeholder="Type your message..." class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                    <button onclick="sendTestMessage()" class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="mt-3 flex items-center gap-2">
+                    <button class="text-xs text-slate-500 hover:text-slate-700"><i class="fas fa-redo mr-1"></i>Reset</button>
+                    <span class="text-slate-300">|</span>
+                    <button class="text-xs text-slate-500 hover:text-slate-700"><i class="fas fa-download mr-1"></i>Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="testChatOverlay" class="fixed inset-0 bg-black/20 z-40 hidden" onclick="closeTestChat()"></div>
+
 <div id="assistantModal" class="fixed inset-0 bg-black/40 z-50 hidden">
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-xl flex flex-col">
@@ -884,6 +1992,86 @@
                                     <p class="text-xs text-slate-500">Male · Conversational · Romanian</p>
                                 </div>
                                 <button class="text-accent-600 text-sm font-medium hover:underline">Change</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filler Audio Section -->
+                    <div class="mt-6 pt-6 border-t border-slate-200">
+                        <h3 class="text-sm font-semibold text-slate-700 mb-4">Filler Audio</h3>
+                        <p class="text-sm text-slate-500 mb-4">Natural sounds during processing to keep callers engaged (e.g., "hmm", "okay", "I understand")</p>
+                        
+                        <div class="space-y-3">
+                            <label class="flex items-center justify-between cursor-pointer p-4 bg-slate-50 rounded-lg border border-slate-200">
+                                <div>
+                                    <span class="text-sm font-medium text-slate-700">Enable Filler Audio</span>
+                                    <p class="text-xs text-slate-500">Play natural sounds while AI is thinking</p>
+                                </div>
+                                <div class="w-10 h-5 bg-accent-500 rounded-full relative">
+                                    <div class="w-4 h-4 bg-white rounded-full absolute right-0.5 top-0.5 shadow"></div>
+                                </div>
+                            </label>
+
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="p-3 bg-white rounded-lg border border-slate-200">
+                                    <label class="block text-xs text-slate-500 mb-2">Positive</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs">
+                                        <option>"Great!"</option>
+                                        <option>"Perfect!"</option>
+                                        <option>"Super!"</option>
+                                        <option>Custom...</option>
+                                    </select>
+                                </div>
+                                <div class="p-3 bg-white rounded-lg border border-slate-200">
+                                    <label class="block text-xs text-slate-500 mb-2">Negative</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs">
+                                        <option>"Hmm."</option>
+                                        <option>"I see."</option>
+                                        <option>"Okay."</option>
+                                        <option>Custom...</option>
+                                    </select>
+                                </div>
+                                <div class="p-3 bg-white rounded-lg border border-slate-200">
+                                    <label class="block text-xs text-slate-500 mb-2">Question</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs">
+                                        <option>"Right?"</option>
+                                        <option>"Really?"</option>
+                                        <option>"How so?"</option>
+                                        <option>Custom...</option>
+                                    </select>
+                                </div>
+                                <div class="p-3 bg-white rounded-lg border border-slate-200">
+                                    <label class="block text-xs text-slate-500 mb-2">Neutral</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs">
+                                        <option>"Okay."</option>
+                                        <option>"I understand."</option>
+                                        <option>"Got it."</option>
+                                        <option>Custom...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ambient Sound Section -->
+                    <div class="mt-6 pt-6 border-t border-slate-200">
+                        <h3 class="text-sm font-semibold text-slate-700 mb-4">Ambient Sound</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Background Sound</label>
+                                <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                                    <option>None</option>
+                                    <option>Office Environment</option>
+                                    <option>Call Center</option>
+                                    <option>Custom Audio...</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Volume</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="range" min="0" max="100" value="20" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                                    <span class="text-sm text-slate-600 w-10">20%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
