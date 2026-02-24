@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aloro — Voice AI Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {50: '#f8fafc',100: '#f1f5f9',200: '#e2e8f0',300: '#cbd5e1',400: '#94a3b8',500: '#64748b',600: '#475569',700: '#334155',800: '#1e293b',900: '#0f172a'},
+                        accent: {50: '#eff6ff',100: '#dbeafe',200: '#bfdbfe',300: '#93c5fd',400: '#60a5fa',500: '#3b82f6',600: '#2563eb',700: '#1d4ed8',800: '#1e40af',900: '#1e3a8a'}
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/styles.css">
+    
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+<header class="fixed top-0 left-0 right-0 h-14 bg-white border-b border-slate-200 z-50 flex items-center justify-between px-5">
+    <div class="flex items-center gap-4">
+        <button id="toggleSidebar" class="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-100 transition">
+            <i class="fas fa-bars text-lg"></i>
+        </button>
+        <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 bg-gradient-to-br from-accent-500 to-accent-700 rounded-lg flex items-center justify-center">
+                <span class="text-white font-bold text-sm">A</span>
+            </div>
+            <span class="font-semibold text-slate-800">Aloro</span>
+            <span class="text-xs text-slate-400 font-medium ml-1">Voice AI Platform</span>
+        </div>
+    </div>
+    <div class="flex items-center gap-3">
+        <div class="relative">
+            <input type="text" id="globalSearch" placeholder="Search..." class="bg-slate-100 rounded-lg pl-9 pr-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:bg-white transition">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        </div>
+        <button class="text-slate-400 hover:text-slate-600 relative p-2 rounded-lg hover:bg-slate-100 transition">
+            <i class="fas fa-bell"></i>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+        <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
+            <div class="text-right">
+                <p class="text-sm font-medium text-slate-700">Alexandru Crudu</p>
+                <p class="text-xs text-slate-400">Telerenta.ro</p>
+            </div>
+            <div class="w-9 h-9 bg-accent-100 rounded-full flex items-center justify-center">
+                <span class="text-accent-600 font-semibold text-sm">AC</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<aside id="sidebar" class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-slate-200 overflow-y-auto transition-all duration-300">
+    <div class="p-3 border-b border-slate-100 org-card">
+        <div class="bg-slate-50 rounded-lg p-3">
+            <div class="flex items-center gap-2 mb-2">
+                <div class="w-6 h-6 bg-accent-600 rounded flex items-center justify-center">
+                    <span class="text-white text-xs font-semibold">T</span>
+                </div>
+                <span class="text-sm font-medium text-slate-700">Telerenta.ro</span>
+                <i class="fas fa-chevron-down text-xs text-slate-400 ml-auto"></i>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+                <span class="px-1.5 py-0.5 bg-green-100 text-green-700 rounded">Production</span>
+                <span>3 assistants</span>
+            </div>
+        </div>
+    </div>
+    <nav class="p-2">
+        <div class="space-y-0.5">
+            <a href="#" class="sidebar-item active flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="dashboard">
+                <i class="fas fa-th-large w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Dashboard</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="insights">
+                <i class="fas fa-chart-pie w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Call Insights</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="assistants">
+                <i class="fas fa-robot w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Assistants</span>
+                <span class="ml-auto bg-accent-100 text-accent-600 text-xs px-1.5 py-0.5 rounded">3</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="calls">
+                <i class="fas fa-phone-alt w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Call Logs</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="campaigns">
+                <i class="fas fa-bullhorn w-4 text-slate-400 text-sm"></i>
+                <span class="nav-text text-sm font-medium">Campaigns</span>
+            </a>
+        </div>
+        <div class="mt-4 pt-4 border-t border-slate-100 sidebar-section">
+            <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Configuration</p>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700">
+                <i class="fas fa-plug w-4 text-slate-400 text-sm"></i>
+                <span class="text-sm font-medium">Integrations</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700">
+                <i class="fas fa-code w-4 text-slate-400 text-sm"></i>
+                <span class="text-sm font-medium">API</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700">
+                <i class="fas fa-cog w-4 text-slate-400 text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main id="mainContent" class="ml-60 mt-14 p-6 transition-all duration-300">
+
+    <!-- Dashboard Page -->
+    <div id="page-dashboard" class="page fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Dashboard</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Telerenta.ro · Voice AI Operations</p>
+            </div>
+            <select class="bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600">
+                <option>Last 7 days</option>
+                <option>Last 30 days</option>
+                <option>This month</option>
+            </select>
+        </div>
+        
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+            <div class="card-hover bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-sm text-slate-500 font-medium">Total Calls</p>
+                    <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-phone-alt text-blue-500 text-sm"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-semibold text-slate-800">1,247</p>
+                <p class="text-xs text-slate-400 mt-1"><span class="text-green-600">↑ 12%</span> vs last period</p>
+            </div>
+            <div class="card-hover bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-sm text-slate-500 font-medium">Connected</p>
+                    <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-check-circle text-green-500 text-sm"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-semibold text-slate-800">892</p>
+                <p class="text-xs text-slate-400 mt-1">71.5% connection rate</p>
+            </div>
+            <div class="card-hover bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-sm text-slate-500 font-medium">Promise Dates</p>
+                    <div class="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-calendar-check text-amber-500 text-sm"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-semibold text-slate-800">234</p>
+                <p class="text-xs text-slate-400 mt-1"><span class="text-green-600">26.2%</span> of connected</p>
+            </div>
+            <div class="card-hover bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-sm text-slate-500 font-medium">Human Escalations</p>
+                    <div class="w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-user-plus text-red-500 text-sm"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-semibold text-slate-800">18</p>
+                <p class="text-xs text-slate-400 mt-1"><span class="text-amber-600">2.0%</span> needs follow-up</p>
+            </div>
+            <div class="card-hover bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-sm text-slate-500 font-medium">Talk Time</p>
+                    <div class="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-hourglass-half text-purple-500 text-sm"></i>
+                    </div>
+                </div>
+                <p class="text-2xl font-semibold text-slate-800">53.2h</p>
+                <p class="text-xs text-slate-400 mt-1">This billing period</p>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <!-- Call Volume Chart -->
+            <div class="lg:col-span-2 bg-white rounded-lg p-5 border border-slate-200">
+                <h2 class="text-sm font-semibold text-slate-700 mb-4">Call Volume (Last 7 Days)</h2>
+                <div class="h-40 flex items-end justify-between gap-2">
+                    <div class="flex-1 bg-accent-200 rounded-t" style="height: 60%"></div>
+                    <div class="flex-1 bg-accent-200 rounded-t" style="height: 80%"></div>
+                    <div class="flex-1 bg-accent-200 rounded-t" style="height: 45%"></div>
+                    <div class="flex-1 bg-accent-200 rounded-t" style="height: 90%"></div>
+                    <div class="flex-1 bg-accent-500 rounded-t" style="height: 70%"></div>
+                    <div class="flex-1 bg-accent-200 rounded-t" style="height: 40%"></div>
+                    <div class="flex-1 bg-slate-100 rounded-t" style="height: 20%"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-xs text-slate-400">
+                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                </div>
+            </div>
+
+            <!-- Call Outcomes Widget -->
+            <div class="bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-sm font-semibold text-slate-700">Call Outcomes</h2>
+                    <a href="#" onclick="$('.sidebar-item[data-page=insights]').click()" class="text-xs text-accent-600 hover:underline">Details</a>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-2.5 bg-green-50 rounded-lg">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 bg-green-100 rounded flex items-center justify-center">
+                                <i class="fas fa-check text-green-600 text-xs"></i>
+                            </div>
+                            <span class="text-sm text-slate-700">Promise to Pay</span>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-800">234</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-red-50 rounded-lg">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 bg-red-100 rounded flex items-center justify-center">
+                                <i class="fas fa-user-plus text-red-600 text-xs"></i>
+                            </div>
+                            <span class="text-sm text-slate-700">Escalate to Human</span>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-800">18</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-amber-50 rounded-lg">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 bg-amber-100 rounded flex items-center justify-center">
+                                <i class="fas fa-phone-slash text-amber-600 text-xs"></i>
+                            </div>
+                            <span class="text-sm text-slate-700">Refused / Dispute</span>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-800">45</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-lg">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 bg-slate-100 rounded flex items-center justify-center">
+                                <i class="fas fa-question text-slate-500 text-xs"></i>
+                            </div>
+                            <span class="text-sm text-slate-700">No Resolution</span>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-800">89</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Calls with Variables -->
+        <div class="bg-white rounded-lg border border-slate-200">
+            <div class="flex items-center justify-between p-4 border-b border-slate-100">
+                <h2 class="text-sm font-semibold text-slate-700">Recent Calls</h2>
+                <a href="#" onclick="$('.sidebar-item[data-page=calls]').click()" class="text-accent-600 font-medium hover:underline text-sm">View all →</a>
+            </div>
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-slate-100 bg-slate-50/50">
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-8"></th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Phone</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Assistant</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Outcome</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row border-b border-slate-50 cursor-pointer" onclick="toggleCallDetails(this)">
+                        <td class="py-3 px-4"><i class="fas fa-chevron-right text-slate-300 text-xs expand-icon transition-transform duration-200"></i></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Completed</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">+40 744 987 654</td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded">Promise</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-500">Today, 11:15</td>
+                    </tr>
+                    <tr class="call-details bg-slate-50">
+                        <td colspan="6" class="px-4 py-3">
+                            <div class="text-xs text-slate-500 mb-2 font-medium">Extracted Variables:</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-green-50 border border-green-200 rounded text-xs"><span class="text-green-600">promise_date:</span> <span class="font-medium text-green-700">Mar 5, 2026</span></span>
+                                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs"><span class="text-slate-400">amount:</span> <span class="font-medium text-slate-700">€245.00</span></span>
+                                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs"><span class="text-slate-400">payment_method:</span> <span class="font-medium text-slate-700">Card</span></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-b border-slate-50 cursor-pointer" onclick="toggleCallDetails(this)">
+                        <td class="py-3 px-4"><i class="fas fa-chevron-right text-slate-300 text-xs expand-icon transition-transform duration-200"></i></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Completed</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">+40 756 123 789</td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-red-50 text-red-600 text-xs rounded">Escalate</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-500">Yesterday, 16:22</td>
+                    </tr>
+                    <tr class="call-details bg-slate-50">
+                        <td colspan="6" class="px-4 py-3">
+                            <div class="text-xs text-slate-500 mb-2 font-medium">Extracted Variables:</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-red-50 border border-red-200 rounded text-xs"><span class="text-red-600">escalation_reason:</span> <span class="font-medium text-red-700">Legal threat</span></span>
+                                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs"><span class="text-slate-400">amount:</span> <span class="font-medium text-slate-700">€1,250.00</span></span>
+                                <span class="px-2 py-1 bg-amber-50 border border-amber-200 rounded text-xs"><span class="text-amber-600">priority:</span> <span class="font-medium text-amber-700">High</span></span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Call Insights Page -->
+    <div id="page-insights" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Call Insights</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Post-call variable analytics and outcomes</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <select class="bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600">
+                    <option>All Assistants</option>
+                    <option>Debt Collection</option>
+                    <option>Sales Outreach</option>
+                </select>
+                <button class="bg-white border border-slate-200 text-slate-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-50">
+                    <i class="fas fa-download mr-2"></i>Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Outcome Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-calendar-check text-green-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500">Promise Dates Set</p>
+                        <p class="text-2xl font-semibold text-slate-800">234</p>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-400">26.2% of connected calls</div>
+            </div>
+            <div class="bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-user-plus text-red-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500">Human Escalations</p>
+                        <p class="text-2xl font-semibold text-slate-800">18</p>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-400">2.0% of connected calls</div>
+            </div>
+            <div class="bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-phone-slash text-amber-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500">Refusals / Disputes</p>
+                        <p class="text-2xl font-semibold text-slate-800">45</p>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-400">5.0% of connected calls</div>
+            </div>
+            <div class="bg-white rounded-lg p-5 border border-slate-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-euro-sign text-accent-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500">Promised Amount</p>
+                        <p class="text-2xl font-semibold text-slate-800">€12,450</p>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-400">From 234 promises</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <!-- Outcome Distribution -->
+            <div class="bg-white rounded-lg p-5 border border-slate-200">
+                <h2 class="text-sm font-semibold text-slate-700 mb-4">Outcome Distribution</h2>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex items-center justify-between mb-1"><span class="text-sm text-slate-600">Promise to Pay</span><span class="text-sm font-medium">234 (26.2%)</span></div>
+                        <div class="h-3 bg-slate-100 rounded-full"><div class="h-3 bg-green-500 rounded-full" style="width: 26.2%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1"><span class="text-sm text-slate-600">Partial Payment</span><span class="text-sm font-medium">67 (7.5%)</span></div>
+                        <div class="h-3 bg-slate-100 rounded-full"><div class="h-3 bg-accent-500 rounded-full" style="width: 7.5%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1"><span class="text-sm text-slate-600">Refused / Dispute</span><span class="text-sm font-medium">45 (5.0%)</span></div>
+                        <div class="h-3 bg-slate-100 rounded-full"><div class="h-3 bg-amber-500 rounded-full" style="width: 5%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1"><span class="text-sm text-slate-600">Human Escalation</span><span class="text-sm font-medium">18 (2.0%)</span></div>
+                        <div class="h-3 bg-slate-100 rounded-full"><div class="h-3 bg-red-500 rounded-full" style="width: 2%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1"><span class="text-sm text-slate-600">Call Back Later</span><span class="text-sm font-medium">156 (17.5%)</span></div>
+                        <div class="h-3 bg-slate-100 rounded-full"><div class="h-3 bg-purple-500 rounded-full" style="width: 17.5%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Escalation Reasons -->
+            <div class="bg-white rounded-lg p-5 border border-slate-200">
+                <h2 class="text-sm font-semibold text-slate-700 mb-4">Escalation Reasons</h2>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-2.5 bg-red-50 rounded-lg">
+                        <span class="text-sm text-slate-700">Legal threat</span>
+                        <div class="flex items-center gap-2"><span class="text-sm font-medium text-slate-800">7</span><span class="text-xs text-slate-500">39%</span></div>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-red-50/70 rounded-lg">
+                        <span class="text-sm text-slate-700">Complex dispute</span>
+                        <div class="flex items-center gap-2"><span class="text-sm font-medium text-slate-800">5</span><span class="text-xs text-slate-500">28%</span></div>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-red-50/50 rounded-lg">
+                        <span class="text-sm text-slate-700">Requested supervisor</span>
+                        <div class="flex items-center gap-2"><span class="text-sm font-medium text-slate-800">3</span><span class="text-xs text-slate-500">17%</span></div>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-lg">
+                        <span class="text-sm text-slate-700">Other</span>
+                        <div class="flex items-center gap-2"><span class="text-sm font-medium text-slate-800">3</span><span class="text-xs text-slate-500">16%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Promise Date Timeline -->
+        <div class="bg-white rounded-lg p-5 border border-slate-200">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-sm font-semibold text-slate-700">Upcoming Promise Dates</h2>
+                <span class="text-xs text-slate-500">Next 7 days</span>
+            </div>
+            <div class="grid grid-cols-7 gap-2">
+                <div class="text-center p-3 bg-slate-50 rounded-lg">
+                    <p class="text-xs text-slate-400 mb-1">Mon 24</p>
+                    <p class="text-lg font-semibold text-slate-800">12</p>
+                    <p class="text-xs text-slate-500">€840</p>
+                </div>
+                <div class="text-center p-3 bg-accent-50 rounded-lg border-2 border-accent-200">
+                    <p class="text-xs text-accent-600 mb-1">Tue 25</p>
+                    <p class="text-lg font-semibold text-accent-700">28</p>
+                    <p class="text-xs text-slate-500">€1,680</p>
+                </div>
+                <div class="text-center p-3 bg-slate-50 rounded-lg">
+                    <p class="text-xs text-slate-400 mb-1">Wed 26</p>
+                    <p class="text-lg font-semibold text-slate-800">15</p>
+                    <p class="text-xs text-slate-500">€920</p>
+                </div>
+                <div class="text-center p-3 bg-slate-50 rounded-lg">
+                    <p class="text-xs text-slate-400 mb-1">Thu 27</p>
+                    <p class="text-lg font-semibold text-slate-800">19</p>
+                    <p class="text-xs text-slate-500">€1,150</p>
+                </div>
+                <div class="text-center p-3 bg-green-50 rounded-lg border-2 border-green-200">
+                    <p class="text-xs text-green-600 mb-1">Fri 28</p>
+                    <p class="text-lg font-semibold text-green-700">45</p>
+                    <p class="text-xs text-slate-500">€2,890</p>
+                </div>
+                <div class="text-center p-3 bg-slate-50/50 rounded-lg">
+                    <p class="text-xs text-slate-400 mb-1">Sat 1</p>
+                    <p class="text-lg font-semibold text-slate-400">8</p>
+                    <p class="text-xs text-slate-400">€340</p>
+                </div>
+                <div class="text-center p-3 bg-slate-50/50 rounded-lg">
+                    <p class="text-xs text-slate-400 mb-1">Sun 2</p>
+                    <p class="text-lg font-semibold text-slate-400">3</p>
+                    <p class="text-xs text-slate-400">€120</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assistants Page -->
+    <div id="page-assistants" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Assistants</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Configure and manage voice AI agents</p>
+            </div>
+            <button onclick="openAssistantModal()" class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                <i class="fas fa-plus mr-2"></i>New Assistant
+            </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Debt Collection -->
+            <div class="card-hover bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-accent-500 to-accent-700 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-hand-holding-usd text-white"></i>
+                        </div>
+                        <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">Debt Collection</h3>
+                    <p class="text-sm text-slate-500 mb-3">Outbound debt recovery</p>
+                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 mb-3">
+                        <span><i class="fas fa-globe mr-1"></i>ro-RO</span>
+                        <span><i class="fas fa-clock mr-1"></i>Bucharest</span>
+                        <span><i class="fas fa-brain mr-1"></i>GPT-4o</span>
+                    </div>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="px-1.5 py-0.5 bg-blue-50 text-blue-600 text-xs rounded"><i class="fas fa-exchange-alt mr-1"></i>Transfer</span>
+                        <span class="px-1.5 py-0.5 bg-red-50 text-red-600 text-xs rounded"><i class="fas fa-phone-slash mr-1"></i>Hangup</span>
+                        <span class="px-1.5 py-0.5 bg-purple-50 text-purple-600 text-xs rounded"><i class="fas fa-calculator mr-1"></i>DTMF</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-3 text-xs">
+                        <span class="px-1.5 py-0.5 bg-green-50 text-green-600 rounded"><i class="fas fa-database mr-1"></i>5 variables</span>
+                        <span class="text-slate-400">234 promises</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">847 calls · Updated 2d ago</span>
+                        <button onclick="openAssistantModal('debt')" class="text-accent-600 text-sm font-medium hover:underline">Edit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Outreach -->
+            <div class="card-hover bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bullhorn text-white"></i>
+                        </div>
+                        <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Active</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">Sales Outreach</h3>
+                    <p class="text-sm text-slate-500 mb-3">Lead qualification</p>
+                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 mb-3">
+                        <span><i class="fas fa-globe mr-1"></i>ro-RO</span>
+                        <span><i class="fas fa-clock mr-1"></i>Bucharest</span>
+                        <span><i class="fas fa-brain mr-1"></i>Claude 3.5</span>
+                    </div>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="px-1.5 py-0.5 bg-orange-50 text-orange-600 text-xs rounded"><i class="fas fa-calendar mr-1"></i>Cal.com</span>
+                        <span class="px-1.5 py-0.5 bg-blue-50 text-blue-600 text-xs rounded"><i class="fas fa-exchange-alt mr-1"></i>Transfer</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-3 text-xs">
+                        <span class="px-1.5 py-0.5 bg-green-50 text-green-600 rounded"><i class="fas fa-database mr-1"></i>3 variables</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">312 calls · Updated 1w ago</span>
+                        <button onclick="openAssistantModal('sales')" class="text-accent-600 text-sm font-medium hover:underline">Edit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create New -->
+            <div onclick="openAssistantModal()" class="card-hover bg-white rounded-lg border-2 border-dashed border-slate-200 flex items-center justify-center hover:border-accent-300 cursor-pointer min-h-[200px]">
+                <div class="text-center py-8">
+                    <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-plus text-slate-400"></i>
+                    </div>
+                    <p class="text-sm font-medium text-slate-600">Create new assistant</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call Logs Page -->
+    <div id="page-calls" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Call Logs</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Complete call history with extracted data</p>
+            </div>
+            <button class="bg-white border border-slate-200 text-slate-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-50">
+                <i class="fas fa-download mr-2"></i>Export
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 mb-5">
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Total</p>
+                <p class="text-xl font-semibold text-slate-800 mt-1">1,247</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Connected</p>
+                <p class="text-xl font-semibold text-green-600 mt-1">892</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Promises</p>
+                <p class="text-xl font-semibold text-amber-600 mt-1">234</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Escalations</p>
+                <p class="text-xl font-semibold text-red-600 mt-1">18</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-slate-200">
+                <p class="text-xs text-slate-500 font-medium">Avg Duration</p>
+                <p class="text-xl font-semibold text-slate-800 mt-1">2:34</p>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-lg p-4 border border-slate-200 mb-5">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Phone</label>
+                    <input type="text" placeholder="Search..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Assistant</label>
+                    <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                        <option>All</option>
+                        <option>Debt Collection</option>
+                        <option>Sales Outreach</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Status</label>
+                    <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                        <option>All</option>
+                        <option>Completed</option>
+                        <option>No Answer</option>
+                        <option>Failed</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Outcome</label>
+                    <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                        <option>All</option>
+                        <option>Promise to Pay</option>
+                        <option>Escalate</option>
+                        <option>Refused</option>
+                        <option>Call Back</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Date</label>
+                    <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                        <option>All time</option>
+                        <option>Today</option>
+                        <option>Yesterday</option>
+                        <option>This week</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-8"></th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Phone</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Assistant</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Duration</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Outcome</th>
+                        <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row border-t border-slate-50 cursor-pointer" onclick="toggleCallDetails(this)">
+                        <td class="py-3 px-4"><i class="fas fa-chevron-right text-slate-300 text-xs expand-icon transition-transform duration-200"></i></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Completed</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">+40 744 987 654</td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4 text-sm text-slate-700">4:32</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded">Promise</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-500">Today, 11:15</td>
+                    </tr>
+                    <tr class="call-details bg-slate-50">
+                        <td colspan="7" class="px-4 py-3">
+                            <div class="text-xs text-slate-500 mb-2 font-medium">Extracted Variables:</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-green-50 border border-green-200 rounded text-xs"><span class="text-green-600">promise_date:</span> <span class="font-medium text-green-700">Mar 5, 2026</span></span>
+                                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs"><span class="text-slate-400">amount:</span> <span class="font-medium text-slate-700">€245.00</span></span>
+                                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs"><span class="text-slate-400">reason:</span> <span class="font-medium text-slate-700">forgot_payment</span></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50 cursor-pointer" onclick="toggleCallDetails(this)">
+                        <td class="py-3 px-4"><i class="fas fa-chevron-right text-slate-300 text-xs expand-icon transition-transform duration-200"></i></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">Completed</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">+40 756 123 789</td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4 text-sm text-slate-700">3:15</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-red-50 text-red-600 text-xs rounded">Escalate</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-500">Yesterday, 16:22</td>
+                    </tr>
+                    <tr class="call-details bg-slate-50">
+                        <td colspan="7" class="px-4 py-3">
+                            <div class="text-xs text-slate-500 mb-2 font-medium">Extracted Variables:</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-red-50 border border-red-200 rounded text-xs"><span class="text-red-600">escalation_reason:</span> <span class="font-medium text-red-700">Legal threat</span></span>
+                                <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs"><span class="text-slate-400">amount:</span> <span class="font-medium text-slate-700">€1,250.00</span></span>
+                                <span class="px-2 py-1 bg-amber-50 border border-amber-200 rounded text-xs"><span class="text-amber-600">priority:</span> <span class="font-medium text-amber-700">High</span></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="table-row border-t border-slate-50">
+                        <td class="py-3 px-4"></td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 bg-red-50 text-red-600 text-xs font-medium rounded">No Answer</span></td>
+                        <td class="py-3 px-4 text-sm text-slate-700">+40 799 876 543</td>
+                        <td class="py-3 px-4 text-sm text-accent-600 font-medium">Debt Collection</td>
+                        <td class="py-3 px-4 text-sm text-slate-400">—</td>
+                        <td class="py-3 px-4 text-sm text-slate-400">—</td>
+                        <td class="py-3 px-4 text-sm text-slate-500">Feb 22, 14:30</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="px-4 py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+                <p class="text-sm text-slate-500">Showing 3 of 1,247 calls</p>
+                <div class="flex items-center gap-1">
+                    <button class="px-2.5 py-1 text-sm text-slate-500 hover:bg-white rounded"><i class="fas fa-chevron-left"></i></button>
+                    <button class="px-2.5 py-1 text-sm text-accent-600 bg-white rounded font-medium">1</button>
+                    <button class="px-2.5 py-1 text-sm text-slate-500 hover:bg-white rounded">2</button>
+                    <button class="px-2.5 py-1 text-sm text-slate-500 hover:bg-white rounded">3</button>
+                    <button class="px-2.5 py-1 text-sm text-slate-500 hover:bg-white rounded"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaigns Page -->
+    <div id="page-campaigns" class="page hidden fade-in">
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">Campaigns</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Outbound campaign management</p>
+            </div>
+            <button class="bg-accent-500 text-white px-4 py-2 rounded-lg text-sm font-medium"><i class="fas fa-plus mr-2"></i>New Campaign</button>
+        </div>
+        <div class="bg-white rounded-lg p-10 border border-slate-200 text-center">
+            <div class="w-14 h-14 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-3"><i class="fas fa-bullhorn text-slate-400 text-xl"></i></div>
+            <h3 class="text-base font-semibold text-slate-800 mb-1">No campaigns yet</h3>
+            <p class="text-sm text-slate-500 mb-5">Create and manage outbound calling campaigns</p>
+            <button class="bg-accent-500 text-white px-5 py-2 rounded-lg text-sm font-medium">Create Campaign</button>
+        </div>
+    </div>
+
+</main>
+
+<!-- Assistant Creation/Edit Modal -->
+<div id="assistantModal" class="fixed inset-0 bg-black/40 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-xl flex flex-col">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-5 border-b border-slate-200">
+                <div>
+                    <h2 class="text-lg font-semibold text-slate-800" id="modalTitle">Create Assistant</h2>
+                    <p class="text-sm text-slate-500">Configure your voice AI agent</p>
+                </div>
+                <button onclick="$('#assistantModal').fadeOut()" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>
+            </div>
+
+            <!-- Steps -->
+            <div class="flex border-b border-slate-200 px-5 bg-slate-50">
+                <button class="step-tab px-4 py-3 text-sm font-medium text-accent-600 border-b-2 border-accent-500" data-step="1">1. General</button>
+                <button class="step-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-step="2">2. Language & Model</button>
+                <button class="step-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-step="3">3. Voice</button>
+                <button class="step-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-step="4">4. Tools</button>
+                <button class="step-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-step="5">5. Variables</button>
+                <button class="step-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-step="6">6. Advanced</button>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto p-6">
+                
+                <!-- Step 1: General -->
+                <div id="step-1" class="step-content">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Assistant Name *</label>
+                            <input type="text" id="assistantName" placeholder="e.g., Debt Collection Agent" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Direction *</label>
+                            <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                                <option>Outbound only</option>
+                                <option>Inbound only</option>
+                                <option>Both directions</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Description</label>
+                        <textarea rows="2" placeholder="Brief description of what this assistant does..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none"></textarea>
+                    </div>
+                    <div class="mt-5">
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Phone Numbers</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                            <option>+40 751 XXX XXX</option>
+                            <option>+40 752 XXX XXX</option>
+                            <option>+ New number...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 2: Language & Model -->
+                <div id="step-2" class="step-content hidden">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Primary Language *</label>
+                            <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                                <option value="ro-RO">Romanian (Romania)</option>
+                                <option value="en-US">English (US)</option>
+                                <option value="en-GB">English (UK)</option>
+                                <option value="de-DE">German (Germany)</option>
+                                <option value="fr-FR">French (France)</option>
+                                <option value="es-ES">Spanish (Spain)</option>
+                                <option value="it-IT">Italian (Italy)</option>
+                                <option value="pl-PL">Polish (Poland)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Timezone *</label>
+                            <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                                <option value="Europe/Bucharest">Europe/Bucharest (UTC+2/+3)</option>
+                                <option value="Europe/London">Europe/London (UTC+0/+1)</option>
+                                <option value="Europe/Berlin">Europe/Berlin (UTC+1/+2)</option>
+                                <option value="America/New_York">America/New York (UTC-5/-4)</option>
+                                <option value="America/Los_Angeles">America/Los Angeles (UTC-8/-7)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-slate-200">
+                        <h3 class="text-sm font-semibold text-slate-700 mb-4">LLM Configuration</h3>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Model *</label>
+                                <select id="llmModel" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                                    <optgroup label="OpenAI">
+                                        <option value="gpt-4o">GPT-4o (Recommended)</option>
+                                        <option value="gpt-4o-mini">GPT-4o Mini (Faster, cheaper)</option>
+                                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                                    </optgroup>
+                                    <optgroup label="Anthropic">
+                                        <option value="claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+                                        <option value="claude-3-opus">Claude 3 Opus</option>
+                                    </optgroup>
+                                    <optgroup label="Google">
+                                        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                                        <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Temperature</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="range" id="temperature" min="0" max="100" value="30" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                                    <span id="tempValue" class="text-sm font-medium text-slate-700 w-10">0.3</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-1">Lower = more deterministic, Higher = more creative</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Voice -->
+                <div id="step-3" class="step-content hidden">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">TTS Provider *</label>
+                            <select id="ttsProvider" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
+                                <option value="cartesia">Cartesia Sonic</option>
+                                <option value="elevenlabs">ElevenLabs</option>
+                                <option value="azure">Azure AI Speech</option>
+                                <option value="google">Google Cloud TTS</option>
+                                <option value="deepgram">Deepgram Aura</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Voice</label>
+                            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                <button class="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center text-accent-600 hover:bg-accent-200 transition">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-slate-700">Andrei</p>
+                                    <p class="text-xs text-slate-500">Male · Conversational · Romanian</p>
+                                </div>
+                                <button class="text-accent-600 text-sm font-medium hover:underline">Change</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Tools -->
+                <div id="step-4" class="step-content hidden">
+                    <p class="text-sm text-slate-500 mb-4">Enable tools that the assistant can use during calls. Each tool can be configured with specific rules.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Cold Transfer -->
+                        <div class="tool-card enabled p-4 rounded-lg border-2 border-slate-200 cursor-pointer" onclick="toggleTool(this)">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-exchange-alt text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-slate-800">Cold Transfer</h4>
+                                        <p class="text-xs text-slate-500">Transfer call to human agent</p>
+                                    </div>
+                                </div>
+                                <div class="w-10 h-5 bg-accent-500 rounded-full relative">
+                                    <div class="w-4 h-4 bg-white rounded-full absolute right-0.5 top-0.5 shadow"></div>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-slate-100">
+                                <label class="block text-xs text-slate-500 mb-1">Transfer Number</label>
+                                <input type="text" value="+40 722 333 444" class="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-sm">
+                            </div>
+                        </div>
+
+                        <!-- Hangup -->
+                        <div class="tool-card enabled p-4 rounded-lg border-2 border-slate-200 cursor-pointer" onclick="toggleTool(this)">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-phone-slash text-red-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-slate-800">Hangup</h4>
+                                        <p class="text-xs text-slate-500">End call with rules</p>
+                                    </div>
+                                </div>
+                                <div class="w-10 h-5 bg-accent-500 rounded-full relative">
+                                    <div class="w-4 h-4 bg-white rounded-full absolute right-0.5 top-0.5 shadow"></div>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-slate-100 space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" checked class="rounded text-accent-500">
+                                    <span class="text-xs text-slate-600">After outcome detected</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" checked class="rounded text-accent-500">
+                                    <span class="text-xs text-slate-600">Max duration: <input type="number" value="600" class="w-16 bg-white border border-slate-200 rounded px-1 py-0.5 text-xs ml-1"> sec</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DTMF Input -->
+                        <div class="tool-card p-4 rounded-lg border-2 border-slate-200 cursor-pointer" onclick="toggleTool(this)">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-calculator text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-slate-800">DTMF Input</h4>
+                                        <p class="text-xs text-slate-500">Collect keypad inputs</p>
+                                    </div>
+                                </div>
+                                <div class="w-10 h-5 bg-slate-200 rounded-full relative">
+                                    <div class="w-4 h-4 bg-white rounded-full absolute left-0.5 top-0.5 shadow"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appointment Scheduling -->
+                        <div class="tool-card enabled p-4 rounded-lg border-2 border-slate-200 cursor-pointer" onclick="toggleTool(this)">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-calendar-plus text-orange-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-slate-800">Appointment Scheduling</h4>
+                                        <p class="text-xs text-slate-500">Book via Cal.com or Calendly</p>
+                                    </div>
+                                </div>
+                                <div class="w-10 h-5 bg-accent-500 rounded-full relative">
+                                    <div class="w-4 h-4 bg-white rounded-full absolute right-0.5 top-0.5 shadow"></div>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-slate-100 space-y-2">
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Provider</label>
+                                    <select class="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option>Cal.com</option>
+                                        <option>Calendly</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Event Type</label>
+                                    <select class="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option>30 min consultation</option>
+                                        <option>1 hour meeting</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- API / Webhook -->
+                        <div class="tool-card p-4 rounded-lg border-2 border-slate-200 cursor-pointer" onclick="toggleTool(this)">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-plug text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-slate-800">API / Webhook</h4>
+                                        <p class="text-xs text-slate-500">Call external endpoints</p>
+                                    </div>
+                                </div>
+                                <div class="w-10 h-5 bg-slate-200 rounded-full relative">
+                                    <div class="w-4 h-4 bg-white rounded-full absolute left-0.5 top-0.5 shadow"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Knowledge Base -->
+                        <div class="tool-card p-4 rounded-lg border-2 border-slate-200 cursor-pointer" onclick="toggleTool(this)">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-database text-slate-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-slate-800">Knowledge Base</h4>
+                                        <p class="text-xs text-slate-500">RAG from documents</p>
+                                    </div>
+                                </div>
+                                <div class="w-10 h-5 bg-slate-200 rounded-full relative">
+                                    <div class="w-4 h-4 bg-white rounded-full absolute left-0.5 top-0.5 shadow"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Post-Call Variables -->
+                <div id="step-5" class="step-content hidden">
+                    <p class="text-sm text-slate-500 mb-4">Define structured data to extract from each call. These variables can be used in webhooks, analytics, and integrations.</p>
+                    
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+                        <p class="text-xs text-amber-700"><i class="fas fa-info-circle mr-1"></i> Variables are extracted by the LLM at the end of each call based on the name, type, and description you provide.</p>
+                    </div>
+
+                    <!-- Variable List -->
+                    <div class="space-y-2 mb-4" id="variablesList">
+                        <div class="variable-row flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
+                            <div class="flex-1 grid grid-cols-5 gap-2">
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Name</label>
+                                    <input type="text" value="call_outcome" class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Type</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option selected>enum</option>
+                                        <option>string</option>
+                                        <option>number</option>
+                                        <option>boolean</option>
+                                        <option>date</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Required</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option selected>Yes</option>
+                                        <option>No</option>
+                                    </select>
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="block text-xs text-slate-500 mb-1">Description / Enum Values</label>
+                                    <input type="text" value="promise, refused, escalate, callback, no_answer" class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                </div>
+                            </div>
+                            <button class="text-slate-400 hover:text-red-500 mt-5"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+
+                        <div class="variable-row flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
+                            <div class="flex-1 grid grid-cols-5 gap-2">
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Name</label>
+                                    <input type="text" value="promise_date" class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Type</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option>enum</option>
+                                        <option>string</option>
+                                        <option>number</option>
+                                        <option>boolean</option>
+                                        <option selected>date</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Required</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option>No</option>
+                                    </select>
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="block text-xs text-slate-500 mb-1">Description</label>
+                                    <input type="text" value="Date customer promised to pay" class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                </div>
+                            </div>
+                            <button class="text-slate-400 hover:text-red-500 mt-5"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+
+                        <div class="variable-row flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
+                            <div class="flex-1 grid grid-cols-5 gap-2">
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Name</label>
+                                    <input type="text" value="amount_discussed" class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Type</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option>enum</option>
+                                        <option>string</option>
+                                        <option selected>number</option>
+                                        <option>boolean</option>
+                                        <option>date</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Required</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option selected>No</option>
+                                    </select>
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="block text-xs text-slate-500 mb-1">Description</label>
+                                    <input type="text" value="Amount discussed or promised (in EUR)" class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                </div>
+                            </div>
+                            <button class="text-slate-400 hover:text-red-500 mt-5"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+
+                        <div class="variable-row flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
+                            <div class="flex-1 grid grid-cols-5 gap-2">
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Name</label>
+                                    <input type="text" value="escalation_reason" class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Type</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option selected>enum</option>
+                                        <option>string</option>
+                                        <option>number</option>
+                                        <option>boolean</option>
+                                        <option>date</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-500 mb-1">Required</label>
+                                    <select class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                        <option selected>No</option>
+                                    </select>
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="block text-xs text-slate-500 mb-1">Description / Enum Values</label>
+                                    <input type="text" value="legal_threat, dispute, requested_supervisor, complex_case, other" class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-sm">
+                                </div>
+                            </div>
+                            <button class="text-slate-400 hover:text-red-500 mt-5"><i class="fas fa-trash text-sm"></i></button>
+                        </div>
+                    </div>
+
+                    <button onclick="addVariable()" class="w-full py-2.5 border-2 border-dashed border-slate-300 rounded-lg text-sm text-slate-500 hover:border-accent-300 hover:text-accent-600 transition">
+                        <i class="fas fa-plus mr-2"></i>Add Variable
+                    </button>
+                </div>
+
+                <!-- Step 6: Advanced -->
+                <div id="step-6" class="step-content hidden">
+                    <div class="space-y-6">
+                        <!-- Interruption Settings -->
+                        <div class="config-section">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-4">Interruption Settings</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm text-slate-600 mb-1.5">Min Interruption Words</label>
+                                    <input type="number" value="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                                    <p class="text-xs text-slate-400 mt-1">Minimum words to detect as interruption</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-slate-600 mb-1.5">Min Interruption Duration (ms)</label>
+                                    <input type="number" value="500" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                                    <p class="text-xs text-slate-400 mt-1">Minimum duration to trigger interruption</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-slate-600 mb-1.5">False Interruption Timeout (ms)</label>
+                                    <input type="number" value="1000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                                    <p class="text-xs text-slate-400 mt-1">Wait time before resuming after false interrupt</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" checked class="w-4 h-4 text-accent-600 rounded">
+                                        <span class="text-sm text-slate-600">Resume after false interruptions</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Call Settings -->
+                        <div class="config-section">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-4">Call Settings</h3>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm text-slate-600 mb-1.5">Max Call Duration (sec)</label>
+                                    <input type="number" value="600" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-slate-600 mb-1.5">Re-engagement Timeout (sec)</label>
+                                    <input type="number" value="30" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-slate-600 mb-1.5">Retry Attempts</label>
+                                    <input type="number" value="3" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Options -->
+                        <div class="config-section">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-4">Additional Options</h3>
+                            <div class="space-y-3">
+                                <label class="flex items-center justify-between cursor-pointer p-3 bg-slate-50 rounded-lg">
+                                    <div>
+                                        <span class="text-sm font-medium text-slate-700">Enable Emotions</span>
+                                        <p class="text-xs text-slate-500">Allow emotional voice modulation</p>
+                                    </div>
+                                    <input type="checkbox" checked class="w-4 h-4 text-accent-600 rounded">
+                                </label>
+                                <label class="flex items-center justify-between cursor-pointer p-3 bg-slate-50 rounded-lg">
+                                    <div>
+                                        <span class="text-sm font-medium text-slate-700">Noise Cancellation</span>
+                                        <p class="text-xs text-slate-500">Apply noise reduction to audio</p>
+                                    </div>
+                                    <input type="checkbox" checked class="w-4 h-4 text-accent-600 rounded">
+                                </label>
+                                <label class="flex items-center justify-between cursor-pointer p-3 bg-slate-50 rounded-lg">
+                                    <div>
+                                        <span class="text-sm font-medium text-slate-700">Call Recording</span>
+                                        <p class="text-xs text-slate-500">Record calls for review and training</p>
+                                    </div>
+                                    <input type="checkbox" class="w-4 h-4 text-accent-600 rounded">
+                                </label>
+                                <label class="flex items-center justify-between cursor-pointer p-3 bg-slate-50 rounded-lg">
+                                    <div>
+                                        <span class="text-sm font-medium text-slate-700">Transcription</span>
+                                        <p class="text-xs text-slate-500">Generate text transcript of calls</p>
+                                    </div>
+                                    <input type="checkbox" checked class="w-4 h-4 text-accent-600 rounded">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="flex items-center justify-between p-5 border-t border-slate-200 bg-slate-50">
+                <button id="prevBtn" onclick="prevStep()" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 disabled:opacity-50" disabled>
+                    <i class="fas fa-arrow-left mr-2"></i>Previous
+                </button>
+                <div class="flex items-center gap-3">
+                    <button onclick="$('#assistantModal').fadeOut()" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800">Cancel</button>
+                    <button id="nextBtn" onclick="nextStep()" class="bg-accent-500 hover:bg-accent-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition">
+                        Next<i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                    <button id="saveBtn" onclick="saveAssistant()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition hidden">
+                        <i class="fas fa-check mr-2"></i>Save Assistant
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

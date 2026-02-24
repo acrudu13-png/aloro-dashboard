@@ -1,0 +1,100 @@
+/* Aloro Dashboard Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.sidebar-item {
+    transition: all 0.15s;
+}
+
+.sidebar-item:hover {
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.sidebar-item.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-right: 2px solid #3b82f6;
+}
+
+.fade-in {
+    animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-hover {
+    transition: box-shadow 0.2s;
+}
+
+.card-hover:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.sidebar-collapsed #sidebar {
+    width: 72px;
+}
+
+.sidebar-collapsed #sidebar .nav-text,
+.sidebar-collapsed #sidebar .sidebar-section,
+.sidebar-collapsed #sidebar .org-card {
+    display: none;
+}
+
+.sidebar-collapsed #mainContent {
+    margin-left: 72px;
+}
+
+.table-row:hover {
+    background: #f8fafc;
+}
+
+.call-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.call-details.expanded {
+    max-height: 300px;
+}
+
+.tool-card {
+    transition: all 0.15s;
+}
+
+.tool-card:hover {
+    border-color: #93c5fd;
+}
+
+.tool-card.enabled {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.variable-row:hover {
+    background: #f8fafc;
+}
+
+.config-section {
+    border-left: 3px solid #e2e8f0;
+    padding-left: 1rem;
+}
+
+.config-section.active {
+    border-left-color: #3b82f6;
+}
+
+/* Expand icon rotation */
+.expand-icon {
+    transition: transform 0.2s ease;
+}
+
+.call-details.expanded .expand-icon,
+tr.expanded .expand-icon {
+    transform: rotate(90deg);
+}
