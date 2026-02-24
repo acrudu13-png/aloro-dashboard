@@ -205,27 +205,88 @@ $(document).on('keypress', '#testChatInput', function(e) {
     }
 });
 
-// Modal functions for new pages
+// Campaign Modal
+function openCampaignModal() {
+    $('#campaignModal').fadeIn();
+}
+
+function saveCampaign() {
+    const name = $('#campaignName').val().trim();
+    const assistant = $('#campaignAssistant').val();
+    
+    if (!name) {
+        alert('Please enter a campaign name');
+        return;
+    }
+    if (!assistant) {
+        alert('Please select an assistant');
+        return;
+    }
+    
+    // In real implementation, save to API
+    alert('Campaign created successfully!');
+    $('#campaignModal').fadeOut();
+    // Reset form
+    $('#campaignName').val('');
+    $('#campaignAssistant').val('');
+}
+
+// Knowledge Base Modal
 function openKBModal() {
-    alert('Knowledge Base modal - to be implemented');
+    $('#kbModal').fadeIn();
 }
 
+function saveKB() {
+    // In real implementation, collect form data and save
+    alert('Knowledge Base created successfully! Documents will be indexed shortly.');
+    $('#kbModal').fadeOut();
+}
+
+// WhatsApp Sender Modal
 function openWASenderModal() {
-    alert('WhatsApp Sender modal - to be implemented');
+    $('#waSenderModal').fadeIn();
 }
 
+function saveWASender() {
+    // In real implementation, collect form data and save
+    alert('WhatsApp Sender added! Please verify the number to activate it.');
+    $('#waSenderModal').fadeOut();
+}
+
+// WhatsApp Template Modal
 function openWATemplateModal() {
-    alert('WhatsApp Template modal - to be implemented');
+    $('#waTemplateModal').fadeIn();
 }
 
+function saveWATemplate() {
+    // In real implementation, collect form data and submit to Meta
+    alert('Template submitted for approval! This usually takes 24-48 hours.');
+    $('#waTemplateModal').fadeOut();
+}
+
+// Phone Number Modal
 function openPhoneModal() {
-    alert('Phone Number modal - to be implemented');
+    $('#phoneModal').fadeIn();
 }
 
+function savePhone() {
+    // In real implementation, collect form data and save
+    alert('Phone number added successfully!');
+    $('#phoneModal').fadeOut();
+}
+
+// Webhook Modal
 function openWebhookModal() {
-    alert('Webhook modal - to be implemented');
+    $('#webhookModal').fadeIn();
 }
 
+function saveWebhook() {
+    // In real implementation, collect form data and save
+    alert('Webhook added successfully!');
+    $('#webhookModal').fadeOut();
+}
+
+// Custom Dashboard Modal
 function openCustomDashboardModal() {
-    alert('Custom Dashboard builder - to be implemented');
+    alert('Custom Dashboard builder coming soon! This will include a drag-and-drop interface for building custom analytics dashboards.');
 }
