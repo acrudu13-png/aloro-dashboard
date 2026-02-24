@@ -1,25 +1,51 @@
-# Autocalls.ai Competitor Research
+# Autocalls.ai Competitor Research (Comprehensive)
 
 > Thorough analysis of Autocalls.ai platform documentation for dashboard feature ideas
-> Research date: 2025-02-24
-> Focus: Platform Guide (excluding API docs, Whitelabel, No-code Automation)
+> Research date: 2026-02-24
+> Focus: Platform Guide (excluding API docs, Whitelabel)
+
+---
+
+## Table of Contents
+
+1. [Platform Overview](#1-platform-overview)
+2. [AI Assistants](#2-ai-assistants)
+3. [Campaigns](#3-campaigns)
+4. [WhatsApp Integration](#4-whatsapp-integration)
+5. [Conversations](#5-conversations)
+6. [Custom Dashboards](#6-custom-dashboards)
+7. [Phone Numbers](#7-phone-numbers)
+8. [Automation Platform](#8-automation-platform)
+9. [Conversation Design](#9-conversation-design)
+10. [UX Patterns](#10-ux-patterns)
+11. [Feature Ideas for Aloro](#11-feature-ideas-for-aloro-dashboard)
+12. [Terminology](#12-terminology-reference)
 
 ---
 
 ## 1. Platform Overview
 
-Autocalls.ai is an AI voice calling platform with three core capabilities:
-- **AI Assistants** - Voice agents with configurable prompts, tools, and voices
-- **Campaigns** - Outbound calling automation with retry logic
-- **Conversations** - Text-based chat via web widget, WhatsApp, test interface
+Autocalls.ai is an AI voice + messaging platform with:
+
+| Capability | Description |
+|------------|-------------|
+| **AI Assistants** | Voice agents with configurable prompts, tools, voices |
+| **Campaigns** | Outbound calling automation with retry logic |
+| **Conversations** | Text chat via web widget, WhatsApp, test interface |
+| **WhatsApp** | Business messaging with template support |
+| **Custom Dashboards** | Widget-based analytics builder |
+| **Automation Platform** | No-code workflow automation |
 
 ---
 
-## 2. AI Assistants - Core Features
+## 2. AI Assistants
 
-### 2.1 Assistant Modes (Voice Engines)
+### 2.1 Assistant Types
 
-Three modes for voice generation:
+- **Inbound** - Receives calls from customers
+- **Outbound** - Makes calls to leads/customers
+
+### 2.2 Voice Engine Modes
 
 | Mode | How It Works | Latency | Best For |
 |------|-------------|---------|----------|
@@ -27,119 +53,150 @@ Three modes for voice generation:
 | **Speech-to-Speech** | Direct multimodal | 300-600ms | Fast back-and-forth, short replies |
 | **Dualplex (Beta)** | Multimodal + ElevenLabs TTS | Low | Fast replies with premium/cloned voices |
 
-**Dashboard idea:** Voice engine selector with latency/quality tradeoff visualization.
+**Mode selection UI:** Dropdown in assistant settings with descriptions
 
-### 2.2 Voice & TTS
+### 2.3 Voice Selection & Cloning
 
-- **Providers:** ElevenLabs (high quality), Cartesia (fast, low latency)
-- **Voice Cloning:** Upload audio samples to clone voices
-  - Cartesia: 10+ seconds, single speaker
-  - ElevenLabs: 1+ minute samples, max 5 min total
-- **Best practices:** Clear audio, no background noise, steady delivery
+**TTS Providers:**
+- **ElevenLabs** - High-quality voices, cloning support
+- **Cartesia** - Fast, low-latency synthesis
 
-**Dashboard idea:** Voice library browser with preview, cloning status indicators.
+**Voice options:**
+1. Built-in voice library (by provider, language, gender)
+2. Voice cloning from audio samples
+   - Cartesia: 10+ seconds, single speaker, no noise
+   - ElevenLabs: 1+ minute samples, max 5 min total
+3. Request from ElevenLabs public library
 
-### 2.3 System Prompts & Initial Messages
+**Cloning UI:** Modal with provider selection → language → name → record/upload → processing status
 
-- **System Prompt:** Overall instructions, tone, steps to follow
-- **Initial Message:** First thing AI says (greeting)
-- **Initial Audio:** Pre-recorded audio file for first impression (professional voice actor)
+### 2.4 System Prompt Configuration
 
-**Best practices:**
-- Be specific with instructions
-- Use example dialogues
-- Handle "unknown" cases explicitly
-- Keep prompts short and focused
-- Use diacritics for proper pronunciation
+**Editing interfaces:**
+1. **Classic Editor** - Textarea with manual editing
+2. **AI Prompt Editor** - Conversational editing with AI
+3. **Flow Builder** - Visual drag-and-drop nodes
 
-**Dashboard idea:** 
-- Prompt editor with AI-assisted suggestions
-- Diff view for changes
-- Template library for common use cases
+### 2.5 AI Prompt Editor (Chat-based)
 
-### 2.4 Flow Builder (Visual Conversation Designer)
-
-Visual drag-and-drop editor for conversation flows:
-
-**Node Types:**
-1. **Start (Green)** - Entry point, greeting message
-2. **Speak (Blue)** - Pre-written exact message
-3. **Prompt (Purple)** - AI instructions, flexible responses
-4. **Action (Orange)** - Call forward, book appointment, custom action
-5. **End (Red)** - End call or transfer
+Conversational interface for editing prompts without manual text editing:
 
 **Features:**
-- Multiple outcomes per node (branching paths)
-- Import/Export flows as JSON
-- Template library
-- Settings panel for agent personality (name, type, language, assertiveness, humor)
-
-**Dashboard idea:** Visual flow builder with drag-and-drop nodes.
-
-### 2.5 AI Prompt Editor
-
-Conversational interface for editing prompts:
-- Chat with AI to describe changes
-- Smart suggestions for improvements
-- Diff view (green=added, red=removed, blue=modified)
+- Chat panel to describe changes in natural language
+- AI suggests modifications
+- Diff view with color coding:
+  - Green = added
+  - Red = removed
+  - Blue = modified
 - Accept/reject individual changes
-- Quick suggestion chips: "Make concise", "Add detail", "Improve clarity"
+- Bulk accept/reject all
+- Quick suggestion chips:
+  - "Make it more concise"
+  - "Add more detail"
+  - "Improve clarity"
+  - "Add instructions"
 
-**Dashboard idea:** AI-assisted prompt improvement with natural language.
+**Variable management:**
+- Pre-call variables tab
+- Post-call fields tab
+- Add/remove fields inline
 
-### 2.6 Tools & Functions
+**Template library:**
+- Start from scratch
+- Continue with existing
+- Start with template (Sales, Support, Scheduling, Surveys, Lead Qualification)
 
-Built-in tools AI can use during calls:
-- **Call Forward** - Transfer to another number
-- **Book Appointment** - Calendar integration
-- **Knowledge Base Search** - Query uploaded documents
-- **Custom Mid-Call Tools** - API integrations
+### 2.6 Flow Builder (Visual Designer)
 
-### 2.7 Custom Mid-Call Tools
+Visual drag-and-drop conversation flow editor:
 
-API integrations that AI can call during conversations:
+**Interface:**
+- Canvas area (center) - drag nodes, connect paths
+- Bottom toolbar - Auto Layout, Duplicate, Delete, Add Node
+- Settings panel (right) - agent personality, variables
+
+**Node Types:**
+
+| Node | Color | Purpose |
+|------|-------|---------|
+| **Start** | Green | Entry point, greeting message |
+| **Speak** | Blue | Pre-written exact message |
+| **Prompt** | Purple | AI instructions, flexible responses |
+| **Action** | Orange | Call forward, book appointment, custom tool |
+| **End** | Red | End call or transfer |
+
+**Outcomes (branching):**
+- Each Speak/Prompt node can have multiple outcomes
+- Different paths based on customer response
+- Visual branching connections
+
+**Settings panel:**
+- Agent name, type, language
+- Assertiveness level
+- Humor level
+- Variables (pre-call data)
+- Post-call fields
+
+**Import/Export:** JSON format for sharing flows
+
+### 2.7 Built-in Tools
+
+| Tool | Description |
+|------|-------------|
+| **End Call** | Politely wrap up conversation |
+| **Transfer** | Route to human/department (standard or SIP URI) |
+| **Appointment Scheduler** | Book with Cal.com, Calendly, GoHighLevel |
+| **DTMF Input** | Send keypad inputs for IVR navigation |
+
+### 2.8 Custom Mid-Call Tools
+
+Create API integrations callable during conversations:
 
 **Configuration:**
 - Name (lowercase, underscores)
-- Description (when/how to use)
+- Description (when/how AI should use)
 - Endpoint URL (supports `{variable}` interpolation)
 - HTTP Method (GET, POST, PUT, PATCH, DELETE)
 - Headers (auth, content-type)
 - Parameters (string, number, boolean)
 - Timeout setting
 
-**Use cases:**
-- Order lookup
-- Check appointment availability
-- Customer verification
-- Inventory checks
+**Testing:** Built-in test button with auto-generated dummy data
 
-**Dashboard idea:** Tool configuration UI with test functionality.
+**Examples:**
+- `check_order_status` - Order lookup
+- `check_availability` - Appointment slots
+- `verify_customer` - CRM verification
 
-### 2.8 Knowledge Bases
+### 2.9 Knowledge Bases
 
-Document/website indexing for AI to reference:
+Document/website indexing for AI reference:
 
-**Sources:**
+**Content sources:**
 - Website scraping (URLs)
 - PDF, DOCX, TXT files
 
-**Processing states:** Empty → Processing → Active → Failed
+**Processing states:**
+- Empty → Processing → Active → Failed
 
 **Integration modes:**
-1. **Function Call** - Search only when needed (recommended, faster)
-2. **Prompt Injection** - Search after every message (more accurate, slower)
+1. **Function Call** (recommended) - Search only when needed
+2. **Prompt Injection** - Search after every message (slower)
 
-**Dashboard idea:** Knowledge base manager with processing status, document upload.
+**UI:** List view with status badges, document count, actions
 
-### 2.9 Post-Call Actions
-
-Extract structured data after calls and send to webhooks:
+### 2.10 Post-Call Actions
 
 **Post-call Variables:**
 - Default: `status` (boolean), `summary` (string)
 - Custom: string, number, boolean types
 - AI extracts from full transcript
+
+**Variable examples:**
+- `meeting_scheduled` (boolean)
+- `interest_level` (string: hot/warm/cold)
+- `callback_time` (string)
+- `objection_reason` (string)
 
 **Webhook configuration:**
 - URL endpoint
@@ -147,25 +204,124 @@ Extract structured data after calls and send to webhooks:
 - Include recording URL (toggle)
 - Test request button
 
-**Payload includes:**
+**Webhook payload includes:**
 - Call info (id, phone, duration, status)
 - Extracted variables
 - Transcript (timestamped + formatted)
 - Recording URL
 - Campaign/lead data (if applicable)
 
-**Dashboard idea:** Variable schema editor, webhook config, test button.
+### 2.11 Call Variables (Pre-call)
 
-### 2.10 Filler Audio
+Variables passed before the call starts:
 
-Natural sounds ("hmm", "one moment") during processing:
+**Usage:** Reference in prompts with `{variable_name}` syntax
+
+**Examples:**
+- `{customer_name}` - Personalization
+- `{email}` - Calendar integrations
+- `{account_type}` - Tailored responses
+- `{company}` - Business context
+
+**Data sources:**
+- Manual entry
+- CSV import
+- CRM sync (GoHighLevel, Google Sheets)
+- Automation platform
+
+### 2.12 Call Flow Settings
+
+**Who speaks first:**
+- AI Assistant (default) - Starts with greeting
+- Customer - AI waits for caller
+
+**Initial Message:**
+- Text greeting read by TTS
+- Use diacritics for pronunciation
+- Keep 5-10 seconds
+
+**Initial Audio (optional):**
+- Pre-recorded MP3/WAV file
+- Professional voice actor
+- Perfect pronunciation
+- Best combined with voice cloning from same voice
+
+### 2.13 Filler Audio
+
+Natural sounds during processing:
+- "hmm", "okay", "I understand", "one moment"
+- Language-aware phrases
 - Eliminates dead air
 - Keeps callers engaged
-- Best combined with fast engine mode
 
-**Dashboard idea:** Toggle for filler audio, combine with latency settings.
+**Categories:**
+- Positive: "Great!", "Perfect!", "Super!"
+- Negative: "Hmm.", "I see.", "Okay."
+- Question: "Right?", "Really?", "How so?"
+- Neutral: "Okay.", "I understand.", "Got it."
 
-### 2.11 Web Widget
+### 2.14 Ambient Sound
+
+Optional background audio:
+- None (default)
+- Office environment sounds
+- Volume control
+
+### 2.15 Audio Enhancement
+
+**Noise Cancellation:**
+- Filters caller background noise
+- Toggle on/off
+
+**End Call on Voicemail:**
+- Detect voicemail and hang up
+- Optional voicemail message before ending
+
+**Record Calls:**
+- Toggle recording on/off
+
+### 2.16 Advanced Settings
+
+**LLM Model Selection:**
+| Model | Best For |
+|-------|----------|
+| GPT-5 Mini | Pipeline mode, balanced reasoning |
+| GPT-5 Realtime | Speech-to-Speech, Dualplex |
+| GPT-4o | Complex tasks (higher latency) |
+| Gemini Flash 2.0/2.5 | Minimal latency |
+
+**LLM Temperature:**
+- Range: 0.0 - 1.0
+- Default: 0.1
+- Lower = stable, predictable
+- Higher = creative, varied
+
+**Duration Settings:**
+| Setting | Range | Default |
+|---------|-------|---------|
+| Re-engagement Interval | 7-600s | 30s |
+| Re-engagement Prompt | Custom text | "Are you still there?" |
+| Max Call Duration | 20-1200s | 600s (10 min) |
+| Max Silence Duration | 1-120s | 40s |
+| Ringing Time | 1-60s | 30s |
+
+### 2.17 Testing Methods
+
+| Method | Description | Cost |
+|--------|-------------|------|
+| **Web Call** | Browser-based voice testing | Deducts balance |
+| **Phone Call** | Real outbound test call | Deducts balance |
+| **Test Chat** | Text-based rapid iteration | Lower cost |
+
+**Test Chat features:**
+- Slide-over panel interface
+- Text-based interaction
+- Same AI logic as voice calls
+- Tests variable collection
+- Tests tool execution
+- Creates conversation records for review
+
+### 2.18 Web Widget
 
 Embeddable widget for websites:
 
@@ -174,32 +330,54 @@ Embeddable widget for websites:
 - Chat Only
 - Voice Only
 
-**Configuration:**
-- Position (8 options)
-- Size (standard / extra large)
-- Primary color
-- Toggle button style (animated / simple)
-- Auto-open on page load
-- Custom avatar
-- Pre-chat form
-- Voice settings tab (mic selection)
+**Size options:**
+- Standard (compact floating)
+- Extra Large (half-screen desktop, full-screen mobile)
 
-**Dashboard idea:** Widget builder with live preview, embed code generator.
+**Position:** 8 options (corners + center edges)
 
-### 2.12 Testing
+**Configuration tabs:**
 
-**Three testing methods:**
-1. **Web Call** - Browser-based voice testing (deducts balance)
-2. **Phone Call** - Real phone test (outbound)
-3. **Test Chat** - Text-based for rapid iteration
+1. **General**
+   - Widget mode
+   - Size
+   - Position
+   - Primary color
+   - Toggle button size/style
+   - Auto-open on page load
 
-**Dashboard idea:** Quick test buttons, test history.
+2. **Button**
+   - Custom avatar image
+   - Button main text
+   - Button sub text
+   - Tab labels (Voice/Chat)
+
+3. **Header & Modal**
+   - Header title/subtitle
+   - Modal title
+   - Start button text
+   - Modal description
+
+4. **Chat Settings**
+   - Placeholder text
+   - Send button label
+   - Show/hide function calls
+
+5. **Voice Settings**
+   - Microphone selection
+   - Voice preferences
+
+**Pre-chat Form:**
+- Collect variables before conversation
+- Custom fields
 
 ---
 
-## 3. Campaigns - Outbound Automation
+## 3. Campaigns
 
-### 3.1 Campaign Structure
+### 3.1 Campaign Overview
+
+Automated outbound calling to multiple leads:
 
 **Components:**
 - Lead management (primary + secondary contacts)
@@ -207,36 +385,75 @@ Embeddable widget for websites:
 - Retry logic (attempts, intervals)
 - Goal tracking (completion variables)
 
-**Campaign Status:** Draft → In Progress → Paused → Completed
+**Campaign Status:**
+| Status | Description |
+|--------|-------------|
+| Draft | Being configured |
+| In Progress | Actively calling |
+| Paused | Temporarily stopped |
+| Completed | All leads contacted |
 
-### 3.2 Lead Management
+### 3.2 Campaign Setup
+
+**Prerequisites:**
+- AI assistant configured for outbound
+- Phone number assigned
+- Sufficient account balance
+- Leads ready
+
+**Configuration:**
+1. Campaign name
+2. Select AI assistant
+3. Set schedule (hours, days, timezone)
+4. Configure retry logic
+5. Add leads
+
+### 3.3 Scheduling
+
+**Allowed calling hours:**
+- Start time (default: 00:00)
+- End time (default: 23:59)
+- Uses assistant's timezone
+
+**Allowed days:**
+- Monday-Sunday (select individual)
+- Presets: Business only (Mon-Fri)
+
+### 3.4 Retry Logic
+
+| Setting | Options | Default |
+|---------|---------|---------|
+| Max retries | 1-5 | 3 |
+| Retry interval | 10-4320 minutes | 60 |
+| Retry on voicemail | Yes/No | - |
+| Retry until goal completed | Boolean variable | - |
+
+### 3.5 Lead Management
 
 **Lead sources:**
-- CSV import
 - Manual entry
+- CSV import
 - Integration import (GoHighLevel, Google Sheets)
 
 **Lead types:**
 - Primary leads
 - Secondary contacts (backup numbers)
 
-**Lead status tracking:**
-- Created → Scheduled → Processing → Completed → Rescheduled → Max Retries
+**Lead status:**
+| Status | Description |
+|--------|-------------|
+| Created | Ready to call |
+| Scheduled | Queued for next attempt |
+| Processing | Currently being called |
+| Completed | Successfully contacted |
+| Rescheduled | Scheduled for retry |
+| Max Retries | Reached max attempts |
 
-### 3.3 Scheduling
+**Manual status changes:**
+- Set to "Created" - Reset to call again
+- Set to "Completed" - Stop calling
 
-- Allowed calling hours (start/end time)
-- Allowed days of week
-- Timezone support (uses assistant's timezone)
-
-### 3.4 Retry Logic
-
-- Max retries: 1-5 (default: 3)
-- Retry interval: 10-4320 minutes (default: 60)
-- Retry on voicemail: Yes/No
-- Retry until goal completed: Uses post-call boolean variable
-
-### 3.5 Campaign Monitoring
+### 3.6 Campaign Monitoring
 
 **Real-time metrics:**
 - Calls in progress
@@ -248,83 +465,246 @@ Embeddable widget for websites:
 - Initiated, Ringing, In Progress, Completed
 - Busy, Unanswered, Failed
 
-**Dashboard idea:** Campaign dashboard with real-time progress, lead status table.
+---
+
+## 4. WhatsApp Integration
+
+### 4.1 Overview
+
+WhatsApp Business API integration for AI-powered messaging:
+
+**Capabilities:**
+- Receive messages → AI auto-responds
+- Send template messages (business-initiated)
+- 24-hour messaging window rules
+- Image analysis (Vision)
+- Voice message transcription
+
+### 4.2 WhatsApp Senders
+
+Phone numbers registered for WhatsApp Business:
+
+**Number types:**
+1. **Platform Numbers** - Purchased through platform, auto-verification
+2. **External Numbers** - Your own mobile, SMS/voice verification
+
+**Setup (Platform Number):**
+1. Select available number
+2. Enter display name
+3. Add business profile (optional)
+4. Start verification (AI-assisted voice, 1-2 min)
+5. Connect via Meta Embedded Signup
+6. Create NEW WhatsApp Business Account (critical!)
+
+**Setup (External Number):**
+1. Enter phone number (E.164 format)
+2. Enter display name
+3. Login with Facebook
+4. Create new WhatsApp Business Account
+5. Verify via SMS or voice call (6-digit code)
+
+**Sender Status:**
+| Status | Description |
+|--------|-------------|
+| Online | Fully operational |
+| Connecting | Being initialized |
+| Pending | Awaiting verification |
+| Offline | Manually disabled |
+| Suspended | Meta policy violation |
+| Failed | Setup failed |
+
+### 4.3 Message Templates
+
+Pre-approved formats for business-initiated messages:
+
+**Categories:**
+| Category | Use Case | Approval Time |
+|----------|----------|---------------|
+| Utility | Order confirmations, shipping, appointments | Minutes |
+| Marketing | Promotions, announcements | Hours to 24h |
+| Authentication | OTP, verification codes | Minutes |
+| Voice Call Request | Request permission to call | Instant |
+
+**Template structure:**
+- Header (optional) - Text or media
+- Body (required) - Main message with `{{1}}`, `{{2}}` variables
+- Footer (optional) - Up to 60 characters
+- Buttons (optional) - Quick Reply, Call to Action, Voice Call Request
+
+**Approval process:**
+1. Create template
+2. Submit for approval
+3. Meta review (minutes to 24 hours)
+4. Status: Draft → Pending → Approved/Rejected
+
+**Common rejection reasons:**
+- Promotional content in Utility templates
+- Missing/unclear variable samples
+- Aggressive language
+- URL shorteners (bit.ly, etc.)
+- Wrong category selection
+- Restricted content (alcohol, gambling, etc.)
+
+**Editing limitation:** Cannot edit approved templates - must create new version
+
+### 4.4 24-Hour Messaging Window
+
+- Customer messages you → 24-hour window opens
+- Within window: Send any free-form message
+- After window: Must use approved template
+
+**Quality rating affects limits:**
+| Quality | Daily Limit |
+|---------|-------------|
+| New Sender | ~250 |
+| Low | 1,000 |
+| Medium | 10,000 |
+| High | 100,000+ |
+
+### 4.5 WhatsApp Automation
+
+**Triggers:**
+- WhatsApp Message Received
+- WhatsApp Conversation Started
+- Conversation Ended
+
+**Actions:**
+- Send WhatsApp Template Message
+- Send WhatsApp Message (free-form, 24h window)
+- Generate AI Reply (for custom integrations)
+
+**Example workflows:**
+1. Post-call follow-up → Send template based on call outcome
+2. Lead qualification via WhatsApp
+3. Appointment reminders on schedule
 
 ---
 
-## 4. Conversations - Text Interactions
-
-**Conversation sources:**
-- Web Widget
-- WhatsApp Business
-- Test Chat
-
-**Conversation types (badges):**
-- Test (Orange)
-- Web Widget (Purple)
-- WhatsApp (Green)
-
-**Tracked data:**
-- Message history
-- Variables collected (pre-chat + extracted)
-- Cost and token usage
-- Session timestamps
-- Customer identifier
-
-**Dashboard idea:** Conversation list with filters by type, date, status.
-
----
-
-## 5. Custom Dashboards
+## 5. Conversations
 
 ### 5.1 Overview
 
-Drag-and-drop dashboard builder with widgets:
-- **Stat Widgets** - Single metrics with optional comparison
-- **Chart Widgets** - 8 chart types
-- **Table Widgets** - Detailed records with sorting
+Text-based interactions tracked separately from phone calls:
 
-### 5.2 Stat Widgets
+**Sources:**
+| Source | Badge Color |
+|--------|-------------|
+| Test Chat | Orange |
+| Web Widget | Purple |
+| WhatsApp | Green |
+
+### 5.2 Conversation Data
+
+Each conversation includes:
+- Message history with timestamps
+- Variables collected (pre-chat + extracted)
+- Cost and token usage
+- Conversation type badge
+- Customer identifier (phone for WhatsApp)
+
+### 5.3 WhatsApp Conversations
+
+- Follows 24-hour messaging window rules
+- Customer phone number tracked
+- Voice notes auto-transcribed
+- Images analyzed with Vision AI
+- All media stored as attachments
+
+---
+
+## 6. Custom Dashboards
+
+### 6.1 Overview
+
+Drag-and-drop analytics builder with three widget types:
+
+| Widget | Purpose |
+|--------|---------|
+| Stat | Single metric with optional comparison |
+| Chart | 8 chart types for trends |
+| Table | Detailed records with sorting |
+
+### 6.2 Creating Dashboards
+
+1. Click "Create Custom Dashboard"
+2. Enter name, choose icon
+3. Unlock to customize
+4. Add widgets (presets or custom)
+5. Drag to arrange
+6. Save and lock
+
+### 6.3 Stat Widgets
 
 **Configuration:**
-- Data source (calls, leads, campaigns, assistants, phone_numbers, sms)
+
+**Step 1 - Basics:**
+- Widget name (internal)
+- Data table (calls, leads, campaigns, assistants, phone_numbers, sms)
 - Aggregation (COUNT, SUM, AVG, MAX, MIN)
 - Column (for aggregations)
-- Label, description, color
+
+**Step 2 - Display:**
+- Label (required)
+- Description
+- Color (primary, success, warning, danger, info, gray)
 - Show mini chart (daily trend)
-- Compare with previous period
+- Compare with previous period (percentage change)
 - Date range
 - Conditions (filters)
 
-### 5.3 Chart Widgets
+**Examples:**
+- Total Calls (COUNT, 30 days)
+- Average Duration (AVG duration, mini chart)
+- Appointments Booked (COUNT where status=completed AND appointment_booked=true)
+
+### 6.4 Chart Widgets
 
 **Chart types:**
-1. Line - Trends over time
-2. Bar - Category comparison
-3. Area - Filled trend
-4. Pie - Proportions
-5. Donut - Pie with center hole
-6. Polar Area - Magnitude via radius
-7. Radar - Multi-variable comparison
-8. Radial Bar - Circular progress indicator
-
-**Options:**
-- Group By (categorical) OR Group By Period (hour/day/week/month)
-- Grid lines, legend, tooltips, data labels
-- Line curve (smooth/straight/stepline)
-- Chart height (200-800px)
-- Gradient (radialBar only)
-
-**Radial Bar special features:**
-- Calculate as Percentage (conditions met / total × 100)
-- Show footer with numbers
-- Start/End angle
-- Hollow size, dash array
-
-### 5.4 Table Widgets
+| Type | Use For | Requires |
+|------|---------|----------|
+| Line | Trends over time | Group By Period |
+| Bar | Category/time comparison | Group By OR Group By Period |
+| Area | Filled trends | Group By Period |
+| Pie | Proportions | Group By |
+| Donut | Pie with center hole | Group By |
+| Polar Area | Magnitude via radius | Group By |
+| Radar | Multi-axis comparison | Group By |
+| Radial Bar | Progress percentage | Conditions |
 
 **Configuration:**
-- Data source selection
+
+**Step 1 - Basics:**
+- Same as Stat widgets
+- Chart type selection
+
+**Step 2 - Display:**
+- Label, description, color
+- Date range
+- Group By (categorical) OR Group By Period (hour/day/week/month)
+- Conditions
+
+**Step 3 - Advanced:**
+- Show grid lines
+- Show legend
+- Show tooltips
+- Show data labels
+- Show toolbar (zoom/download)
+- Line curve (smooth/straight/stepline)
+- Line width (1-10px)
+- Chart height (200-800px)
+
+**Radial Bar special:**
+- Calculate as Percentage (conditions met / total × 100)
+- Show footer with numbers ("150 achieved / 1,000 total")
+- Start/End angle
+- Hollow size (0-100%)
+- Dash array (dashed pattern)
+- Gradient colors
+
+### 6.5 Table Widgets
+
+**Configuration:**
+- Data source
 - Campaign filter (enables variable columns)
 - Assistant filter (enables evaluation columns)
 - Column selection (basic, relationships, evaluation, variables)
@@ -334,74 +714,178 @@ Drag-and-drop dashboard builder with widgets:
 - Conditions
 
 **Interactive features:**
-- Clickable rows (link to detail page)
+- Clickable rows (link to detail)
 - Live date filter
 - Status filter (multi-select)
 - Text truncation with tooltip
 
-### 5.5 Filtering System
+### 6.6 Filtering System
 
-**Date ranges:** Today, Yesterday, Last 7/14/30/60/90 days, Last 6 months, Last year
+**Date ranges:**
+- Today, Yesterday
+- Last 7/14/30/60/90 days
+- Last 6 months, Last year
 
-**Conditions:** Multiple AND filters
+**Conditions:**
+- Multiple AND filters
 - Field, operator, value
 - Supports evaluation fields (post-call variables)
 
-### 5.6 Layout
+### 6.7 Layout Best Practices
 
-- Edit mode: Unlock → Drag → Resize → Save → Lock
-- Widget sizing: Stats 3-4 cols, Charts 6-12 cols, Tables 12 cols
-- Best practice: KPIs at top, related metrics grouped, tables at bottom
+- Stats: 3-4 columns (fit 3-4 per row)
+- Charts: 6-12 columns
+- Tables: 12 columns (full width)
+- KPIs at top
+- Group related metrics
+- Tables at bottom
 
-**Dashboard ideas:**
-- Custom dashboard builder
-- Preset widgets for common metrics
-- Drag-and-drop layout editor
-- Save multiple dashboards with icons
+### 6.8 Preset Widgets
 
----
-
-## 6. Phone Numbers
-
-**Types:**
-1. **Dedicated Numbers** - Rented from platform, inbound + outbound
-2. **SIP Integration** - Connect existing VOIP/PBX
-3. **Caller ID** - Verified outbound only, shows existing number
-
-**Dashboard idea:** Phone number manager with type indicators, verification status.
+21 ready-made widgets marked with emoji:
+- 📊 Stats
+- 📈 Charts
+- 📋 Tables
 
 ---
 
-## 7. Conversation Design Best Practices
+## 7. Phone Numbers
 
-### 7.1 Prompt Writing
+### 7.1 Number Types
 
+| Type | Inbound | Outbound | Monthly Fee |
+|------|---------|----------|-------------|
+| **Dedicated** | ✅ | ✅ | From $3.99/mo |
+| **SIP Integration** | ✅ | ✅ | $0.00045/min (AI bridging) |
+| **Caller ID** | ❌ | ✅ | Per-minute rates |
+
+### 7.2 Choosing Type
+
+- Need inbound + no VOIP → Dedicated number
+- Have PBX/VOIP → SIP integration
+- Outbound only with existing number → Caller ID
+
+---
+
+## 8. Automation Platform
+
+### 8.1 Overview
+
+No-code workflow automation with triggers and actions:
+
+**Flow structure:**
+```
+Trigger → Actions
+```
+
+### 8.2 Triggers
+
+**Call-based:**
+1. **Call Ended** - Post-conversation automation
+2. **Inbound Call Variable Injection** - Pre-call context enrichment
+
+**WhatsApp:**
+- Message Received
+- Conversation Started
+- Conversation Ended
+
+**Other:**
+- Schedule Trigger
+- Webhook Trigger
+- Service-specific events
+
+### 8.3 Actions
+
+**Hubspot:**
+- Update contact records
+- Create new contacts
+- Sync conversation insights
+
+**Campaign Management:**
+- Add leads to campaigns
+- Schedule follow-up calls
+- Manage priorities
+
+**External:**
+- Send emails
+- Update spreadsheets
+- Trigger webhooks
+- Custom integrations
+
+### 8.4 Example Workflows
+
+**Intelligent CRM Update:**
+```
+Trigger: AI Call Ended
+↓
+Process Conversation Insights
+↓
+Update Hubspot Contact
+↓
+Schedule Next AI Interaction
+```
+
+**Smart Inbound Handling:**
+```
+Trigger: Inbound Call to AI
+↓
+Lookup Customer in Hubspot
+↓
+Return Enriched Context
+↓
+AI Personalizes Conversation
+```
+
+---
+
+## 9. Conversation Design
+
+### 9.1 Prompt Writing
+
+**Best practices:**
 - Be specific about purpose, tone, steps
 - Use example dialogues
 - Handle "unknown" cases explicitly
-- Keep it short and focused
+- Keep prompts short and focused
 - Periodically review transcripts
 
-### 7.2 Handling Interruptions
+### 9.2 System Prompt vs Initial Message
 
-- **Voice Activity Detection (VAD):** Controls when AI responds
-  - High sensitivity = less interruption, more pauses
-  - Low sensitivity = may talk over user
-- **Speech speed & filler usage:** Natural vs robotic
-- **Encourage shorter responses** in prompt to reduce collision
+| Element | Purpose |
+|---------|---------|
+| System Prompt | Overall instructions, context, behavior |
+| Initial Message | First thing AI says (greeting) |
+
+### 9.3 Handling Interruptions
+
+**Voice Activity Detection (VAD):**
+- High sensitivity = less interruption, more pauses
+- Low sensitivity = may talk over user
+
+**Best practices:**
+- Encourage shorter responses in prompt
+- Use filler audio
+- Adjust speech speed
+
+### 9.4 Language Support
+
+- Primary language selection
+- Secondary languages (multilingual support)
+- AI detects spoken language and responds accordingly
+- Filler phrases auto-set per language
 
 ---
 
-## 8. Key UX Patterns to Adopt
+## 10. UX Patterns
 
-### 8.1 Navigation Structure
+### 10.1 Navigation Structure
 
 ```
 - Assistants (list + create)
-  - [Assistant Name] (edit page)
-    - Settings (tab)
+  - [Assistant Name]
+    - Settings (tabbed)
     - Flow Builder (tab)
-    - AI Prompt Editor (tab)
+    - AI Prompt Editor (button)
     - Web Widget (button)
     - Test (button)
 - Campaigns (list + create)
@@ -411,70 +895,116 @@ Drag-and-drop dashboard builder with widgets:
 - Phone Numbers (list + create)
 - Knowledge Bases (list + create)
 - Mid-Call Tools (list + create)
+- WhatsApp Senders (list + create)
+- WhatsApp Templates (list + create)
 ```
 
-### 8.2 Status Badges
+### 10.2 Status Badges
 
-Color-coded badges for quick scanning:
-- Draft (gray)
-- In Progress (blue)
-- Paused (orange)
-- Completed (green)
-- Failed (red)
+| Status | Color |
+|--------|-------|
+| Draft | Gray |
+| In Progress | Blue |
+| Paused | Orange |
+| Completed | Green |
+| Failed | Red |
+| Processing | Spinning |
+| Pending | Yellow |
 
-### 8.3 Quick Actions
+### 10.3 Quick Actions
 
 - Inline status changes
 - Test buttons near configuration
 - Duplicate/delete in lists
+- "Speak with assistant" button
 
-### 8.4 Real-time Indicators
+### 10.4 Real-time Indicators
 
-- Processing status (spinning)
+- Processing status (spinning animation)
 - Active/inactive toggles
 - Last activity timestamps
+- Call counts in nav badges
 
-### 8.5 Bulk Operations
+### 10.5 Bulk Operations
 
-- Import from CSV
+- CSV import for leads
 - Multi-select for batch actions
 - Export data
+- Integration imports (GoHighLevel, Google Sheets)
+
+### 10.6 Form Patterns
+
+**Tabbed settings:**
+- General
+- Prompt & Tools
+- Post-call Actions
+
+**Accordion sections:**
+- Collapsible detailed options
+- Step-by-step wizards
+
+**Slide-over panels:**
+- Test Chat
+- Widget preview
 
 ---
 
-## 9. Feature Prioritization for Aloro Dashboard
+## 11. Feature Ideas for Aloro Dashboard
 
 ### High Priority (Core)
-1. **Assistants list + CRUD** - Central entity
-2. **Assistant settings page** - Name, voice, prompt, tools
-3. **Calls list** - Recent calls with status, duration, phone
-4. **Real-time stats** - Total calls, success rate, avg duration
-5. **Campaigns list + CRUD** - For outbound operations
+
+| Feature | Description |
+|---------|-------------|
+| Assistants list + CRUD | Central entity management |
+| Assistant settings | Name, voice, prompt, tools |
+| Calls list | Status, duration, phone, transcript |
+| Real-time stats | Total calls, success rate, avg duration |
+| Campaigns list + CRUD | Outbound operations |
 
 ### Medium Priority
-6. **Custom dashboard builder** - Drag-and-drop widgets
-7. **Knowledge base manager** - Upload documents, status
-8. **Test chat interface** - Quick iteration
-9. **Web widget builder** - Embed code generator
-10. **Post-call variables editor** - Schema configuration
+
+| Feature | Description |
+|---------|-------------|
+| Custom dashboard builder | Drag-and-drop widgets |
+| Knowledge base manager | Upload documents, status |
+| Test chat interface | Quick iteration |
+| Web widget builder | Embed code generator |
+| Post-call variables | Schema configuration |
+| WhatsApp integration | Business messaging |
 
 ### Lower Priority (Advanced)
-11. **Flow Builder** - Visual conversation designer
-12. **AI Prompt Editor** - Conversational prompt improvement
-13. **Mid-call tools manager** - Custom API integrations
-14. **Phone number management** - Purchase, SIP, Caller ID
+
+| Feature | Description |
+|---------|-------------|
+| Flow Builder | Visual conversation designer |
+| AI Prompt Editor | Conversational prompt improvement |
+| Mid-call tools | Custom API integrations |
+| Phone number management | Purchase, SIP, Caller ID |
+| Automation workflows | No-code triggers/actions |
+
+### Aloro-Specific Ideas
+
+| Feature | Use Case |
+|---------|----------|
+| Telerenta metrics | Device returns, debt collection status |
+| Sales agent performance | Call outcomes, appointments booked |
+| Multi-language | Romanian + English support |
+| Debt collection scripts | Specialized prompt templates |
+| Device tracking | Rental status dashboard |
 
 ---
 
-## 10. Terminology Reference
+## 12. Terminology Reference
 
-| Autocalls Term | Description |
-|----------------|-------------|
+| Term | Description |
+|------|-------------|
 | Assistant | AI voice agent configuration |
 | Campaign | Outbound calling automation |
 | Lead | Contact to call in campaign |
 | Post-call Variables | Data extracted after call ends |
+| Pre-call Variables | Data passed before call starts |
 | Flow Builder | Visual conversation designer |
+| AI Prompt Editor | Chat-based prompt editing |
 | Mid-Call Tool | API integration callable during conversation |
 | Knowledge Base | Document/website index for AI reference |
 | Web Widget | Embeddable chat/voice widget |
@@ -483,37 +1013,52 @@ Color-coded badges for quick scanning:
 | Dualplex | Hybrid: multimodal + ElevenLabs TTS |
 | Filler Audio | Natural sounds during processing |
 | VAD | Voice Activity Detection |
+| WhatsApp Sender | Phone number for WhatsApp Business |
+| Template Message | Pre-approved message format |
+| 24-Hour Window | Free-form messaging period |
 
 ---
 
-## 11. Integration Ideas for Aloro
+## 13. UI Components Reference
 
-### From Their Platform
-1. **Assistant modes** - Let users choose latency vs quality
-2. **Flow Builder** - Visual script designer
-3. **Custom dashboards** - Widget-based analytics
-4. **Post-call variables** - Structured data extraction
-5. **Knowledge bases** - Document indexing
-6. **Mid-call tools** - Real-time API calls
+### From Their Docs
 
-### Unique to Aloro Context
-1. **Telerenta-specific metrics** - Device returns, debt collection
-2. **Sales agent performance** - Call outcomes, appointments
-3. **Multi-language support** - Romanian + English
-4. **WhatsApp integration** - Already on roadmap?
-
----
-
-## 12. Screenshots to Reference
-
-Key UI patterns from their docs:
-- Flow Builder canvas with nodes
+- Flow Builder canvas with color-coded nodes
 - AI Prompt Editor with diff view
-- Custom Dashboard with widgets
-- Campaign monitoring table
+- Custom Dashboard with drag-and-drop
+- Campaign monitoring table with status badges
 - Widget configuration tabs
 - Knowledge base processing states
+- WhatsApp template editor
+- Test Chat slide-over panel
+- Web Widget live preview
+
+### Component Patterns
+
+**Lists:**
+- Search + filter bar
+- Status badges
+- Quick actions (edit, duplicate, delete)
+- Pagination
+
+**Forms:**
+- Tabbed sections
+- Accordion groups
+- Inline help text
+- Validation messages
+
+**Widgets:**
+- Stat cards with mini charts
+- Charts with tooltips/legends
+- Tables with sortable columns
+- Filter dropdowns
+
+**Modals:**
+- Wizard flows
+- Confirmation dialogs
+- Preview panels
 
 ---
 
 *Research compiled for Aloro Dashboard development*
+*Last updated: 2026-02-24*
