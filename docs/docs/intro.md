@@ -1,47 +1,61 @@
 ---
 sidebar_position: 1
+slug: /
 ---
 
-# Tutorial Intro
+# Welcome to Aloro
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Aloro is a powerful **Voice AI platform** that enables businesses to build, deploy, and manage AI-powered voice assistants. Whether you're handling inbound customer support calls, running outbound sales campaigns, or integrating WhatsApp messaging, Aloro provides the tools you need.
+
+## What Can You Build?
+
+With Aloro, you can create AI assistants that:
+
+- **Handle inbound calls** - Answer customer questions, book appointments, route calls
+- **Run outbound campaigns** - Reach leads at scale with personalized conversations
+- **Manage WhatsApp messaging** - Automated responses and template-based outreach
+- **Integrate with your systems** - Connect to CRMs, calendars, and custom APIs
+
+## Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **AI Assistants** | Configure voice agents with custom prompts, voices, and tools |
+| **Campaigns** | Automate outbound calling with scheduling and retry logic |
+| **Knowledge Bases** | Give your assistants access to your documentation |
+| **Web Widget** | Embed voice and chat on your website |
+| **WhatsApp Integration** | Business messaging with AI-powered responses |
+| **Custom Dashboards** | Build analytics with drag-and-drop widgets |
+| **Webhooks** | Connect call data to your external systems |
+
+## Who Is This For?
+
+- **Sales Teams** - Qualify leads and book appointments automatically
+- **Customer Support** - Handle inquiries 24/7 with AI assistants
+- **Debt Collection** - Automated reminder calls and payment processing
+- **Healthcare** - Appointment scheduling and patient follow-ups
+- **Real Estate** - Lead qualification and property inquiries
 
 ## Getting Started
 
-Get started by **creating a new site**.
+Ready to build your first AI assistant? Head over to the [Quick Start Guide](/docs/getting-started/quickstart) to get up and running in minutes.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+:::tip Need Help?
+If you have questions, reach out to our support team or check the [Glossary](/docs/glossary) for key terms and concepts.
+:::
 
-### What you'll need
+## Platform Architecture
 
-- [Node.js](https://nodejs.org/en/download/) version 20.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
+```mermaid
+graph TD
+    A[Phone Call / Web Widget / WhatsApp] --> B[AI Assistant]
+    B --> C[Speech-to-Text]
+    C --> D[LLM Processing]
+    D --> E[Text-to-Speech]
+    E --> F[Response to User]
+    B --> G[Knowledge Base]
+    B --> H[Mid-Call Tools / APIs]
+    B --> I[Post-Call Webhooks]
 ```
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+The Aloro platform handles the entire voice AI pipeline, from speech recognition to natural language understanding to speech synthesis, all configurable through an intuitive dashboard.

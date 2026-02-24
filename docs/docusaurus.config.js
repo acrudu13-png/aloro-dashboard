@@ -10,8 +10,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Aloro Docs',
-  tagline: 'Voice AI platform documentation',
+  title: 'Aloro Documentation',
+  tagline: 'Voice AI Platform Documentation',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -20,10 +20,10 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://aloro-ai.github.io',
+  url: 'https://aloro.ai',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/aloro-dashboard/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -47,6 +47,7 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
+          routeBasePath: 'docs',
           editUrl:
             'https://github.com/aloro-ai/aloro-dashboard/tree/main/docs/',
         },
@@ -74,7 +75,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/aloro-social-card.png',
       colorMode: {
         respectPrefersColorScheme: true,
       },
@@ -89,7 +90,12 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Docs',
+            label: 'Documentation',
+          },
+          {
+            to: '/docs/getting-started/quickstart',
+            label: 'Quick Start',
+            position: 'left',
           },
           {to: '/blog', label: 'Updates', position: 'left'},
           {
@@ -103,34 +109,46 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Documentation',
             items: [
               {
-                label: 'Overview',
-                to: '/docs/intro',
+                label: 'Getting Started',
+                to: '/docs/getting-started/quickstart',
               },
               {
-                label: 'Features',
-                to: '/docs/features/overview',
+                label: 'Assistants',
+                to: '/docs/assistants/overview',
+              },
+              {
+                label: 'Campaigns',
+                to: '/docs/campaigns/overview',
               },
             ],
           },
           {
-            title: 'Product',
+            title: 'Integrations',
             items: [
               {
-                label: 'Dashboard',
-                to: '/docs/dashboard/overview',
+                label: 'WhatsApp',
+                to: '/docs/whatsapp/senders',
               },
               {
                 label: 'Web Widget',
-                to: '/docs/web-widget/config',
+                to: '/docs/web-widget/configuration',
+              },
+              {
+                label: 'Webhooks',
+                to: '/docs/webhooks/post-call',
               },
             ],
           },
           {
-            title: 'More',
+            title: 'Resources',
             items: [
+              {
+                label: 'Glossary',
+                to: '/docs/glossary',
+              },
               {
                 label: 'Updates',
                 to: '/blog',
@@ -147,6 +165,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
+        additionalLanguages: ['json', 'bash'],
       },
     }),
 };
