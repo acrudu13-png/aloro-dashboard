@@ -1,4 +1,4 @@
-name: Deploy Dashboard + Docs to GitHub Pages
+name: Deploy Dashboard + Docs + React to GitHub Pages
 
 on:
   push:
@@ -29,9 +29,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-          cache-dependency-path: docs/package-lock.json
           
+      # Build Docusaurus docs
       - name: Install Docusaurus dependencies
         run: cd docs && npm ci
         
@@ -41,6 +40,17 @@ jobs:
       - name: Move docs to /documentation
         run: mv docs/build documentation
         
+      # Build React dashboard
+      - name: Install React dependencies
+        run: cd dashboard-react && npm ci
+        
+      - name: Build React dashboard
+        run: cd dashboard-react && npm run build
+        
+      - name: Move React build to /react
+        run: mv dashboard-react/dist react
+        
+      # Deploy everything
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
