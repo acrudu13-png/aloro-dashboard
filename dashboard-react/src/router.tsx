@@ -5,6 +5,7 @@ import { CallsPage } from './pages/CallsPage';
 import { InsightsPage } from './pages/InsightsPage';
 import { AssistantsPage } from './pages/AssistantsPage';
 import { CampaignsPage } from './pages/CampaignsPage';
+import { CustomersPage } from './pages/CustomersPage';
 import {
   ConversationsPage,
   KnowledgeBasesPage,
@@ -13,7 +14,7 @@ import {
   PhoneNumbersPage,
   WebhooksPage,
   CustomDashboardsPage,
-  SettingsPage,
+  DocumentationPage,
 } from './pages';
 
 export const router = createHashRouter([
@@ -50,6 +51,10 @@ export const router = createHashRouter([
         element: <ConversationsPage />,
       },
       {
+        path: 'customers',
+        element: <CustomersPage />,
+      },
+      {
         path: 'knowledge-bases',
         element: <KnowledgeBasesPage />,
       },
@@ -74,8 +79,8 @@ export const router = createHashRouter([
         element: <CustomDashboardsPage />,
       },
       {
-        path: 'settings',
-        element: <SettingsPage />,
+        path: 'documentation',
+        element: <DocumentationPage />,
       },
     ],
   },

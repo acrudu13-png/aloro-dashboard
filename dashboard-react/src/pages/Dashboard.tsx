@@ -10,6 +10,38 @@ import { KPICard } from '../components/ui/KPICard';
 import { Badge } from '../components/ui/Badge';
 import { ChevronRight } from 'lucide-react';
 import { useState } from 'react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from 'recharts';
+
+// Mock data for charts - last 7 days
+const chartData = [
+  { name: 'Mon', callVolume: 145, outcomes: 128, talkTime: 42, answered: 138 },
+  { name: 'Tue', callVolume: 198, outcomes: 175, talkTime: 58, answered: 185 },
+  { name: 'Wed', callVolume: 112, outcomes: 98, talkTime: 31, answered: 105 },
+  { name: 'Thu', callVolume: 223, outcomes: 201, talkTime: 67, answered: 215 },
+  { name: 'Wed', callVolume: 178, outcomes: 156, talkTime: 52, answered: 168 },
+  { name: 'Sat', callVolume: 89, outcomes: 78, talkTime: 24, answered: 82 },
+  { name: 'Sun', callVolume: 45, outcomes: 38, talkTime: 12, answered: 40 },
+];
+
+// Call outcomes breakdown data
+const outcomeData = [
+  { name: 'Mon', promiseToPay: 38, humanEscalation: 3, refused: 7, noResolution: 12 },
+  { name: 'Tue', promiseToPay: 52, humanEscalation: 5, refused: 9, noResolution: 15 },
+  { name: 'Wed', promiseToPay: 29, humanEscalation: 2, refused: 5, noResolution: 10 },
+  { name: 'Thu', promiseToPay: 61, humanEscalation: 4, refused: 11, noResolution: 18 },
+  { name: 'Fri', promiseToPay: 48, humanEscalation: 3, refused: 8, noResolution: 14 },
+  { name: 'Sat', promiseToPay: 24, humanEscalation: 1, refused: 3, noResolution: 7 },
+  { name: 'Sun', promiseToPay: 12, humanEscalation: 0, refused: 2, noResolution: 4 },
+];
 
 // Mock data - will be replaced with API calls
 const kpiData = [
@@ -110,8 +142,39 @@ const outcomeIcons: Record<string, { variant: 'success' | 'danger' | 'warning' |
   none: { variant: 'default', label: 'None' },
 };
 
+type ChartLineKey = 'callVolume' | 'outcomes' | 'talkTime' | 'answered';
+type OutcomeLineKey = 'promiseToPay' | 'humanEscalation' | 'refused' | 'noResolution';
+
 export function Dashboard() {
   const [expandedCall, setExpandedCall] = useState<string | null>(null);
+  const [activeLines, setActiveLines] = useState<ChartLineKey[]>(['callVolume', 'answered']);
+  const [activeOutcomeLines, setActiveOutcomeLines] = useState<OutcomeLineKey[]>(['promiseToPay', 'humanEscalation']);
+
+  const toggleLine = (key: ChartLineKey) => {
+    setActiveLines(prev =>
+      prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
+    );
+  };
+
+  const toggleOutcomeLine = (key: OutcomeLineKey) => {
+    setActiveOutcomeLines(prev =>
+      prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
+    );
+  };
+
+  const lineConfig: { key: ChartLineKey; label: string; color: string }[] = [
+    { key: 'callVolume', label: 'Call Volume', color: '#3b82f6' },
+    { key: 'answered', label: 'Answered Calls', color: '#10b981' },
+    { key: 'talkTime', label: 'Talk Time (min)', color: '#8b5cf6' },
+    { key: 'outcomes', label: 'Successful Outcomes', color: '#f59e0b' },
+  ];
+
+  const outcomeLineConfig: { key: OutcomeLineKey; label: string; color: string }[] = [
+    { key: 'promiseToPay', label: 'Promise to Pay', color: '#10b981' },
+    { key: 'humanEscalation', label: 'Human Escalation', color: '#ef4444' },
+    { key: 'refused', label: 'Refused/Dispute', color: '#f59e0b' },
+    { key: 'noResolution', label: 'No Resolution', color: '#94a3b8' },
+  ];
 
   return (
     <div className="animate-fade-in">
@@ -123,59 +186,134 @@ export function Dashboard() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
         {/* Call Volume Chart */}
-        <div className="lg:col-span-2 bg-white rounded-lg p-4 lg:p-5 border border-slate-200">
-          <h2 className="text-sm font-semibold text-slate-700 mb-4">Call Volume (Last 7 Days)</h2>
-          <div className="h-40 flex items-end justify-between gap-2">
-            {[60, 80, 45, 90, 70, 40, 20].map((height, i) => (
-              <div
-                key={i}
-                className={`flex-1 rounded-t ${
-                  i === 4 ? 'bg-accent-500' : i === 6 ? 'bg-slate-100' : 'bg-accent-200'
+        <div className="bg-white rounded-lg p-4 lg:p-5 border border-slate-200">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-slate-700">Call Metrics (Last 7 Days)</h2>
+          </div>
+          {/* Toggle buttons */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {lineConfig.map(line => (
+              <button
+                key={line.key}
+                onClick={() => toggleLine(line.key)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-full border transition ${
+                  activeLines.includes(line.key)
+                    ? 'border-transparent text-white'
+                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
-                style={{ height: `${height}%` }}
-              />
+                style={activeLines.includes(line.key) ? { backgroundColor: line.color } : {}}
+              >
+                {line.label}
+              </button>
             ))}
           </div>
-          <div className="flex justify-between mt-2 text-xs text-slate-400">
-            <span>Mon</span>
-            <span>Tue</span>
-            <span>Wed</span>
-            <span>Thu</span>
-            <span>Fri</span>
-            <span>Sat</span>
-            <span>Sun</span>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#94a3b8" />
+                <YAxis tick={{ fontSize: 12 }} stroke="#94a3b8" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#fff',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '8px',
+                    fontSize: '12px',
+                  }}
+                />
+                <Legend />
+                {lineConfig.map(line =>
+                  activeLines.includes(line.key) && (
+                    <Line
+                      key={line.key}
+                      type="monotone"
+                      dataKey={line.key}
+                      name={line.label}
+                      stroke={line.color}
+                      strokeWidth={2}
+                      dot={{ r: 3 }}
+                      activeDot={{ r: 5 }}
+                    />
+                  )
+                )}
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Call Outcomes */}
+        {/* Call Outcomes Breakdown */}
         <div className="bg-white rounded-lg p-4 lg:p-5 border border-slate-200">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-slate-700">Call Outcomes</h2>
-            <a href="#" className="text-xs text-accent-600 hover:underline">
-              Details
-            </a>
+            <h2 className="text-sm font-semibold text-slate-700">Call Outcomes Breakdown</h2>
           </div>
-          <div className="space-y-2">
-            {callOutcomes.map((outcome, i) => (
-              <div
-                key={i}
-                className={`flex items-center justify-between p-2.5 rounded-lg ${outcome.bgClass}`}
+          {/* Toggle buttons */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {outcomeLineConfig.map(line => (
+              <button
+                key={line.key}
+                onClick={() => toggleOutcomeLine(line.key)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-full border transition ${
+                  activeOutcomeLines.includes(line.key)
+                    ? 'border-transparent text-white'
+                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+                style={activeOutcomeLines.includes(line.key) ? { backgroundColor: line.color } : {}}
               >
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`w-6 h-6 rounded flex items-center justify-center`}
-                  >
-                    <div className={`w-2 h-2 rounded-full ${outcome.color}`} />
-                  </div>
-                  <span className="text-sm text-slate-700">{outcome.label}</span>
-                </div>
-                <span className="text-sm font-semibold text-slate-800">{outcome.count}</span>
-              </div>
+                {line.label}
+              </button>
             ))}
           </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={outcomeData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#94a3b8" />
+                <YAxis tick={{ fontSize: 12 }} stroke="#94a3b8" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#fff',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '8px',
+                    fontSize: '12px',
+                  }}
+                />
+                <Legend />
+                {outcomeLineConfig.map(line =>
+                  activeOutcomeLines.includes(line.key) && (
+                    <Line
+                      key={line.key}
+                      type="monotone"
+                      dataKey={line.key}
+                      name={line.label}
+                      stroke={line.color}
+                      strokeWidth={2}
+                      dot={{ r: 3 }}
+                      activeDot={{ r: 5 }}
+                    />
+                  )
+                )}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
+      </div>
+
+      {/* Outcome Summary Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        {callOutcomes.map((outcome, i) => (
+          <div
+            key={i}
+            className={`flex items-center justify-between p-3 rounded-lg ${outcome.bgClass} border border-slate-100`}
+          >
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${outcome.color}`} />
+              <span className="text-sm text-slate-700">{outcome.label}</span>
+            </div>
+            <span className="text-sm font-semibold text-slate-800">{outcome.count}</span>
+          </div>
+        ))}
       </div>
 
       {/* Recent Calls */}

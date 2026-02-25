@@ -5,11 +5,12 @@ import {
   Bot,
   MessageSquare,
   Database,
-  Settings,
+  BookOpen,
   Webhook,
   Smartphone,
   BarChart3,
   ChevronRight,
+  Users,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -26,9 +27,10 @@ const navItems = [
   { id: 'insights', label: 'Call Insights', icon: BarChart3 },
   { id: 'campaigns', label: 'Campaigns', icon: Megaphone },
   { id: 'assistants', label: 'Assistants', icon: Bot },
-  { id: 'conversations', label: 'Conversations', icon: MessageSquare },
+  { id: 'conversations', label: 'Conversations', icon: MessageSquare, badge: 'Coming Soon' },
+  { id: 'customers', label: 'Customers', icon: Users },
   { id: 'knowledge-bases', label: 'Knowledge Bases', icon: Database },
-  { id: 'whatsapp', label: 'WhatsApp', icon: Smartphone },
+  { id: 'whatsapp', label: 'WhatsApp', icon: Smartphone, badge: 'Coming Soon' },
   { id: 'web-widget', label: 'Web Widget', icon: MessageSquare },
   { id: 'phone-numbers', label: 'Phone Numbers', icon: Phone },
   { id: 'webhooks', label: 'Webhooks', icon: Webhook },
@@ -36,7 +38,7 @@ const navItems = [
 
 const settingsItems = [
   { id: 'custom-dashboards', label: 'Custom Dashboards', icon: BarChart3 },
-  { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'documentation', label: 'Documentation', icon: BookOpen },
 ];
 
 export function Sidebar({ currentPage, onNavigate, isOpen, onClose }: SidebarProps) {
@@ -95,6 +97,11 @@ export function Sidebar({ currentPage, onNavigate, isOpen, onClose }: SidebarPro
                 >
                   <item.icon className="w-4 h-4" />
                   <span>{item.label}</span>
+                  {item.badge && (
+                    <span className="ml-auto text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded">
+                      {item.badge}
+                    </span>
+                  )}
                 </button>
               </li>
             ))}

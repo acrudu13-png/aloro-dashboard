@@ -1,4 +1,5 @@
 import { PlaceholderPage } from './PlaceholderPage';
+import { WebWidgetPage as WebWidgetPageComponent } from './WebWidgetPage';
 
 export function ConversationsPage() {
   return <PlaceholderPage title="Conversations" description="WhatsApp and Web chat history" />;
@@ -13,7 +14,7 @@ export function WhatsAppPage() {
 }
 
 export function WebWidgetPage() {
-  return <PlaceholderPage title="Web Widget" description="Configure your embeddable chat/voice widget" />;
+  return <WebWidgetPageComponent />;
 }
 
 export function PhoneNumbersPage() {
@@ -28,6 +29,6 @@ export function CustomDashboardsPage() {
   return <PlaceholderPage title="Custom Dashboards" description="Build custom analytics views" />;
 }
 
-export function SettingsPage() {
-  return <PlaceholderPage title="Settings" description="Organization and account settings" />;
+export function DocumentationPage() {
+  return <PlaceholderPage title="Documentation" description="API docs and guides" />;
 }

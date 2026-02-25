@@ -1,4 +1,5 @@
-import { Menu, Search, Bell } from 'lucide-react';
+import { Menu, Search } from 'lucide-react';
+import { NotificationBell } from '../ui/NotificationBell';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -37,10 +38,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         </div>
 
         {/* Notifications */}
-        <button className="text-slate-400 hover:text-slate-600 relative p-2 rounded-lg hover:bg-slate-100 transition">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
-        </button>
+        <NotificationBell />
 
         {/* User */}
         <div className="flex items-center gap-2 lg:gap-3 lg:pl-3 lg:border-l border-slate-200">
