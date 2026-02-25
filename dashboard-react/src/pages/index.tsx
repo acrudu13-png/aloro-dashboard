@@ -9,10 +9,6 @@ export function KnowledgeBasesPage() {
   return <PlaceholderPage title="Knowledge Bases" description="Manage document collections for AI context" />;
 }
 
-export function WhatsAppPage() {
-  return <PlaceholderPage title="WhatsApp" description="WhatsApp Business integration" />;
-}
-
 export function WebWidgetPage() {
   return <WebWidgetPageComponent />;
 }

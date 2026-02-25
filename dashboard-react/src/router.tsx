@@ -6,10 +6,10 @@ import { InsightsPage } from './pages/InsightsPage';
 import { AssistantsPage } from './pages/AssistantsPage';
 import { CampaignsPage } from './pages/CampaignsPage';
 import { CustomersPage } from './pages/CustomersPage';
+import { PromptSnippetsPage } from './pages/PromptSnippetsPage';
 import {
   ConversationsPage,
   KnowledgeBasesPage,
-  WhatsAppPage,
   WebWidgetPage,
   PhoneNumbersPage,
   WebhooksPage,
@@ -59,8 +59,8 @@ export const router = createHashRouter([
         element: <KnowledgeBasesPage />,
       },
       {
-        path: 'whatsapp',
-        element: <WhatsAppPage />,
+        path: 'prompt-snippets',
+        element: <PromptSnippetsPage />,
       },
       {
         path: 'web-widget',
