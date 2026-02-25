@@ -48,23 +48,11 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          routeBasePath: 'docs',
+          routeBasePath: '/', // Docs at root instead of /docs
           editUrl:
             'https://github.com/acrudu13-png/aloro-dashboard/tree/main/docs/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          editUrl:
-            'https://github.com/acrudu13-png/aloro-dashboard/tree/main/docs/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false, // Disable blog
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -94,11 +82,10 @@ const config = {
             label: 'Documentation',
           },
           {
-            to: '/docs/getting-started/quickstart',
+            to: '/getting-started/quickstart',
             label: 'Quick Start',
             position: 'left',
           },
-          {to: '/blog', label: 'Updates', position: 'left'},
           {
             href: 'https://github.com/acrudu13-png/aloro-dashboard',
             label: 'GitHub',
@@ -114,15 +101,15 @@ const config = {
             items: [
               {
                 label: 'Getting Started',
-                to: '/docs/getting-started/quickstart',
+                to: '/getting-started/quickstart',
               },
               {
                 label: 'Assistants',
-                to: '/docs/assistants/overview',
+                to: '/assistants/overview',
               },
               {
                 label: 'Campaigns',
-                to: '/docs/campaigns/overview',
+                to: '/campaigns/overview',
               },
             ],
           },
@@ -131,15 +118,15 @@ const config = {
             items: [
               {
                 label: 'WhatsApp',
-                to: '/docs/whatsapp/senders',
+                to: '/whatsapp/senders',
               },
               {
                 label: 'Web Widget',
-                to: '/docs/web-widget/configuration',
+                to: '/web-widget/configuration',
               },
               {
                 label: 'Webhooks',
-                to: '/docs/webhooks/post-call',
+                to: '/webhooks/post-call',
               },
             ],
           },
@@ -148,11 +135,7 @@ const config = {
             items: [
               {
                 label: 'Glossary',
-                to: '/docs/glossary',
-              },
-              {
-                label: 'Updates',
-                to: '/blog',
+                to: '/glossary',
               },
               {
                 label: 'GitHub',
