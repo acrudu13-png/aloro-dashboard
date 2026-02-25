@@ -1,27 +1,28 @@
-import { useState } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import { useUIStore } from '../../stores';
 
-interface LayoutProps {
-  children: React.ReactNode;
-  currentPage: string;
-  onNavigate: (page: string) => void;
-}
-
-export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+export function Layout() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentPage = location.pathname.slice(1) || 'dashboard';
+  const { sidebarOpen, toggleSidebar, closeSidebar } = useUIStore();
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <Header onMenuClick={toggleSidebar} />
       <Sidebar
         currentPage={currentPage}
-        onNavigate={onNavigate}
+        onNavigate={(page) => {
+          navigate(`/${page}`);
+          closeSidebar();
+        }}
         isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
+        onClose={closeSidebar}
       />
       <main className="ml-0 lg:ml-60 mt-14 p-4 lg:p-6 transition-all duration-300">
-        {children}
+        <Outlet />
       </main>
     </div>
   );
