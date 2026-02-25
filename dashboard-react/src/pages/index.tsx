@@ -17,6 +17,10 @@ export function PhoneNumbersPage() {
   return <PlaceholderPage title="Phone Numbers" description="Manage inbound and outbound phone numbers" />;
 }
 
+export function WhatsAppPage() {
+  return <PlaceholderPage title="WhatsApp" description="WhatsApp Business integration" />;
+}
+
 export function WebhooksPage() {
   return <PlaceholderPage title="Webhooks" description="Post-call and event webhooks" />;
 }

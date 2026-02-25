@@ -11,6 +11,8 @@ import {
   BarChart3,
   ChevronRight,
   Users,
+  Radio,
+  LineChart,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -21,24 +23,59 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-const navItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'calls', label: 'Calls', icon: Phone },
-  { id: 'insights', label: 'Call Insights', icon: BarChart3 },
-  { id: 'campaigns', label: 'Campaigns', icon: Megaphone },
-  { id: 'assistants', label: 'Assistants', icon: Bot },
-  { id: 'conversations', label: 'Conversations', icon: MessageSquare, badge: 'Coming Soon' },
-  { id: 'customers', label: 'Customers', icon: Users },
-  { id: 'knowledge-bases', label: 'Knowledge Bases', icon: Database },
-  { id: 'prompt-snippets', label: 'Prompt Snippets', icon: FileText },
-  { id: 'web-widget', label: 'Web Widget', icon: MessageSquare },
-  { id: 'phone-numbers', label: 'Phone Numbers', icon: Phone },
-  { id: 'webhooks', label: 'Webhooks', icon: Webhook },
-];
+interface NavItem {
+  id: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  badge?: string;
+}
 
-const settingsItems = [
-  { id: 'custom-dashboards', label: 'Custom Dashboards', icon: BarChart3 },
-  { id: 'documentation', label: 'Documentation', icon: BookOpen },
+interface NavCategory {
+  label: string;
+  items: NavItem[];
+}
+
+const navCategories: NavCategory[] = [
+  {
+    label: 'Analytics',
+    items: [
+      { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+      { id: 'insights', label: 'Call Insights', icon: LineChart },
+      { id: 'custom-dashboards', label: 'Custom Dashboards', icon: BarChart3 },
+    ],
+  },
+  {
+    label: 'Operations',
+    items: [
+      { id: 'calls', label: 'Calls', icon: Phone },
+      { id: 'campaigns', label: 'Campaigns', icon: Megaphone },
+      { id: 'customers', label: 'Customers', icon: Users },
+    ],
+  },
+  {
+    label: 'AI Configuration',
+    items: [
+      { id: 'assistants', label: 'Assistants', icon: Bot },
+      { id: 'knowledge-bases', label: 'Knowledge Bases', icon: Database },
+      { id: 'prompt-snippets', label: 'Prompt Snippets', icon: FileText },
+    ],
+  },
+  {
+    label: 'Channels',
+    items: [
+      { id: 'conversations', label: 'Conversations', icon: MessageSquare, badge: 'Soon' },
+      { id: 'web-widget', label: 'Web Widget', icon: Radio },
+      { id: 'phone-numbers', label: 'Phone Numbers', icon: Phone },
+      { id: 'whatsapp', label: 'WhatsApp', icon: MessageSquare, badge: 'Soon' },
+    ],
+  },
+  {
+    label: 'Integrations',
+    items: [
+      { id: 'webhooks', label: 'Webhooks', icon: Webhook },
+      { id: 'documentation', label: 'Documentation', icon: BookOpen },
+    ],
+  },
 ];
 
 export function Sidebar({ currentPage, onNavigate, isOpen, onClose }: SidebarProps) {
@@ -75,66 +112,42 @@ export function Sidebar({ currentPage, onNavigate, isOpen, onClose }: SidebarPro
           </div>
         </div>
 
-        {/* Main Navigation */}
-        <nav className="p-3">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-3">
-            Main
-          </p>
-          <ul className="space-y-0.5">
-            {navItems.map((item) => (
-              <li key={item.id}>
-                <button
-                  onClick={() => {
-                    onNavigate(item.id);
-                    onClose();
-                  }}
-                  className={cn(
-                    'sidebar-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
-                    currentPage === item.id
-                      ? 'bg-accent-50 text-accent-700 font-medium border-r-2 border-accent-500'
-                      : 'text-slate-600 hover:bg-slate-50'
-                  )}
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                  {item.badge && (
-                    <span className="ml-auto text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded">
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* Settings */}
-        <nav className="p-3 border-t border-slate-100">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-3">
-            Settings
-          </p>
-          <ul className="space-y-0.5">
-            {settingsItems.map((item) => (
-              <li key={item.id}>
-                <button
-                  onClick={() => {
-                    onNavigate(item.id);
-                    onClose();
-                  }}
-                  className={cn(
-                    'sidebar-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
-                    currentPage === item.id
-                      ? 'bg-accent-50 text-accent-700 font-medium'
-                      : 'text-slate-600 hover:bg-slate-50'
-                  )}
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {/* Categorized Navigation */}
+        <div className="py-3">
+          {navCategories.map((category, catIndex) => (
+            <nav key={category.label} className={catIndex > 0 ? 'border-t border-slate-100 pt-3 mt-3' : ''}>
+              <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5 px-4">
+                {category.label}
+              </p>
+              <ul className="space-y-0.5 px-2">
+                {category.items.map((item) => (
+                  <li key={item.id}>
+                    <button
+                      onClick={() => {
+                        onNavigate(item.id);
+                        onClose();
+                      }}
+                      className={cn(
+                        'sidebar-item w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors',
+                        currentPage === item.id
+                          ? 'bg-accent-50 text-accent-700 font-medium'
+                          : 'text-slate-600 hover:bg-slate-50'
+                      )}
+                    >
+                      <item.icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{item.label}</span>
+                      {item.badge && (
+                        <span className="ml-auto text-[10px] px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded font-medium">
+                          {item.badge}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+        </div>
       </aside>
     </>
   );

@@ -12,6 +12,7 @@ import {
   KnowledgeBasesPage,
   WebWidgetPage,
   PhoneNumbersPage,
+  WhatsAppPage,
   WebhooksPage,
   CustomDashboardsPage,
   DocumentationPage,
@@ -69,6 +70,10 @@ export const router = createHashRouter([
       {
         path: 'phone-numbers',
         element: <PhoneNumbersPage />,
+      },
+      {
+        path: 'whatsapp',
+        element: <WhatsAppPage />,
       },
       {
         path: 'webhooks',
