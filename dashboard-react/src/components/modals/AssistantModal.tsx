@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { X, Bot, Wrench, Settings2, Phone, User, MessageSquare, Play, Mic, MicOff, PhoneOff, Volume2 } from 'lucide-react';
+import { useState } from 'react';
+import { X, Bot, Wrench, Settings2, Phone, User, MessageSquare } from 'lucide-react';
 
 interface AssistantModalProps {
   isOpen: boolean;
@@ -7,7 +7,7 @@ interface AssistantModalProps {
   assistantId?: string | null;
 }
 
-type TabKey = 'general' | 'tools' | 'advanced' | 'test';
+type TabKey = 'general' | 'tools' | 'advanced';
 
 const ttsProviders = [
   { id: 'cartesia', name: 'Cartesia' },
@@ -30,8 +30,6 @@ const webhooks = [
 
 export function AssistantModal({ isOpen, onClose, assistantId }: AssistantModalProps) {
   const [activeTab, setActiveTab] = useState<TabKey>('general');
-  
-  // General tab state
   const [whoSpeaksFirst, setWhoSpeaksFirst] = useState<'agent' | 'customer'>('agent');
   const [initialMessage, setInitialMessage] = useState('Hello! This is an automated call from Telerenta regarding your account.');
   const [prompt, setPrompt] = useState(`You are a professional debt collection assistant. Your goal is to:
@@ -43,8 +41,6 @@ export function AssistantModal({ isOpen, onClose, assistantId }: AssistantModalP
 Always remain calm and professional. Never make threats or use aggressive language.`);
   const [ttsProvider, setTtsProvider] = useState('cartesia');
   const [selectedVoice, setSelectedVoice] = useState('Luna');
-
-  // Tools tab state
   const [coldTransferEnabled, setColdTransferEnabled] = useState(true);
   const [whenToTransfer, setWhenToTransfer] = useState('Transfer the call when the customer asks for a real assistant');
   const [transferNumber, setTransferNumber] = useState('+40 744 123 456');
@@ -52,60 +48,18 @@ Always remain calm and professional. Never make threats or use aggressive langua
   const [whenToEnd, setWhenToEnd] = useState('End the call when the customer hangs up or becomes abusive');
   const [dtmfEnabled, setDtmfEnabled] = useState(false);
   const [dtmfPrompt, setDtmfPrompt] = useState('Press 1 to confirm your payment date, or press 2 to speak with an agent');
-
-  // Advanced tab state
   const [postCallWebhook, setPostCallWebhook] = useState('wh-1');
   const [reengagementMessage, setReengagementMessage] = useState('Hi {name}, we tried to reach you about your account. Please call us back at your earliest convenience.');
 
-  // Test tab state - MUST be before early return
-  const [testCallState, setTestCallState] = useState<'idle' | 'connecting' | 'connected'>('idle');
-  const [testIsMuted, setTestIsMuted] = useState(false);
-  const [testDuration, setTestDuration] = useState(0);
-  const [testTranscript, setTestTranscript] = useState<{ speaker: 'user' | 'agent'; text: string }[]>([]);
-  const durationRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    if (testCallState === 'connected') {
-      durationRef.current = setInterval(() => setTestDuration(d => d + 1), 1000);
-    } else {
-      if (durationRef.current) clearInterval(durationRef.current);
-      setTestDuration(0);
-    }
-    return () => {
-      if (durationRef.current) clearInterval(durationRef.current);
-    };
-  }, [testCallState]);
-
-  const formatTestDuration = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const startTestCall = () => {
-    setTestCallState('connecting');
-    setTimeout(() => {
-      setTestCallState('connected');
-      setTestTranscript([{ speaker: 'agent', text: initialMessage || 'Hello! How can I help you today?' }]);
-    }, 1500);
-  };
-
-  const endTestCall = () => {
-    setTestCallState('idle');
-    setTestTranscript([]);
-  };
+  if (!isOpen) return null;
 
   const tabs: { key: TabKey; label: string; icon: typeof Bot }[] = [
     { key: 'general', label: 'General', icon: Bot },
     { key: 'tools', label: 'Tools', icon: Wrench },
     { key: 'advanced', label: 'Advanced', icon: Settings2 },
-    { key: 'test', label: 'Test', icon: Play },
   ];
 
   const isNew = !assistantId;
-
-  // Early return AFTER all hooks
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -144,11 +98,8 @@ Always remain calm and professional. Never make threats or use aggressive langua
         <div className="flex-1 overflow-y-auto p-6">
           {activeTab === 'general' && (
             <div className="space-y-6">
-              {/* Assistant Name */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                  Assistant Name
-                </label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Assistant Name</label>
                 <input
                   type="text"
                   defaultValue="Debt Collection"
@@ -156,11 +107,8 @@ Always remain calm and professional. Never make threats or use aggressive langua
                 />
               </div>
 
-              {/* Who Speaks First */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Who speaks first?
-                </label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Who speaks first?</label>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -187,12 +135,9 @@ Always remain calm and professional. Never make threats or use aggressive langua
                 </div>
               </div>
 
-              {/* Initial Message (if Agent speaks first) */}
               {whoSpeaksFirst === 'agent' && (
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                    Initial Message
-                  </label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Initial Message</label>
                   <textarea
                     value={initialMessage}
                     onChange={e => setInitialMessage(e.target.value)}
@@ -202,11 +147,8 @@ Always remain calm and professional. Never make threats or use aggressive langua
                 </div>
               )}
 
-              {/* Prompt Editor */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                  System Prompt
-                </label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">System Prompt</label>
                 <textarea
                   value={prompt}
                   onChange={e => setPrompt(e.target.value)}
@@ -217,11 +159,8 @@ Always remain calm and professional. Never make threats or use aggressive langua
                 <p className="text-xs text-slate-400 mt-1">Define the assistant's behavior and goals</p>
               </div>
 
-              {/* TTS Provider */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                  TTS Provider
-                </label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">TTS Provider</label>
                 <select
                   value={ttsProvider}
                   onChange={e => {
@@ -236,11 +175,8 @@ Always remain calm and professional. Never make threats or use aggressive langua
                 </select>
               </div>
 
-              {/* Voice Selection */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                  Voice
-                </label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Voice</label>
                 <select
                   value={selectedVoice}
                   onChange={e => setSelectedVoice(e.target.value)}
@@ -256,7 +192,6 @@ Always remain calm and professional. Never make threats or use aggressive langua
 
           {activeTab === 'tools' && (
             <div className="space-y-6">
-              {/* Cold Transfer */}
               <div className="bg-slate-50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -297,7 +232,6 @@ Always remain calm and professional. Never make threats or use aggressive langua
                 )}
               </div>
 
-              {/* End Call */}
               <div className="bg-slate-50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -327,7 +261,6 @@ Always remain calm and professional. Never make threats or use aggressive langua
                 )}
               </div>
 
-              {/* DTMF */}
               <div className="bg-slate-50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -361,11 +294,8 @@ Always remain calm and professional. Never make threats or use aggressive langua
 
           {activeTab === 'advanced' && (
             <div className="space-y-6">
-              {/* Post-call Webhook */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                  Post-call Webhook
-                </label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Post-call Webhook</label>
                 <select
                   value={postCallWebhook}
                   onChange={e => setPostCallWebhook(e.target.value)}
@@ -378,28 +308,20 @@ Always remain calm and professional. Never make threats or use aggressive langua
                 <p className="text-xs text-slate-400 mt-1">Trigger a webhook after each call completes</p>
               </div>
 
-              {/* Re-engagement Message */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                  Re-engagement Text Message
-                </label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Re-engagement Text Message</label>
                 <textarea
                   value={reengagementMessage}
                   onChange={e => setReengagementMessage(e.target.value)}
                   rows={3}
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 resize-none"
                 />
-                <p className="text-xs text-slate-400 mt-1">
-                  Sent when call is unanswered. Use {'{name}'} for customer name placeholder.
-                </p>
+                <p className="text-xs text-slate-400 mt-1">Sent when call is unanswered. Use {'{name}'} for customer name placeholder.</p>
               </div>
 
-              {/* Additional Settings */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                    Max Call Duration (min)
-                  </label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Max Call Duration (min)</label>
                   <input
                     type="number"
                     defaultValue={10}
@@ -407,9 +329,7 @@ Always remain calm and professional. Never make threats or use aggressive langua
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                    Silence Timeout (sec)
-                  </label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Silence Timeout (sec)</label>
                   <input
                     type="number"
                     defaultValue={30}
@@ -419,134 +339,14 @@ Always remain calm and professional. Never make threats or use aggressive langua
               </div>
             </div>
           )}
-
-          {activeTab === 'test' && (
-            <div className="space-y-6">
-              <div className="text-center">
-                <p className="text-sm text-slate-500 mb-6">
-                  Test your assistant configuration before saving. This simulates a voice call.
-                </p>
-
-                {testCallState === 'idle' && (
-                  <div className="py-8">
-                    <div className="w-20 h-20 rounded-full bg-accent-100 flex items-center justify-center mx-auto mb-4">
-                      <Bot className="w-10 h-10 text-accent-600" />
-                    </div>
-                    <p className="text-sm text-slate-600 mb-4">Ready to test your assistant</p>
-                    <button
-                      onClick={startTestCall}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-accent-500 hover:bg-accent-600 text-white rounded-full font-medium transition"
-                    >
-                      <Phone className="w-5 h-5" />
-                      Start Test Call
-                    </button>
-                  </div>
-                )}
-
-                {testCallState === 'connecting' && (
-                  <div className="py-8">
-                    <div className="w-20 h-20 rounded-full bg-accent-100 flex items-center justify-center mx-auto mb-4">
-                      <div className="w-4 h-4 bg-accent-500 rounded-full animate-ping" />
-                    </div>
-                    <p className="text-sm text-slate-600">Connecting to assistant...</p>
-                  </div>
-                )}
-
-                {testCallState === 'connected' && (
-                  <div className="py-4">
-                    {/* Audio Visualizer */}
-                    <div className="flex items-center justify-center gap-1 h-16 mb-4">
-                      {[...Array(16)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="w-1.5 rounded-full bg-accent-500 transition-all duration-100"
-                          style={{
-                            height: `${testIsMuted ? 20 : 20 + Math.random() * 40}px`,
-                            opacity: testIsMuted ? 0.3 : 1,
-                          }}
-                        />
-                      ))}
-                    </div>
-
-                    <div className="text-2xl font-mono text-slate-700 mb-1">{formatTestDuration(testDuration)}</div>
-                    <div className="text-xs text-slate-500 mb-6">{testIsMuted ? 'Muted' : 'Listening...'}</div>
-
-                    {/* Controls */}
-                    <div className="flex items-center justify-center gap-4 mb-6">
-                      <button
-                        onClick={() => setTestIsMuted(!testIsMuted)}
-                        className={`w-14 h-14 rounded-full flex items-center justify-center transition ${
-                          testIsMuted ? 'bg-red-100 text-red-500' : 'bg-slate-200 text-slate-600'
-                        }`}
-                      >
-                        {testIsMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
-                      </button>
-                      <button
-                        onClick={endTestCall}
-                        className="w-16 h-16 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition"
-                      >
-                        <PhoneOff className="w-7 h-7" />
-                      </button>
-                    </div>
-
-                    {/* Transcript */}
-                    <div className="bg-slate-50 rounded-lg p-4 text-left">
-                      <div className="text-xs font-medium text-slate-500 mb-2 flex items-center gap-1">
-                        <Volume2 className="w-3 h-3" />
-                        Live Transcript
-                      </div>
-                      <div className="max-h-32 overflow-y-auto space-y-2">
-                        {testTranscript.map((msg, i) => (
-                          <div key={i} className={`text-sm ${msg.speaker === 'user' ? 'text-right' : 'text-left'}`}>
-                            <span className={`inline-block px-3 py-1.5 rounded-lg ${
-                              msg.speaker === 'user' 
-                                ? 'bg-accent-100 text-accent-700' 
-                                : 'bg-white border border-slate-200 text-slate-700'
-                            }`}>
-                              {msg.text}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Quick Settings */}
-              <div className="border-t border-slate-200 pt-4">
-                <p className="text-xs font-medium text-slate-500 mb-3">Test Settings</p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs text-slate-600 mb-1">Voice</label>
-                    <select className="w-full px-2 py-1.5 border border-slate-200 rounded text-sm bg-white">
-                      <option>{selectedVoice} ({ttsProviders.find(p => p.id === ttsProvider)?.name})</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs text-slate-600 mb-1">Language</label>
-                    <select className="w-full px-2 py-1.5 border border-slate-200 rounded text-sm bg-white">
-                      <option>Romanian</option>
-                      <option>English</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Footer */}
         <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200 bg-slate-50 rounded-b-xl">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 transition"
-          >
+          <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 transition">
             Cancel
           </button>
-          <button
-            className="px-4 py-2 bg-accent-500 hover:bg-accent-600 text-white rounded-lg text-sm font-medium transition"
-          >
+          <button className="px-4 py-2 bg-accent-500 hover:bg-accent-600 text-white rounded-lg text-sm font-medium transition">
             {isNew ? 'Create Assistant' : 'Save Changes'}
           </button>
         </div>
