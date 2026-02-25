@@ -4,9 +4,15 @@ let currentStep = 1;
 const totalSteps = 6;
 
 $(document).ready(function() {
-    // Sidebar toggle
+    // Sidebar toggle (desktop collapse + mobile open)
     $('#toggleSidebar').click(function() {
-        $('body').toggleClass('sidebar-collapsed');
+        if (window.innerWidth < 1024) {
+            // Mobile: toggle sidebar overlay
+            toggleSidebar();
+        } else {
+            // Desktop: collapse sidebar
+            $('body').toggleClass('sidebar-collapsed');
+        }
     });
 
     // Navigation
@@ -17,6 +23,11 @@ $(document).ready(function() {
         $(this).addClass('active');
         $('.page').addClass('hidden');
         $('#page-' + page).removeClass('hidden');
+        
+        // Close mobile sidebar after navigation
+        if (window.innerWidth < 1024) {
+            closeSidebar();
+        }
     });
 
     // Temperature slider
@@ -24,6 +35,21 @@ $(document).ready(function() {
         $('#tempValue').text((this.value / 100).toFixed(1));
     });
 });
+
+// Mobile sidebar functions
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.toggle('mobile-open');
+    overlay.classList.toggle('active');
+}
+
+function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.remove('mobile-open');
+    overlay.classList.remove('active');
+}
 
 function toggleCallDetails(row) {
     const details = $(row).next('.call-details');
