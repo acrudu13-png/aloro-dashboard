@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { MessageCircle, X, Send, Palette, Settings2 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Phone, PhoneOff, Mic, MicOff, Volume2, Settings2, Copy, Check, X } from 'lucide-react';
 
 interface WidgetConfig {
   primaryColor: string;
   position: 'bottom-right' | 'bottom-left';
   greeting: string;
   title: string;
+  showTranscript: boolean;
 }
 
 const colorPresets = [
@@ -17,56 +18,98 @@ const colorPresets = [
   { name: 'Pink', value: '#ec4899' },
 ];
 
+type CallState = 'idle' | 'connecting' | 'connected' | 'ended';
+
 export function WebWidgetPage() {
   const [config, setConfig] = useState<WidgetConfig>({
     primaryColor: '#3b82f6',
     position: 'bottom-right',
-    greeting: 'Hi! How can I help you today?',
-    title: 'Chat Support',
+    greeting: 'Hello! I\'m your AI assistant. Click the call button to start a voice conversation.',
+    title: 'Voice Assistant',
+    showTranscript: true,
   });
 
   const [isWidgetOpen, setIsWidgetOpen] = useState(true);
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<{ role: 'user' | 'bot'; text: string }[]>([
-    { role: 'bot', text: config.greeting },
-  ]);
+  const [callState, setCallState] = useState<CallState>('idle');
+  const [isMuted, setIsMuted] = useState(false);
   const [showCustomizer, setShowCustomizer] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const [transcript, setTranscript] = useState<{ speaker: 'user' | 'agent'; text: string; time: string }[]>([
+    { speaker: 'agent', text: config.greeting, time: '0:00' },
+  ]);
+  const [callDuration, setCallDuration] = useState(0);
+  const durationRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const handleSend = () => {
-    if (!message.trim()) return;
-    setMessages(prev => [...prev, { role: 'user', text: message }]);
-    setMessage('');
-    // Simulate bot response
+  // Simulate call duration
+  useEffect(() => {
+    if (callState === 'connected') {
+      durationRef.current = setInterval(() => {
+        setCallDuration(d => d + 1);
+      }, 1000);
+    } else {
+      if (durationRef.current) clearInterval(durationRef.current);
+      setCallDuration(0);
+    }
+    return () => {
+      if (durationRef.current) clearInterval(durationRef.current);
+    };
+  }, [callState]);
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleStartCall = () => {
+    setCallState('connecting');
     setTimeout(() => {
-      setMessages(prev => [...prev, { 
-        role: 'bot', 
-        text: "Thanks for your message! This is a demo widget. In production, I'd be connected to your voice AI assistant." 
+      setCallState('connected');
+      setTranscript(prev => [...prev, {
+        speaker: 'agent',
+        text: 'Hi! Thanks for calling. How can I help you today?',
+        time: formatDuration(callDuration + 2),
       }]);
+    }, 1500);
+  };
+
+  const handleEndCall = () => {
+    setCallState('ended');
+    setTimeout(() => {
+      setCallState('idle');
+      setTranscript([{ speaker: 'agent', text: config.greeting, time: '0:00' }]);
     }, 1000);
   };
 
   const getEmbedCode = () => {
     return `<script src="https://cdn.aloro.ai/widget.js"></script>
 <script>
-  AloroWidget.init({
+  AloroVoice.init({
     orgId: 'your-org-id',
     assistantId: 'your-assistant-id',
     primaryColor: '${config.primaryColor}',
     position: '${config.position}',
     greeting: '${config.greeting}',
-    title: '${config.title}'
+    title: '${config.title}',
+    showTranscript: ${config.showTranscript}
   });
 </script>`;
+  };
+
+  const copyEmbedCode = () => {
+    navigator.clipboard.writeText(getEmbedCode());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div className="animate-fade-in">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-slate-800">Web Widget</h1>
-        <p className="text-sm text-slate-500 mt-0.5">Configure and preview your embeddable chat widget</p>
+        <h1 className="text-xl font-semibold text-slate-800">Voice Widget</h1>
+        <p className="text-sm text-slate-500 mt-0.5">Configure and preview your embeddable voice AI widget</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Customization Panel */}
         <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex items-center justify-between">
@@ -89,7 +132,7 @@ export function WebWidgetPage() {
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Primary Color
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {colorPresets.map(color => (
                     <button
                       key={color.value}
@@ -166,6 +209,17 @@ export function WebWidgetPage() {
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 resize-none"
                 />
               </div>
+
+              {/* Show Transcript */}
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={config.showTranscript}
+                  onChange={e => setConfig(c => ({ ...c, showTranscript: e.target.checked }))}
+                  className="w-4 h-4 text-accent-500 rounded"
+                />
+                <span className="text-sm text-slate-700">Show live transcript</span>
+              </label>
             </div>
           )}
         </div>
@@ -173,20 +227,18 @@ export function WebWidgetPage() {
         {/* Embed Code */}
         <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
           <div className="p-4 border-b border-slate-100">
-            <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <Palette className="w-4 h-4" />
-              Embed Code
-            </h2>
+            <h2 className="text-sm font-semibold text-slate-700">Embed Code</h2>
           </div>
           <div className="p-4">
-            <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto font-mono">
+            <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto font-mono whitespace-pre-wrap">
               {getEmbedCode()}
             </pre>
             <button
-              onClick={() => navigator.clipboard.writeText(getEmbedCode())}
-              className="mt-3 w-full px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition"
+              onClick={copyEmbedCode}
+              className="mt-3 w-full px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2"
             >
-              Copy to Clipboard
+              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              {copied ? 'Copied!' : 'Copy to Clipboard'}
             </button>
           </div>
         </div>
@@ -195,7 +247,7 @@ export function WebWidgetPage() {
       {/* Demo Widget - positioned fixed */}
       {isWidgetOpen && (
         <div
-          className={`fixed bottom-6 ${config.position === 'bottom-right' ? 'right-6' : 'left-6'} w-80 bg-white rounded-2xl shadow-2xl overflow-hidden z-50 animate-fade-in`}
+          className={`fixed bottom-6 ${config.position === 'bottom-right' ? 'right-6' : 'left-6'} w-80 bg-white rounded-2xl shadow-2xl overflow-hidden z-50`}
           style={{ maxWidth: 'calc(100vw - 3rem)' }}
         >
           {/* Header */}
@@ -204,7 +256,7 @@ export function WebWidgetPage() {
             style={{ backgroundColor: config.primaryColor }}
           >
             <div className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5" />
+              <Volume2 className="w-5 h-5" />
               <span className="font-medium">{config.title}</span>
             </div>
             <button
@@ -215,46 +267,101 @@ export function WebWidgetPage() {
             </button>
           </div>
 
-          {/* Messages */}
-          <div className="h-64 overflow-y-auto p-4 space-y-3 bg-slate-50">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[80%] px-3 py-2 rounded-lg text-sm ${
-                    msg.role === 'user'
-                      ? 'text-white rounded-br-sm'
-                      : 'bg-white text-slate-700 rounded-bl-sm border border-slate-200'
-                  }`}
-                  style={msg.role === 'user' ? { backgroundColor: config.primaryColor } : {}}
-                >
-                  {msg.text}
+          {/* Main Content */}
+          <div className="p-4 bg-slate-50">
+            {/* Call State Display */}
+            <div className="text-center mb-4">
+              {callState === 'idle' && (
+                <>
+                  <div className="text-sm text-slate-500 mb-2">Ready to call</div>
+                  <button
+                    onClick={handleStartCall}
+                    className="w-16 h-16 rounded-full text-white shadow-lg hover:scale-105 transition flex items-center justify-center mx-auto"
+                    style={{ backgroundColor: config.primaryColor }}
+                  >
+                    <Phone className="w-7 h-7" />
+                  </button>
+                  <div className="text-xs text-slate-400 mt-2">Click to start voice call</div>
+                </>
+              )}
+
+              {callState === 'connecting' && (
+                <>
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: config.primaryColor + '20' }}>
+                    <div className="w-3 h-3 rounded-full animate-ping" style={{ backgroundColor: config.primaryColor }} />
+                  </div>
+                  <div className="text-sm text-slate-600">Connecting...</div>
+                </>
+              )}
+
+              {callState === 'connected' && (
+                <>
+                  {/* Audio Visualizer */}
+                  <div className="flex items-center justify-center gap-1 h-12 mb-2">
+                    {[...Array(12)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-1.5 rounded-full transition-all duration-100"
+                        style={{
+                          backgroundColor: config.primaryColor,
+                          height: `${20 + (isMuted ? 0 : Math.random() * 30)}px`,
+                          opacity: isMuted ? 0.3 : 1,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <div className="text-lg font-mono text-slate-700 mb-1">{formatDuration(callDuration)}</div>
+                  <div className="text-xs text-slate-500">{isMuted ? 'Muted' : 'Listening...'}</div>
+
+                  {/* Controls */}
+                  <div className="flex items-center justify-center gap-3 mt-3">
+                    <button
+                      onClick={() => setIsMuted(!isMuted)}
+                      className={`w-12 h-12 rounded-full flex items-center justify-center transition ${
+                        isMuted ? 'bg-red-100 text-red-500' : 'bg-slate-200 text-slate-600'
+                      }`}
+                    >
+                      {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                    </button>
+                    <button
+                      onClick={handleEndCall}
+                      className="w-14 h-14 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition"
+                    >
+                      <PhoneOff className="w-6 h-6" />
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {callState === 'ended' && (
+                <>
+                  <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center mx-auto mb-2">
+                    <PhoneOff className="w-7 h-7 text-slate-400" />
+                  </div>
+                  <div className="text-sm text-slate-600">Call ended</div>
+                </>
+              )}
+            </div>
+
+            {/* Transcript */}
+            {config.showTranscript && callState !== 'idle' && (
+              <div className="border-t border-slate-200 pt-3">
+                <div className="text-xs font-medium text-slate-500 mb-2">Transcript</div>
+                <div className="max-h-32 overflow-y-auto space-y-2">
+                  {transcript.map((msg, i) => (
+                    <div key={i} className={`text-xs ${msg.speaker === 'user' ? 'text-right' : 'text-left'}`}>
+                      <span className={`inline-block px-2 py-1 rounded ${
+                        msg.speaker === 'user' 
+                          ? 'bg-slate-200 text-slate-700' 
+                          : 'bg-white border border-slate-200 text-slate-600'
+                      }`}>
+                        {msg.text}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Input */}
-          <div className="p-3 border-t border-slate-200 bg-white">
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                onKeyPress={e => e.key === 'Enter' && handleSend()}
-                placeholder="Type a message..."
-                className="flex-1 px-3 py-2 bg-slate-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-accent-500"
-              />
-              <button
-                onClick={handleSend}
-                className="p-2 rounded-full text-white transition hover:opacity-90"
-                style={{ backgroundColor: config.primaryColor }}
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
+            )}
           </div>
         </div>
       )}
@@ -266,7 +373,7 @@ export function WebWidgetPage() {
           className={`fixed bottom-6 ${config.position === 'bottom-right' ? 'right-6' : 'left-6'} w-14 h-14 rounded-full text-white shadow-lg hover:scale-105 transition z-50 flex items-center justify-center`}
           style={{ backgroundColor: config.primaryColor }}
         >
-          <MessageCircle className="w-6 h-6" />
+          <Phone className="w-6 h-6" />
         </button>
       )}
     </div>

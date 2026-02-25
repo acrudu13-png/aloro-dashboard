@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { X, Bot, Wrench, Settings2, Phone, User, MessageSquare } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { X, Bot, Wrench, Settings2, Phone, User, MessageSquare, Play, Mic, MicOff, PhoneOff, Volume2 } from 'lucide-react';
 
 interface AssistantModalProps {
   isOpen: boolean;
@@ -7,7 +7,7 @@ interface AssistantModalProps {
   assistantId?: string | null;
 }
 
-type TabKey = 'general' | 'tools' | 'advanced';
+type TabKey = 'general' | 'tools' | 'advanced' | 'test';
 
 const ttsProviders = [
   { id: 'cartesia', name: 'Cartesia' },
@@ -59,10 +59,49 @@ Always remain calm and professional. Never make threats or use aggressive langua
 
   if (!isOpen) return null;
 
+  // Test tab state
+  const [testCallState, setTestCallState] = useState<'idle' | 'connecting' | 'connected'>('idle');
+  const [testIsMuted, setTestIsMuted] = useState(false);
+  const [testDuration, setTestDuration] = useState(0);
+  const [testTranscript, setTestTranscript] = useState<{ speaker: 'user' | 'agent'; text: string }[]>([]);
+  const durationRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (testCallState === 'connected') {
+      durationRef.current = setInterval(() => setTestDuration(d => d + 1), 1000);
+    } else {
+      if (durationRef.current) clearInterval(durationRef.current);
+      setTestDuration(0);
+    }
+    return () => {
+      if (durationRef.current) clearInterval(durationRef.current);
+    };
+  }, [testCallState]);
+
+  const formatTestDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const startTestCall = () => {
+    setTestCallState('connecting');
+    setTimeout(() => {
+      setTestCallState('connected');
+      setTestTranscript([{ speaker: 'agent', text: initialMessage || 'Hello! How can I help you today?' }]);
+    }, 1500);
+  };
+
+  const endTestCall = () => {
+    setTestCallState('idle');
+    setTestTranscript([]);
+  };
+
   const tabs: { key: TabKey; label: string; icon: typeof Bot }[] = [
     { key: 'general', label: 'General', icon: Bot },
     { key: 'tools', label: 'Tools', icon: Wrench },
     { key: 'advanced', label: 'Advanced', icon: Settings2 },
+    { key: 'test', label: 'Test', icon: Play },
   ];
 
   const isNew = !assistantId;
@@ -375,6 +414,121 @@ Always remain calm and professional. Never make threats or use aggressive langua
                     defaultValue={30}
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent-500"
                   />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'test' && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <p className="text-sm text-slate-500 mb-6">
+                  Test your assistant configuration before saving. This simulates a voice call.
+                </p>
+
+                {testCallState === 'idle' && (
+                  <div className="py-8">
+                    <div className="w-20 h-20 rounded-full bg-accent-100 flex items-center justify-center mx-auto mb-4">
+                      <Bot className="w-10 h-10 text-accent-600" />
+                    </div>
+                    <p className="text-sm text-slate-600 mb-4">Ready to test your assistant</p>
+                    <button
+                      onClick={startTestCall}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-accent-500 hover:bg-accent-600 text-white rounded-full font-medium transition"
+                    >
+                      <Phone className="w-5 h-5" />
+                      Start Test Call
+                    </button>
+                  </div>
+                )}
+
+                {testCallState === 'connecting' && (
+                  <div className="py-8">
+                    <div className="w-20 h-20 rounded-full bg-accent-100 flex items-center justify-center mx-auto mb-4">
+                      <div className="w-4 h-4 bg-accent-500 rounded-full animate-ping" />
+                    </div>
+                    <p className="text-sm text-slate-600">Connecting to assistant...</p>
+                  </div>
+                )}
+
+                {testCallState === 'connected' && (
+                  <div className="py-4">
+                    {/* Audio Visualizer */}
+                    <div className="flex items-center justify-center gap-1 h-16 mb-4">
+                      {[...Array(16)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="w-1.5 rounded-full bg-accent-500 transition-all duration-100"
+                          style={{
+                            height: `${testIsMuted ? 20 : 20 + Math.random() * 40}px`,
+                            opacity: testIsMuted ? 0.3 : 1,
+                          }}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="text-2xl font-mono text-slate-700 mb-1">{formatTestDuration(testDuration)}</div>
+                    <div className="text-xs text-slate-500 mb-6">{testIsMuted ? 'Muted' : 'Listening...'}</div>
+
+                    {/* Controls */}
+                    <div className="flex items-center justify-center gap-4 mb-6">
+                      <button
+                        onClick={() => setTestIsMuted(!testIsMuted)}
+                        className={`w-14 h-14 rounded-full flex items-center justify-center transition ${
+                          testIsMuted ? 'bg-red-100 text-red-500' : 'bg-slate-200 text-slate-600'
+                        }`}
+                      >
+                        {testIsMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+                      </button>
+                      <button
+                        onClick={endTestCall}
+                        className="w-16 h-16 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition"
+                      >
+                        <PhoneOff className="w-7 h-7" />
+                      </button>
+                    </div>
+
+                    {/* Transcript */}
+                    <div className="bg-slate-50 rounded-lg p-4 text-left">
+                      <div className="text-xs font-medium text-slate-500 mb-2 flex items-center gap-1">
+                        <Volume2 className="w-3 h-3" />
+                        Live Transcript
+                      </div>
+                      <div className="max-h-32 overflow-y-auto space-y-2">
+                        {testTranscript.map((msg, i) => (
+                          <div key={i} className={`text-sm ${msg.speaker === 'user' ? 'text-right' : 'text-left'}`}>
+                            <span className={`inline-block px-3 py-1.5 rounded-lg ${
+                              msg.speaker === 'user' 
+                                ? 'bg-accent-100 text-accent-700' 
+                                : 'bg-white border border-slate-200 text-slate-700'
+                            }`}>
+                              {msg.text}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Quick Settings */}
+              <div className="border-t border-slate-200 pt-4">
+                <p className="text-xs font-medium text-slate-500 mb-3">Test Settings</p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-slate-600 mb-1">Voice</label>
+                    <select className="w-full px-2 py-1.5 border border-slate-200 rounded text-sm bg-white">
+                      <option>{selectedVoice} ({ttsProviders.find(p => p.id === ttsProvider)?.name})</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-600 mb-1">Language</label>
+                    <select className="w-full px-2 py-1.5 border border-slate-200 rounded text-sm bg-white">
+                      <option>Romanian</option>
+                      <option>English</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
