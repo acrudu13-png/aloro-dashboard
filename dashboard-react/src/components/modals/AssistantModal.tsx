@@ -57,9 +57,7 @@ Always remain calm and professional. Never make threats or use aggressive langua
   const [postCallWebhook, setPostCallWebhook] = useState('wh-1');
   const [reengagementMessage, setReengagementMessage] = useState('Hi {name}, we tried to reach you about your account. Please call us back at your earliest convenience.');
 
-  if (!isOpen) return null;
-
-  // Test tab state
+  // Test tab state - MUST be before early return
   const [testCallState, setTestCallState] = useState<'idle' | 'connecting' | 'connected'>('idle');
   const [testIsMuted, setTestIsMuted] = useState(false);
   const [testDuration, setTestDuration] = useState(0);
@@ -105,6 +103,9 @@ Always remain calm and professional. Never make threats or use aggressive langua
   ];
 
   const isNew = !assistantId;
+
+  // Early return AFTER all hooks
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
