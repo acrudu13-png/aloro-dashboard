@@ -20,15 +20,15 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://aloro.ai',
+  url: 'https://acrudu13-png.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  // Deployed at /aloro-dashboard/documentation/ to avoid conflict with source docs/ folder
+  baseUrl: '/aloro-dashboard/documentation/',
 
   // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'aloro-ai', // Usually your GitHub org/user name.
-  projectName: 'aloro-dashboard', // Usually your repo name.
+  organizationName: 'acrudu13-png', // GitHub username
+  projectName: 'aloro-dashboard', // Repo name
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
 
@@ -49,7 +49,7 @@ const config = {
           sidebarPath: './sidebars.js',
           routeBasePath: 'docs',
           editUrl:
-            'https://github.com/aloro-ai/aloro-dashboard/tree/main/docs/',
+            'https://github.com/acrudu13-png/aloro-dashboard/tree/main/docs/',
         },
         blog: {
           showReadingTime: true,
@@ -58,7 +58,7 @@ const config = {
             xslt: true,
           },
           editUrl:
-            'https://github.com/aloro-ai/aloro-dashboard/tree/main/docs/',
+            'https://github.com/acrudu13-png/aloro-dashboard/tree/main/docs/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -99,7 +99,7 @@ const config = {
           },
           {to: '/blog', label: 'Updates', position: 'left'},
           {
-            href: 'https://github.com/aloro-ai/aloro-dashboard',
+            href: 'https://github.com/acrudu13-png/aloro-dashboard',
             label: 'GitHub',
             position: 'right',
           },
@@ -155,7 +155,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/aloro-ai/aloro-dashboard',
+                href: 'https://github.com/acrudu13-png/aloro-dashboard',
               },
             ],
           },
