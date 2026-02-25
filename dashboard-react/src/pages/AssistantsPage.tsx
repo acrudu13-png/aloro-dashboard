@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Plus, Bot, Phone, MessageSquare } from 'lucide-react';
 import { Badge } from '../components/ui/Badge';
+import { AssistantModal } from '../components/modals/AssistantModal';
 
 const assistants = [
   {
@@ -38,6 +40,19 @@ const assistants = [
 ];
 
 export function AssistantsPage() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedAssistantId, setSelectedAssistantId] = useState<string | null>(null);
+
+  const handleOpenModal = (assistantId?: string) => {
+    setSelectedAssistantId(assistantId || null);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedAssistantId(null);
+  };
+
   return (
     <div className="animate-fade-in">
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -45,7 +60,10 @@ export function AssistantsPage() {
           <h1 className="text-xl font-semibold text-slate-800">Assistants</h1>
           <p className="text-sm text-slate-500 mt-0.5">Configure and manage voice AI agents</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-accent-500 hover:bg-accent-600 text-white rounded-lg text-sm font-medium transition">
+        <button 
+          onClick={() => handleOpenModal()}
+          className="flex items-center gap-2 px-4 py-2 bg-accent-500 hover:bg-accent-600 text-white rounded-lg text-sm font-medium transition"
+        >
           <Plus className="w-4 h-4" />
           New Assistant
         </button>
@@ -88,17 +106,32 @@ export function AssistantsPage() {
             </div>
             <div className="border-t border-slate-100 px-4 py-3 bg-slate-50/50 flex justify-end gap-2">
               <button className="text-sm text-accent-600 hover:underline">Test</button>
-              <button className="text-sm text-slate-600 hover:underline">Edit</button>
+              <button 
+                onClick={() => handleOpenModal(assistant.id)}
+                className="text-sm text-slate-600 hover:underline"
+              >
+                Edit
+              </button>
             </div>
           </div>
         ))}
 
         {/* Create new card */}
-        <button className="bg-white rounded-lg border-2 border-dashed border-slate-200 p-4 flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 hover:border-slate-300 transition min-h-[240px]">
+        <button 
+          onClick={() => handleOpenModal()}
+          className="bg-white rounded-lg border-2 border-dashed border-slate-200 p-4 flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 hover:border-slate-300 transition min-h-[240px]"
+        >
           <Plus className="w-8 h-8 mb-2" />
           <span className="text-sm font-medium">Create Assistant</span>
         </button>
       </div>
+
+      {/* Modal */}
+      <AssistantModal
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+        assistantId={selectedAssistantId}
+      />
     </div>
   );
 }
