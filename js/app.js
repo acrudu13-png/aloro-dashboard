@@ -316,3 +316,440 @@ function saveWebhook() {
 function openCustomDashboardModal() {
     alert('Custom Dashboard builder coming soon! This will include a drag-and-drop interface for building custom analytics dashboards.');
 }
+
+// ==========================================
+// CUSTOMERS PAGE
+// ==========================================
+
+const customersData = [
+  { id: '1', name: 'Maria Popescu', phone: '+40 744 123 456', email: 'maria.popescu@email.ro', totalCalls: 12, answeredCalls: 10, answerRate: 83.3, avgDuration: '4:32', lastContact: 'Feb 25, 2026', status: 'active' },
+  { id: '2', name: 'Ion Ionescu', phone: '+40 756 234 567', email: 'ion.ionescu@email.ro', totalCalls: 8, answeredCalls: 6, answerRate: 75.0, avgDuration: '3:15', lastContact: 'Feb 24, 2026', status: 'callback' },
+  { id: '3', name: null, phone: '+40 722 345 678', email: null, totalCalls: 5, answeredCalls: 2, answerRate: 40.0, avgDuration: '2:45', lastContact: 'Feb 23, 2026', status: 'active' },
+  { id: '4', name: 'Elena Dumitrescu', phone: '+40 733 456 789', email: 'elena.d@email.ro', totalCalls: 15, answeredCalls: 14, answerRate: 93.3, avgDuration: '5:12', lastContact: 'Feb 25, 2026', status: 'completed' },
+  { id: '5', name: 'Alexandru Marin', phone: '+40 744 567 890', email: 'alex.marin@email.ro', totalCalls: 3, answeredCalls: 0, answerRate: 0, avgDuration: '-', lastContact: 'Feb 20, 2026', status: 'do_not_call' },
+  { id: '6', name: 'Cristina Stoica', phone: '+40 755 678 901', email: 'cristina.s@email.ro', totalCalls: 7, answeredCalls: 5, answerRate: 71.4, avgDuration: '3:48', lastContact: 'Feb 22, 2026', status: 'active' },
+  { id: '7', name: null, phone: '+40 766 789 012', email: null, totalCalls: 4, answeredCalls: 3, answerRate: 75.0, avgDuration: '2:30', lastContact: 'Feb 21, 2026', status: 'callback' },
+  { id: '8', name: 'Mihai Radu', phone: '+40 777 890 123', email: 'mihai.radu@email.ro', totalCalls: 9, answeredCalls: 7, answerRate: 77.8, avgDuration: '4:05', lastContact: 'Feb 24, 2026', status: 'active' },
+  { id: '9', name: 'Ana Vasilescu', phone: '+40 788 901 234', email: 'ana.v@email.ro', totalCalls: 6, answeredCalls: 5, answerRate: 83.3, avgDuration: '3:22', lastContact: 'Feb 23, 2026', status: 'completed' },
+  { id: '10', name: 'Dan Nicolae', phone: '+40 799 012 345', email: null, totalCalls: 2, answeredCalls: 1, answerRate: 50.0, avgDuration: '1:45', lastContact: 'Feb 19, 2026', status: 'do_not_call' },
+  { id: '11', name: 'Ioana Georgescu', phone: '+40 711 123 456', email: 'ioana.g@email.ro', totalCalls: 11, answeredCalls: 9, answerRate: 81.8, avgDuration: '4:50', lastContact: 'Feb 25, 2026', status: 'active' },
+  { id: '12', name: null, phone: '+40 722 234 567', email: null, totalCalls: 1, answeredCalls: 1, answerRate: 100.0, avgDuration: '5:30', lastContact: 'Feb 18, 2026', status: 'completed' },
+  { id: '13', name: 'Florin Tudor', phone: '+40 733 345 678', email: 'florin.t@email.ro', totalCalls: 4, answeredCalls: 2, answerRate: 50.0, avgDuration: '2:15', lastContact: 'Feb 20, 2026', status: 'callback' },
+  { id: '14', name: 'Laura Stan', phone: '+40 744 456 789', email: 'laura.stan@email.ro', totalCalls: 8, answeredCalls: 6, answerRate: 75.0, avgDuration: '3:35', lastContact: 'Feb 22, 2026', status: 'active' },
+  { id: '15', name: 'Ciprian Neagu', phone: '+40 755 567 890', email: null, totalCalls: 3, answeredCalls: 2, answerRate: 66.7, avgDuration: '2:58', lastContact: 'Feb 21, 2026', status: 'active' },
+];
+
+let customersState = {
+    filtered: [...customersData],
+    sortKey: 'lastContact',
+    sortDirection: 'desc',
+    currentPage: 1,
+    itemsPerPage: 10,
+    activeActions: null
+};
+
+const statusConfig = {
+  active: { label: 'Active', class: 'bg-green-100 text-green-700' },
+  do_not_call: { label: 'Do Not Call', class: 'bg-red-100 text-red-700' },
+  callback: { label: 'Call Back', class: 'bg-amber-100 text-amber-700' },
+  completed: { label: 'Completed', class: 'bg-blue-100 text-blue-700' }
+};
+
+function filterCustomers() {
+    const query = $('#customerSearch').val().toLowerCase();
+    customersState.filtered = customersData.filter(c => {
+        return c.phone.toLowerCase().includes(query) ||
+               (c.name?.toLowerCase().includes(query) ?? false) ||
+               (c.email?.toLowerCase().includes(query) ?? false);
+    });
+    customersState.currentPage = 1;
+    renderCustomersTable();
+}
+
+function sortCustomers(key) {
+    if (customersState.sortKey === key) {
+        customersState.sortDirection = customersState.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+        customersState.sortKey = key;
+        customersState.sortDirection = 'asc';
+    }
+    
+    customersState.filtered.sort((a, b) => {
+        let aVal = a[key] ?? '';
+        let bVal = b[key] ?? '';
+        if (typeof aVal === 'string') aVal = aVal.toLowerCase();
+        if (typeof bVal === 'string') bVal = bVal.toLowerCase();
+        if (aVal < bVal) return customersState.sortDirection === 'asc' ? -1 : 1;
+        if (aVal > bVal) return customersState.sortDirection === 'asc' ? 1 : -1;
+        return 0;
+    });
+    
+    renderCustomersTable();
+}
+
+function renderCustomersTable() {
+    const { filtered, currentPage, itemsPerPage } = customersState;
+    const start = (currentPage - 1) * itemsPerPage;
+    const paginated = filtered.slice(start, start + itemsPerPage);
+    const totalPages = Math.ceil(filtered.length / itemsPerPage);
+    
+    let html = '';
+    paginated.forEach(c => {
+        const initials = c.name ? c.name.split(' ').map(n => n[0]).join('').slice(0, 2) : '?';
+        const status = statusConfig[c.status];
+        
+        html += `
+            <tr class="border-t border-slate-50 hover:bg-slate-50">
+                <td class="py-3 px-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+                            <span class="text-xs font-medium text-slate-600">${c.name ? initials : '<i class="fas fa-user text-slate-400 text-sm"></i>'}</span>
+                        </div>
+                        <span class="text-sm text-slate-700">${c.name ?? '<span class="text-slate-400 italic">Unknown</span>'}</span>
+                    </div>
+                </td>
+                <td class="py-3 px-4">
+                    <div class="flex items-center gap-1.5 text-sm text-slate-600">
+                        <i class="fas fa-phone text-slate-400 text-xs"></i>
+                        ${c.phone}
+                    </div>
+                </td>
+                <td class="py-3 px-4">
+                    ${c.email ? `<div class="flex items-center gap-1.5 text-sm text-slate-600"><i class="fas fa-envelope text-slate-400 text-xs"></i>${c.email}</div>` : '<span class="text-slate-300">-</span>'}
+                </td>
+                <td class="py-3 px-4 text-sm text-slate-600">${c.totalCalls}</td>
+                <td class="py-3 px-4 text-sm text-slate-600">${c.answeredCalls}</td>
+                <td class="py-3 px-4">
+                    <span class="text-sm font-medium ${c.answerRate >= 80 ? 'text-green-600' : c.answerRate >= 50 ? 'text-amber-600' : 'text-red-500'}">
+                        ${c.answerRate.toFixed(1)}%
+                    </span>
+                </td>
+                <td class="py-3 px-4 text-sm text-slate-600">${c.avgDuration}</td>
+                <td class="py-3 px-4 text-sm text-slate-500">${c.lastContact}</td>
+                <td class="py-3 px-4">
+                    <span class="px-2 py-0.5 text-xs font-medium rounded ${status.class}">${status.label}</span>
+                </td>
+                <td class="py-3 px-4 relative">
+                    <button onclick="toggleCustomerActions('${c.id}')" class="p-1 text-slate-400 hover:text-slate-600">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <div id="customer-actions-${c.id}" class="absolute right-4 top-full mt-1 w-40 bg-white border border-slate-200 rounded-lg shadow-lg z-10 ${customersState.activeActions === c.id ? '' : 'hidden'}">
+                        <button class="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                            <i class="fas fa-phone"></i> Call Now
+                        </button>
+                        <button class="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                            <i class="fas fa-clock"></i> Schedule Call
+                        </button>
+                        ${c.status !== 'do_not_call' 
+                            ? `<button class="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"><i class="fas fa-ban"></i> Do Not Call</button>`
+                            : `<button class="w-full flex items-center gap-2 px-3 py-2 text-sm text-green-600 hover:bg-green-50"><i class="fas fa-check-circle"></i> Reactivate</button>`
+                        }
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    
+    if (paginated.length === 0) {
+        html = '<tr><td colspan="10" class="py-10 text-center text-slate-500">No customers found</td></tr>';
+    }
+    
+    $('#customersTableBody').html(html);
+    $('#customersCount').text(`${filtered.length} customers in database`);
+    
+    // Pagination
+    const end = Math.min(start + itemsPerPage, filtered.length);
+    $('#customersPaginationInfo').text(`Showing ${start + 1} to ${end} of ${filtered.length}`);
+    
+    let paginationHtml = `
+        <button onclick="customersGoToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} 
+            class="p-2 text-slate-400 hover:text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    `;
+    
+    for (let i = 1; i <= totalPages; i++) {
+        paginationHtml += `
+            <button onclick="customersGoToPage(${i})" 
+                class="w-8 h-8 rounded text-sm font-medium transition ${currentPage === i ? 'bg-accent-500 text-white' : 'text-slate-600 hover:bg-slate-100'}">
+                ${i}
+            </button>
+        `;
+    }
+    
+    paginationHtml += `
+        <button onclick="customersGoToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} 
+            class="p-2 text-slate-400 hover:text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
+    
+    $('#customersPaginationButtons').html(paginationHtml);
+}
+
+function customersGoToPage(page) {
+    const totalPages = Math.ceil(customersState.filtered.length / customersState.itemsPerPage);
+    if (page >= 1 && page <= totalPages) {
+        customersState.currentPage = page;
+        renderCustomersTable();
+    }
+}
+
+function toggleCustomerActions(id) {
+    if (customersState.activeActions === id) {
+        customersState.activeActions = null;
+    } else {
+        customersState.activeActions = id;
+    }
+    renderCustomersTable();
+}
+
+function exportCustomers() {
+    const headers = ['Name', 'Phone', 'Email', 'Total Calls', 'Answered', 'Answer Rate', 'Avg Duration', 'Last Contact', 'Status'];
+    const rows = customersState.filtered.map(c => [
+        c.name ?? '', c.phone, c.email ?? '', c.totalCalls, c.answeredCalls,
+        `${c.answerRate}%`, c.avgDuration, c.lastContact, c.status
+    ]);
+    
+    const csvContent = [headers.join(','), ...rows.map(r => r.map(cell => `"${cell}"`).join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `customers_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+// ==========================================
+// PROMPT SNIPPETS PAGE
+// ==========================================
+
+let snippetsData = [
+  { id: '1', name: 'company_info', content: 'Telerenta.ro is Romania\'s leading device rental platform, offering flexible rental plans for smartphones, tablets, and laptops. We\'ve been serving customers since 2019 with over 50,000 satisfied clients nationwide.', category: 'company', lastUpdated: 'Feb 20, 2026', usageCount: 5 },
+  { id: '2', name: 'payment_instructions', content: 'To make a payment, please visit telerenta.ro/plata and enter your contract number. You can pay by card, bank transfer, or at any PayPoint location. Payment is typically processed within 24 hours.', category: 'instructions', lastUpdated: 'Feb 18, 2026', usageCount: 3 },
+  { id: '3', name: 'legal_disclaimer', content: 'This call may be recorded for quality assurance and training purposes. By continuing this conversation, you acknowledge that you have been informed of the recording. Your personal data will be processed in accordance with GDPR regulations.', category: 'legal', lastUpdated: 'Feb 15, 2026', usageCount: 8 },
+  { id: '4', name: 'hours_of_operation', content: 'Our customer service team is available Monday through Friday from 9:00 AM to 6:00 PM, and Saturday from 10:00 AM to 2:00 PM. We are closed on Sundays and public holidays.', category: 'company', lastUpdated: 'Feb 10, 2026', usageCount: 4 },
+  { id: '5', name: 'late_fee_policy', content: 'A late payment fee of 5% of the outstanding amount is applied after the due date. Additional fees may apply for payments more than 30 days overdue. Please contact us if you\'re experiencing payment difficulties.', category: 'legal', lastUpdated: 'Feb 12, 2026', usageCount: 2 },
+  { id: '6', name: 'return_instructions', content: 'To return your device, please ensure it\'s in good condition with all accessories. Schedule a pickup at telerenta.ro/return or visit any of our 12 drop-off locations across Romania. A return confirmation will be sent within 48 hours.', category: 'instructions', lastUpdated: 'Feb 22, 2026', usageCount: 2 },
+  { id: '7', name: 'upgrade_options', content: 'You may be eligible to upgrade to a newer device model. Check available options in your account dashboard or ask your agent about current upgrade promotions and any applicable fees.', category: 'custom', lastUpdated: 'Feb 24, 2026', usageCount: 1 },
+  { id: '8', name: 'contact_info', content: 'You can reach us by phone at 0800 123 456 (toll-free), by email at suport@telerenta.ro, or via WhatsApp at +40 744 123 456. Our website is www.telerenta.ro.', category: 'company', lastUpdated: 'Feb 8, 2026', usageCount: 6 },
+];
+
+let snippetsState = {
+    filtered: [...snippetsData],
+    categoryFilter: 'all',
+    editingId: null,
+    deleteConfirmId: null,
+    copiedId: null
+};
+
+const categoryConfig = {
+    company: { label: 'Company', class: 'bg-blue-100 text-blue-700' },
+    legal: { label: 'Legal', class: 'bg-amber-100 text-amber-700' },
+    instructions: { label: 'Instructions', class: 'bg-green-100 text-green-700' },
+    custom: { label: 'Custom', class: 'bg-slate-100 text-slate-700' }
+};
+
+function filterSnippets() {
+    const query = $('#snippetSearch').val().toLowerCase();
+    const category = snippetsState.categoryFilter;
+    
+    snippetsState.filtered = snippetsData.filter(s => {
+        const matchesSearch = s.name.toLowerCase().includes(query) || s.content.toLowerCase().includes(query);
+        const matchesCategory = category === 'all' || s.category === category;
+        return matchesSearch && matchesCategory;
+    });
+    
+    renderSnippetsList();
+}
+
+function filterSnippetsByCategory(category) {
+    snippetsState.categoryFilter = category;
+    $('#snippetCategoryLabel').text(category === 'all' ? 'All Categories' : categoryConfig[category].label);
+    $('#snippetCategoryDropdown').addClass('hidden');
+    filterSnippets();
+}
+
+function toggleSnippetCategoryDropdown() {
+    $('#snippetCategoryDropdown').toggleClass('hidden');
+}
+
+function renderSnippetsList() {
+    const { filtered, deleteConfirmId, copiedId } = snippetsState;
+    
+    if (filtered.length === 0) {
+        $('#snippetsList').html(`
+            <div class="p-10 text-center">
+                <div class="w-14 h-14 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-file-code text-slate-400 text-xl"></i>
+                </div>
+                <h3 class="text-base font-semibold text-slate-800 mb-1">No snippets found</h3>
+                <p class="text-sm text-slate-500 mb-5">Try adjusting your filters or create a new snippet</p>
+                <button onclick="openSnippetModal()" class="bg-accent-500 hover:bg-accent-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition">
+                    Create Snippet
+                </button>
+            </div>
+        `);
+        return;
+    }
+    
+    let html = '<div class="divide-y divide-slate-100">';
+    filtered.forEach(s => {
+        const cat = categoryConfig[s.category];
+        html += `
+            <div class="p-4 hover:bg-slate-50 transition group">
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-file-code text-accent-600"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <code class="text-sm font-mono font-medium text-accent-600 bg-accent-50 px-2 py-0.5 rounded">{{${s.name}}}</code>
+                            <span class="px-2 py-0.5 text-xs font-medium rounded ${cat.class}">${cat.label}</span>
+                        </div>
+                        <p class="text-sm text-slate-600 line-clamp-2 mb-2">${s.content}</p>
+                        <div class="flex items-center gap-4 text-xs text-slate-400">
+                            <span>Updated ${s.lastUpdated}</span>
+                            <span>•</span>
+                            <span>${s.usageCount} agent${s.usageCount !== 1 ? 's' : ''} using</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                        <button onclick="copySnippet('${s.id}', '${s.name}')" class="p-2 text-slate-400 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition" title="Copy snippet name">
+                            <i class="fas fa-${copiedId === s.id ? 'check text-green-500' : 'copy'}"></i>
+                        </button>
+                        <button onclick="openSnippetModal('${s.id}')" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        ${deleteConfirmId === s.id ? `
+                            <button onclick="deleteSnippet('${s.id}')" class="p-2 text-white bg-red-500 hover:bg-red-600 rounded-lg transition" title="Confirm delete">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button onclick="cancelDeleteSnippet()" class="p-2 text-slate-400 hover:text-slate-600 bg-slate-100 rounded-lg transition" title="Cancel">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        ` : `
+                            <button onclick="confirmDeleteSnippet('${s.id}')" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    html += '</div>';
+    $('#snippetsList').html(html);
+}
+
+function openSnippetModal(id = null) {
+    snippetsState.editingId = id;
+    
+    if (id) {
+        const snippet = snippetsData.find(s => s.id === id);
+        $('#snippetModalTitle').text('Edit Snippet');
+        $('#snippetName').val(snippet.name);
+        $('#snippetCategory').val(snippet.category);
+        $('#snippetContent').val(snippet.content);
+        $('#snippetSaveBtn').text('Save Changes');
+    } else {
+        $('#snippetModalTitle').text('Create Snippet');
+        $('#snippetName').val('');
+        $('#snippetCategory').val('custom');
+        $('#snippetContent').val('');
+        $('#snippetSaveBtn').text('Create Snippet');
+    }
+    
+    updateSnippetPreview();
+    $('#snippetModal').fadeIn();
+}
+
+function updateSnippetPreview() {
+    const content = $('#snippetContent').val();
+    const name = $('#snippetName').val().toLowerCase().replace(/\s+/g, '_').replace(/[{}]/g, '');
+    $('#snippetContentPreview').html(content || '<span class="text-slate-400 italic">Content will appear here...</span>');
+    $('#snippetPreviewName').text('{{' + (name || 'snippet_name') + '}}');
+}
+
+$('#snippetName, #snippetContent').on('input', updateSnippetPreview);
+
+function copySnippetName() {
+    const name = $('#snippetName').val().toLowerCase().replace(/\s+/g, '_').replace(/[{}]/g, '');
+    navigator.clipboard.writeText('{{' + name + '}}');
+    $('#snippetCopyIcon').removeClass('fa-copy').addClass('fa-check text-green-500');
+    setTimeout(() => $('#snippetCopyIcon').removeClass('fa-check text-green-500').addClass('fa-copy'), 2000);
+}
+
+function copySnippet(id, name) {
+    navigator.clipboard.writeText('{{' + name + '}}');
+    snippetsState.copiedId = id;
+    renderSnippetsList();
+    setTimeout(() => {
+        snippetsState.copiedId = null;
+        renderSnippetsList();
+    }, 2000);
+}
+
+function saveSnippet() {
+    const name = $('#snippetName').val().toLowerCase().replace(/\s+/g, '_').replace(/[{}]/g, '');
+    const category = $('#snippetCategory').val();
+    const content = $('#snippetContent').val();
+    
+    if (!name || !content) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    if (snippetsState.editingId) {
+        const idx = snippetsData.findIndex(s => s.id === snippetsState.editingId);
+        if (idx !== -1) {
+            snippetsData[idx] = { ...snippetsData[idx], name, category, content, lastUpdated: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) };
+        }
+    } else {
+        snippetsData.push({
+            id: Date.now().toString(),
+            name, category, content,
+            lastUpdated: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            usageCount: 0
+        });
+    }
+    
+    $('#snippetModal').fadeOut();
+    filterSnippets();
+}
+
+function confirmDeleteSnippet(id) {
+    snippetsState.deleteConfirmId = id;
+    renderSnippetsList();
+}
+
+function cancelDeleteSnippet() {
+    snippetsState.deleteConfirmId = null;
+    renderSnippetsList();
+}
+
+function deleteSnippet(id) {
+    snippetsData = snippetsData.filter(s => s.id !== id);
+    snippetsState.deleteConfirmId = null;
+    filterSnippets();
+}
+
+// Initialize tables when document is ready
+$(document).ready(function() {
+    renderCustomersTable();
+    renderSnippetsList();
+});
+
+// Close dropdowns when clicking outside
+$(document).on('click', function(e) {
+    if (!$(e.target).closest('#snippetCategoryDropdown, button[onclick="toggleSnippetCategoryDropdown()"]').length) {
+        $('#snippetCategoryDropdown').addClass('hidden');
+    }
+    if (!$(e.target).closest('[id^="customer-actions-"], button[onclick^="toggleCustomerActions"]').length) {
+        if (customersState.activeActions) {
+            customersState.activeActions = null;
+            renderCustomersTable();
+        }
+    }
+});
