@@ -3,6 +3,48 @@
 let currentStep = 1;
 const totalSteps = 6;
 
+// Chart instances
+let callMetricsChart = null;
+let callOutcomesChart = null;
+
+// Chart data
+const chartData = [
+  { name: 'Mon', callVolume: 145, outcomes: 128, talkTime: 42, answered: 138 },
+  { name: 'Tue', callVolume: 198, outcomes: 175, talkTime: 58, answered: 185 },
+  { name: 'Wed', callVolume: 112, outcomes: 98, talkTime: 31, answered: 105 },
+  { name: 'Thu', callVolume: 223, outcomes: 201, talkTime: 67, answered: 215 },
+  { name: 'Fri', callVolume: 178, outcomes: 156, talkTime: 52, answered: 168 },
+  { name: 'Sat', callVolume: 89, outcomes: 78, talkTime: 24, answered: 82 },
+  { name: 'Sun', callVolume: 45, outcomes: 38, talkTime: 12, answered: 40 },
+];
+
+const outcomeData = [
+  { name: 'Mon', promiseToPay: 38, humanEscalation: 3, refused: 7, noResolution: 12 },
+  { name: 'Tue', promiseToPay: 52, humanEscalation: 5, refused: 9, noResolution: 15 },
+  { name: 'Wed', promiseToPay: 29, humanEscalation: 2, refused: 5, noResolution: 10 },
+  { name: 'Thu', promiseToPay: 61, humanEscalation: 4, refused: 11, noResolution: 18 },
+  { name: 'Fri', promiseToPay: 48, humanEscalation: 3, refused: 8, noResolution: 14 },
+  { name: 'Sat', promiseToPay: 24, humanEscalation: 1, refused: 3, noResolution: 7 },
+  { name: 'Sun', promiseToPay: 12, humanEscalation: 0, refused: 2, noResolution: 4 },
+];
+
+let activeLines = ['callVolume', 'answered'];
+let activeOutcomeLines = ['promiseToPay', 'humanEscalation'];
+
+const lineConfig = [
+  { key: 'callVolume', label: 'Call Volume', color: '#3b82f6' },
+  { key: 'answered', label: 'Answered Calls', color: '#10b981' },
+  { key: 'talkTime', label: 'Talk Time (min)', color: '#8b5cf6' },
+  { key: 'outcomes', label: 'Successful Outcomes', color: '#f59e0b' },
+];
+
+const outcomeLineConfig = [
+  { key: 'promiseToPay', label: 'Promise to Pay', color: '#10b981' },
+  { key: 'humanEscalation', label: 'Human Escalation', color: '#ef4444' },
+  { key: 'refused', label: 'Refused/Dispute', color: '#f59e0b' },
+  { key: 'noResolution', label: 'No Resolution', color: '#94a3b8' },
+];
+
 $(document).ready(function() {
     // Sidebar toggle (desktop collapse + mobile open)
     $('#toggleSidebar').click(function() {
@@ -739,7 +781,171 @@ function deleteSnippet(id) {
 $(document).ready(function() {
     renderCustomersTable();
     renderSnippetsList();
+    initCharts();
 });
+
+// Initialize Chart.js charts
+function initCharts() {
+    const labels = chartData.map(d => d.name);
+    
+    // Call Metrics Chart
+    const metricsCtx = document.getElementById('callMetricsChart');
+    if (metricsCtx) {
+        callMetricsChart = new Chart(metricsCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: lineConfig
+                    .filter(l => activeLines.includes(l.key))
+                    .map(l => ({
+                        label: l.label,
+                        data: chartData.map(d => d[l.key]),
+                        borderColor: l.color,
+                        backgroundColor: l.color + '20',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        fill: false,
+                    }))
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
+                plugins: {
+                    legend: { display: true, position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 15 } },
+                    tooltip: { backgroundColor: '#fff', titleColor: '#334155', bodyColor: '#64748b', borderColor: '#e2e8f0', borderWidth: 1, padding: 12, cornerRadius: 8 }
+                },
+                scales: {
+                    x: { grid: { color: '#e2e8f0', drawBorder: false }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: '#e2e8f0', drawBorder: false }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+    }
+    
+    // Call Outcomes Chart
+    const outcomesCtx = document.getElementById('callOutcomesChart');
+    if (outcomesCtx) {
+        callOutcomesChart = new Chart(outcomesCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: outcomeLineConfig
+                    .filter(l => activeOutcomeLines.includes(l.key))
+                    .map(l => ({
+                        label: l.label,
+                        data: outcomeData.map(d => d[l.key]),
+                        borderColor: l.color,
+                        backgroundColor: l.color + '20',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        fill: false,
+                    }))
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
+                plugins: {
+                    legend: { display: true, position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 15 } },
+                    tooltip: { backgroundColor: '#fff', titleColor: '#334155', bodyColor: '#64748b', borderColor: '#e2e8f0', borderWidth: 1, padding: 12, cornerRadius: 8 }
+                },
+                scales: {
+                    x: { grid: { color: '#e2e8f0', drawBorder: false }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: '#e2e8f0', drawBorder: false }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+    }
+}
+
+function toggleChartLine(key) {
+    if (activeLines.includes(key)) {
+        if (activeLines.length > 1) {
+            activeLines = activeLines.filter(k => k !== key);
+        }
+    } else {
+        activeLines.push(key);
+    }
+    updateChartToggles();
+    updateCallMetricsChart();
+}
+
+function toggleOutcomeLine(key) {
+    if (activeOutcomeLines.includes(key)) {
+        if (activeOutcomeLines.length > 1) {
+            activeOutcomeLines = activeOutcomeLines.filter(k => k !== key);
+        }
+    } else {
+        activeOutcomeLines.push(key);
+    }
+    updateOutcomeToggles();
+    updateCallOutcomesChart();
+}
+
+function updateChartToggles() {
+    $('#chartToggles button').each(function() {
+        const line = $(this).data('line');
+        const config = lineConfig.find(l => l.key === line);
+        if (activeLines.includes(line)) {
+            $(this).removeClass('border border-slate-200 text-slate-600 hover:bg-slate-50').addClass('text-white').css('background-color', config.color);
+        } else {
+            $(this).addClass('border border-slate-200 text-slate-600 hover:bg-slate-50').removeClass('text-white').css('background-color', '');
+        }
+    });
+}
+
+function updateOutcomeToggles() {
+    $('#outcomeToggles button').each(function() {
+        const line = $(this).data('line');
+        const config = outcomeLineConfig.find(l => l.key === line);
+        if (activeOutcomeLines.includes(line)) {
+            $(this).removeClass('border border-slate-200 text-slate-600 hover:bg-slate-50').addClass('text-white').css('background-color', config.color);
+        } else {
+            $(this).addClass('border border-slate-200 text-slate-600 hover:bg-slate-50').removeClass('text-white').css('background-color', '');
+        }
+    });
+}
+
+function updateCallMetricsChart() {
+    if (!callMetricsChart) return;
+    callMetricsChart.data.datasets = lineConfig
+        .filter(l => activeLines.includes(l.key))
+        .map(l => ({
+            label: l.label,
+            data: chartData.map(d => d[l.key]),
+            borderColor: l.color,
+            backgroundColor: l.color + '20',
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            fill: false,
+        }));
+    callMetricsChart.update();
+}
+
+function updateCallOutcomesChart() {
+    if (!callOutcomesChart) return;
+    callOutcomesChart.data.datasets = outcomeLineConfig
+        .filter(l => activeOutcomeLines.includes(l.key))
+        .map(l => ({
+            label: l.label,
+            data: outcomeData.map(d => d[l.key]),
+            borderColor: l.color,
+            backgroundColor: l.color + '20',
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            fill: false,
+        }));
+    callOutcomesChart.update();
+}
 
 // Close dropdowns when clicking outside
 $(document).on('click', function(e) {
