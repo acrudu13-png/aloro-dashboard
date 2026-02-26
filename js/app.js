@@ -782,6 +782,7 @@ $(document).ready(function() {
     renderCustomersTable();
     renderSnippetsList();
     initCharts();
+    initPerformanceMetricsChart();
 });
 
 // Initialize Chart.js charts
@@ -945,6 +946,150 @@ function updateCallOutcomesChart() {
             fill: false,
         }));
     callOutcomesChart.update();
+}
+
+// ==========================================
+// INSIGHTS PAGE (Performance Metrics)
+// ==========================================
+
+let performanceMetricsChart = null;
+let activeInsightsMetrics = ['llmTTFT', 'e2eLatency'];
+let insightsTimeFrame = '7d';
+let insightsSelectedAssistant = 'all';
+
+const performanceData = [
+  { name: 'Feb 12', llmTTFT: 0.8, ttsTTFB: 0.3, e2eLatency: 1.2, tokensPerCall: 245, cachedPercent: 35 },
+  { name: 'Feb 13', llmTTFT: 0.7, ttsTTFB: 0.28, e2eLatency: 1.1, tokensPerCall: 252, cachedPercent: 38 },
+  { name: 'Feb 14', llmTTFT: 0.9, ttsTTFB: 0.32, e2eLatency: 1.3, tokensPerCall: 268, cachedPercent: 32 },
+  { name: 'Feb 15', llmTTFT: 0.75, ttsTTFB: 0.25, e2eLatency: 1.05, tokensPerCall: 238, cachedPercent: 42 },
+  { name: 'Feb 16', llmTTFT: 0.85, ttsTTFB: 0.29, e2eLatency: 1.25, tokensPerCall: 255, cachedPercent: 36 },
+  { name: 'Feb 17', llmTTFT: 0.65, ttsTTFB: 0.22, e2eLatency: 0.95, tokensPerCall: 228, cachedPercent: 45 },
+  { name: 'Feb 18', llmTTFT: 0.78, ttsTTFB: 0.27, e2eLatency: 1.15, tokensPerCall: 242, cachedPercent: 40 },
+  { name: 'Feb 19', llmTTFT: 0.82, ttsTTFB: 0.31, e2eLatency: 1.22, tokensPerCall: 261, cachedPercent: 34 },
+  { name: 'Feb 20', llmTTFT: 0.72, ttsTTFB: 0.26, e2eLatency: 1.08, tokensPerCall: 248, cachedPercent: 39 },
+  { name: 'Feb 21', llmTTFT: 0.68, ttsTTFB: 0.24, e2eLatency: 1.0, tokensPerCall: 235, cachedPercent: 44 },
+  { name: 'Feb 22', llmTTFT: 0.88, ttsTTFB: 0.33, e2eLatency: 1.28, tokensPerCall: 272, cachedPercent: 30 },
+  { name: 'Feb 23', llmTTFT: 0.76, ttsTTFB: 0.28, e2eLatency: 1.12, tokensPerCall: 250, cachedPercent: 37 },
+  { name: 'Feb 24', llmTTFT: 0.71, ttsTTFB: 0.25, e2eLatency: 1.02, tokensPerCall: 240, cachedPercent: 41 },
+  { name: 'Feb 25', llmTTFT: 0.74, ttsTTFB: 0.26, e2eLatency: 1.06, tokensPerCall: 245, cachedPercent: 43 },
+];
+
+const insightsMetricConfig = [
+  { key: 'llmTTFT', label: 'Avg LLM TTFT', color: '#3b82f6' },
+  { key: 'ttsTTFB', label: 'Avg TTS TTFB', color: '#10b981' },
+  { key: 'e2eLatency', label: 'Avg E2E Latency', color: '#8b5cf6' },
+  { key: 'tokensPerCall', label: 'Avg Tokens/Call', color: '#f59e0b' },
+  { key: 'cachedPercent', label: 'Cached Tokens %', color: '#ef4444' },
+];
+
+function initPerformanceMetricsChart() {
+    const ctx = document.getElementById('performanceMetricsChart');
+    if (!ctx) return;
+    
+    const labels = performanceData.slice(-7).map(d => d.name);
+    
+    performanceMetricsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: insightsMetricConfig
+                .filter(m => activeInsightsMetrics.includes(m.key))
+                .map(m => ({
+                    label: m.label,
+                    data: performanceData.slice(-7).map(d => d[m.key]),
+                    borderColor: m.color,
+                    backgroundColor: m.color + '20',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    fill: false,
+                }))
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+                legend: { display: true, position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 15 } },
+                tooltip: { backgroundColor: '#fff', titleColor: '#334155', bodyColor: '#64748b', borderColor: '#e2e8f0', borderWidth: 1, padding: 12, cornerRadius: 8 }
+            },
+            scales: {
+                x: { grid: { color: '#e2e8f0', drawBorder: false }, ticks: { color: '#94a3b8' } },
+                y: { grid: { color: '#e2e8f0', drawBorder: false }, ticks: { color: '#94a3b8' } }
+            }
+        }
+    });
+}
+
+function toggleInsightsMetric(key) {
+    if (activeInsightsMetrics.includes(key)) {
+        if (activeInsightsMetrics.length > 1) {
+            activeInsightsMetrics = activeInsightsMetrics.filter(k => k !== key);
+        }
+    } else {
+        activeInsightsMetrics.push(key);
+    }
+    updateInsightsMetricToggles();
+    updatePerformanceMetricsChart();
+}
+
+function updateInsightsMetricToggles() {
+    $('#metricsToggles button').each(function() {
+        const metric = $(this).data('metric');
+        const config = insightsMetricConfig.find(m => m.key === metric);
+        if (activeInsightsMetrics.includes(metric)) {
+            $(this).removeClass('border border-slate-200 text-slate-600 hover:bg-slate-50').addClass('text-white').css('background-color', config.color);
+        } else {
+            $(this).addClass('border border-slate-200 text-slate-600 hover:bg-slate-50').removeClass('text-white').css('background-color', '');
+        }
+    });
+}
+
+function updatePerformanceMetricsChart() {
+    if (!performanceMetricsChart) return;
+    performanceMetricsChart.data.datasets = insightsMetricConfig
+        .filter(m => activeInsightsMetrics.includes(m.key))
+        .map(m => ({
+            label: m.label,
+            data: performanceData.slice(-7).map(d => d[m.key]),
+            borderColor: m.color,
+            backgroundColor: m.color + '20',
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            fill: false,
+        }));
+    performanceMetricsChart.update();
+}
+
+function setTimeFrame(frame) {
+    insightsTimeFrame = frame;
+    $('#timeFrameSelector button').each(function() {
+        if ($(this).data('frame') === frame) {
+            $(this).addClass('bg-accent-500 text-white').removeClass('text-slate-600 hover:bg-slate-50');
+        } else {
+            $(this).removeClass('bg-accent-500 text-white').addClass('text-slate-600 hover:bg-slate-50');
+        }
+    });
+}
+
+function toggleInsightsDropdown() {
+    $('#insightsDropdown').toggleClass('hidden');
+}
+
+function selectInsightsAssistant(id, name) {
+    insightsSelectedAssistant = id;
+    $('#insightsAssistantLabel').text(name);
+    $('#insightsDropdown').addClass('hidden');
+    $('#insightsDropdown button').each(function() {
+        if ($(this).attr('onclick')?.includes(`'${id}'`)) {
+            $(this).addClass('text-accent-600 bg-accent-50').removeClass('text-slate-700');
+        } else {
+            $(this).removeClass('text-accent-600 bg-accent-50').addClass('text-slate-700');
+        }
+    });
 }
 
 // Close dropdowns when clicking outside
