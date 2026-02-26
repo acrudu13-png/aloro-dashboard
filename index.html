@@ -77,84 +77,103 @@
             </div>
         </div>
     </div>
-    <nav class="p-2">
-        <div class="space-y-0.5">
-            <a href="#" class="sidebar-item active flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="dashboard">
-                <i class="fas fa-th-large w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Dashboard</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="insights">
-                <i class="fas fa-chart-pie w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Call Insights</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="assistants">
-                <i class="fas fa-robot w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Assistants</span>
-                <span class="ml-auto bg-accent-100 text-accent-600 text-xs px-1.5 py-0.5 rounded">3</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="calls">
-                <i class="fas fa-phone-alt w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Call Logs</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="campaigns">
-                <i class="fas fa-bullhorn w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Campaigns</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="customers">
-                <i class="fas fa-users w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Customers</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="conversations">
-                <i class="fas fa-comments w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Conversations</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="knowledge-bases">
-                <i class="fas fa-database w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Knowledge Bases</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="prompt-snippets">
-                <i class="fas fa-file-code w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Prompt Snippets</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="custom-dashboards">
-                <i class="fas fa-layer-group w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Custom Dashboards</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="phone-numbers">
-                <i class="fas fa-sim-card w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Phone Numbers</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="whatsapp-senders">
-                <i class="fab fa-whatsapp w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">WhatsApp Senders</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="whatsapp-templates">
-                <i class="fas fa-file-alt w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">WhatsApp Templates</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="web-widget">
-                <i class="fas fa-code w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Web Widget</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700" data-page="post-call-webhooks">
-                <i class="fas fa-link w-4 text-slate-400 text-sm"></i>
-                <span class="nav-text text-sm font-medium">Post-call Webhooks</span>
-            </a>
+    <nav class="p-2 overflow-y-auto flex-1">
+        <!-- Analytics -->
+        <div class="mb-3">
+            <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Analytics</p>
+            <div class="space-y-0.5">
+                <a href="#" class="sidebar-item active flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="dashboard">
+                    <i class="fas fa-th-large w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="insights">
+                    <i class="fas fa-chart-line w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Call Insights</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="custom-dashboards">
+                    <i class="fas fa-layer-group w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Custom Dashboards</span>
+                </a>
+            </div>
         </div>
-        <div class="mt-4 pt-4 border-t border-slate-100 sidebar-section">
-            <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Configuration</p>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700">
-                <i class="fas fa-plug w-4 text-slate-400 text-sm"></i>
-                <span class="text-sm font-medium">Integrations</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700">
-                <i class="fas fa-code w-4 text-slate-400 text-sm"></i>
-                <span class="text-sm font-medium">API</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-700">
-                <i class="fas fa-cog w-4 text-slate-400 text-sm"></i>
-                <span class="text-sm font-medium">Settings</span>
-            </a>
+
+        <!-- Operations -->
+        <div class="mb-3 border-t border-slate-100 pt-3">
+            <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Operations</p>
+            <div class="space-y-0.5">
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="calls">
+                    <i class="fas fa-phone w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Calls</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="campaigns">
+                    <i class="fas fa-bullhorn w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Campaigns</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="customers">
+                    <i class="fas fa-users w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Customers</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- AI Configuration -->
+        <div class="mb-3 border-t border-slate-100 pt-3">
+            <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">AI Configuration</p>
+            <div class="space-y-0.5">
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="assistants">
+                    <i class="fas fa-robot w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Assistants</span>
+                    <span class="ml-auto bg-accent-100 text-accent-600 text-xs px-1.5 py-0.5 rounded">3</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="knowledge-bases">
+                    <i class="fas fa-database w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Knowledge Bases</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="prompt-snippets">
+                    <i class="fas fa-file-code w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Prompt Snippets</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Channels -->
+        <div class="mb-3 border-t border-slate-100 pt-3">
+            <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Channels</p>
+            <div class="space-y-0.5">
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="conversations">
+                    <i class="fas fa-comments w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Conversations</span>
+                    <span class="ml-auto bg-amber-100 text-amber-600 text-xs px-1.5 py-0.5 rounded">Soon</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="web-widget">
+                    <i class="fas fa-broadcast-tower w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Web Widget</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="phone-numbers">
+                    <i class="fas fa-phone w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Phone Numbers</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="whatsapp-senders">
+                    <i class="fab fa-whatsapp w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">WhatsApp</span>
+                    <span class="ml-auto bg-amber-100 text-amber-600 text-xs px-1.5 py-0.5 rounded">Soon</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Integrations -->
+        <div class="border-t border-slate-100 pt-3">
+            <p class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Integrations</p>
+            <div class="space-y-0.5">
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" data-page="post-call-webhooks">
+                    <i class="fas fa-plug w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Webhooks</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-700" onclick="window.open('https://docs.aloro.ai', '_blank')">
+                    <i class="fas fa-book w-4 text-slate-400 text-sm"></i>
+                    <span class="nav-text text-sm font-medium">Documentation</span>
+                </a>
+            </div>
         </div>
     </nav>
 </aside>
@@ -1580,155 +1599,178 @@
         </div>
     </div>
 
-    <!-- Web Widget Config Page -->
+    <!-- Web Widget Page -->
     <div id="page-web-widget" class="page hidden fade-in">
-        <div class="mb-6 flex items-center justify-between">
-            <div>
-                <h1 class="text-xl font-semibold text-slate-800">Web Widget</h1>
-                <p class="text-sm text-slate-500 mt-0.5">Configure your embeddable chat/voice widget</p>
+        <div class="mb-6">
+            <h1 class="text-xl font-semibold text-slate-800">Voice Widget</h1>
+            <p class="text-sm text-slate-500 mt-0.5">Configure and preview your embeddable voice AI widget</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Customization Panel -->
+            <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+                    <h2 class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                        <i class="fas fa-cog text-slate-400"></i>
+                        Widget Configuration
+                    </h2>
+                    <button onclick="$('#widgetCustomizer').toggle()" class="text-xs text-accent-600 hover:underline" id="widgetCustomizerToggle">Hide</button>
+                </div>
+
+                <div id="widgetCustomizer" class="p-4 space-y-5">
+                    <!-- Primary Color -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Primary Color</label>
+                        <div class="flex gap-2 flex-wrap" id="colorPresets">
+                            <button onclick="setWidgetColor('#3b82f6')" class="w-8 h-8 rounded-lg border-2 border-slate-800 scale-110 transition" style="background-color: #3b82f6" title="Blue" data-color="#3b82f6"></button>
+                            <button onclick="setWidgetColor('#10b981')" class="w-8 h-8 rounded-lg border-2 border-transparent hover:scale-105 transition" style="background-color: #10b981" title="Green" data-color="#10b981"></button>
+                            <button onclick="setWidgetColor('#8b5cf6')" class="w-8 h-8 rounded-lg border-2 border-transparent hover:scale-105 transition" style="background-color: #8b5cf6" title="Purple" data-color="#8b5cf6"></button>
+                            <button onclick="setWidgetColor('#ef4444')" class="w-8 h-8 rounded-lg border-2 border-transparent hover:scale-105 transition" style="background-color: #ef4444" title="Red" data-color="#ef4444"></button>
+                            <button onclick="setWidgetColor('#f59e0b')" class="w-8 h-8 rounded-lg border-2 border-transparent hover:scale-105 transition" style="background-color: #f59e0b" title="Orange" data-color="#f59e0b"></button>
+                            <button onclick="setWidgetColor('#ec4899')" class="w-8 h-8 rounded-lg border-2 border-transparent hover:scale-105 transition" style="background-color: #ec4899" title="Pink" data-color="#ec4899"></button>
+                            <input type="color" id="widgetColorPicker" value="#3b82f6" onchange="setWidgetColor(this.value)" class="w-8 h-8 rounded-lg cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Position -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Position</label>
+                        <div class="flex gap-6">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="widgetPosition" value="bottom-right" checked onchange="setWidgetPosition(this.value)" class="w-4 h-4 text-accent-500">
+                                <span class="text-sm text-slate-600">Bottom Right</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="widgetPosition" value="bottom-left" onchange="setWidgetPosition(this.value)" class="w-4 h-4 text-accent-500">
+                                <span class="text-sm text-slate-600">Bottom Left</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Widget Title</label>
+                        <input type="text" id="widgetTitle" value="Voice Assistant" oninput="updateWidgetConfig()" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent-500">
+                    </div>
+
+                    <!-- Greeting -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Greeting Message</label>
+                        <textarea id="widgetGreeting" rows="2" oninput="updateWidgetConfig()" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 resize-none">Hello! I'm your AI assistant. Click the call button to start a voice conversation.</textarea>
+                    </div>
+
+                    <!-- Show Transcript -->
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="widgetShowTranscript" checked onchange="updateWidgetConfig()" class="w-4 h-4 text-accent-500 rounded">
+                        <span class="text-sm text-slate-700">Show live transcript</span>
+                    </label>
+                </div>
             </div>
-            <div class="flex items-center gap-2">
-                <button class="bg-white border border-slate-200 text-slate-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-50">
-                    <i class="fas fa-eye mr-2"></i>Preview
-                </button>
-                <button class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
-                    <i class="fas fa-code mr-2"></i>Get Embed Code
-                </button>
+
+            <!-- Embed Code -->
+            <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="p-4 border-b border-slate-100">
+                    <h2 class="text-sm font-semibold text-slate-700">Embed Code</h2>
+                </div>
+                <div class="p-4">
+                    <pre id="widgetEmbedCode" class="bg-slate-900 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto font-mono whitespace-pre-wrap">&lt;script src="https://cdn.aloro.ai/widget.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  AloroVoice.init({
+    orgId: 'your-org-id',
+    assistantId: 'your-assistant-id',
+    primaryColor: '#3b82f6',
+    position: 'bottom-right',
+    greeting: 'Hello! I\'m your AI assistant.',
+    title: 'Voice Assistant',
+    showTranscript: true
+  });
+&lt;/script&gt;</pre>
+                    <button onclick="copyWidgetEmbedCode()" id="copyEmbedBtn" class="mt-3 w-full px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2">
+                        <i class="fas fa-copy"></i>
+                        <span>Copy to Clipboard</span>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Widget Tabs -->
-        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
-            <div class="flex border-b border-slate-200">
-                <button class="widget-tab px-4 py-3 text-sm font-medium text-accent-600 border-b-2 border-accent-500 bg-accent-50" data-tab="general">General</button>
-                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="button">Button</button>
-                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="header">Header & Modal</button>
-                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="chat">Chat Settings</button>
-                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="voice">Voice Settings</button>
-                <button class="widget-tab px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700" data-tab="form">Pre-chat Form</button>
+        <!-- Widget Preview Section -->
+        <div class="bg-white rounded-lg border border-slate-200 p-4 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-sm font-semibold text-slate-700">Live Preview</h2>
+                <button onclick="resetWidgetDemo()" class="text-xs text-accent-600 hover:underline">Reset Demo</button>
+            </div>
+            <p class="text-sm text-slate-500 mb-4">The widget preview appears in the bottom corner of your screen. Try interacting with it!</p>
+        </div>
+    </div>
+
+    <!-- Live Widget Preview (Fixed Position) -->
+    <div id="widgetPreview" class="fixed bottom-6 right-6 w-80 bg-white rounded-2xl shadow-2xl overflow-hidden z-50" style="max-width: calc(100vw - 3rem)">
+        <!-- Header -->
+        <div id="widgetHeader" class="px-4 py-3 flex items-center justify-between text-white" style="background-color: #3b82f6">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-volume-up"></i>
+                <span class="font-medium" id="widgetPreviewTitle">Voice Assistant</span>
+            </div>
+            <button onclick="closeWidgetPreview()" class="p-1 hover:bg-white/20 rounded transition">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="p-4 bg-slate-50">
+            <!-- Idle State -->
+            <div id="widgetIdle" class="text-center">
+                <div class="text-sm text-slate-500 mb-2">Ready to call</div>
+                <button onclick="startWidgetCall()" id="widgetCallBtn" class="w-16 h-16 rounded-full text-white shadow-lg hover:scale-105 transition flex items-center justify-center mx-auto" style="background-color: #3b82f6">
+                    <i class="fas fa-phone text-xl"></i>
+                </button>
+                <div class="text-xs text-slate-400 mt-2">Click to start voice call</div>
             </div>
 
-            <!-- General Tab -->
-            <div id="widget-tab-general" class="widget-tab-content p-6">
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Widget Mode *</label>
-                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                            <option>Voice & Chat (hybrid)</option>
-                            <option>Chat Only</option>
-                            <option>Voice Only</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Widget Size</label>
-                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                            <option>Standard (compact)</option>
-                            <option>Extra Large (half-screen)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Position</label>
-                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                            <option>Bottom Right</option>
-                            <option>Bottom Left</option>
-                            <option>Bottom Center</option>
-                            <option>Top Right</option>
-                            <option>Top Left</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Primary Color</label>
-                        <div class="flex items-center gap-2">
-                            <input type="color" value="#3b82f6" class="w-10 h-10 rounded border border-slate-200 cursor-pointer">
-                            <input type="text" value="#3b82f6" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm font-mono">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Button Style</label>
-                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                            <option>Round (default)</option>
-                            <option>Square</option>
-                            <option>Pill</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="flex items-center gap-2 cursor-pointer mt-6">
-                            <input type="checkbox" class="w-4 h-4 text-accent-600 rounded">
-                            <span class="text-sm text-slate-700">Auto-open on page load</span>
-                        </label>
-                    </div>
+            <!-- Connecting State -->
+            <div id="widgetConnecting" class="text-center hidden">
+                <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2" style="background-color: rgba(59, 130, 246, 0.2)">
+                    <div class="w-3 h-3 rounded-full animate-ping" style="background-color: #3b82f6"></div>
+                </div>
+                <div class="text-sm text-slate-600">Connecting...</div>
+            </div>
+
+            <!-- Connected State -->
+            <div id="widgetConnected" class="text-center hidden">
+                <!-- Audio Visualizer -->
+                <div class="flex items-center justify-center gap-1 h-12 mb-2" id="audioVisualizer">
+                    <!-- Bars generated by JS -->
+                </div>
+                <div class="text-lg font-mono text-slate-700 mb-1" id="callDuration">0:00</div>
+                <div class="text-xs text-slate-500" id="callStatus">Listening...</div>
+
+                <!-- Controls -->
+                <div class="flex items-center justify-center gap-3 mt-3">
+                    <button onclick="toggleWidgetMute()" id="widgetMuteBtn" class="w-12 h-12 rounded-full flex items-center justify-center transition bg-slate-200 text-slate-600">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button onclick="endWidgetCall()" class="w-14 h-14 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition">
+                        <i class="fas fa-phone-slash text-lg"></i>
+                    </button>
                 </div>
             </div>
 
-            <!-- Button Tab -->
-            <div id="widget-tab-button" class="widget-tab-content p-6 hidden">
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Custom Avatar Image</label>
-                        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-                            <div class="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-robot text-accent-600"></i>
-                            </div>
-                            <button class="text-accent-600 text-sm font-medium hover:underline">Upload Image</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Button Main Text</label>
-                        <input type="text" value="Chat with us" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Button Sub Text</label>
-                        <input type="text" value="We typically reply in minutes" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Tab Labels</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" value="Voice" placeholder="Voice tab" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
-                            <input type="text" value="Chat" placeholder="Chat tab" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
-                        </div>
-                    </div>
+            <!-- Transcript -->
+            <div id="widgetTranscript" class="border-t border-slate-200 pt-3 mt-3 hidden">
+                <div class="text-xs font-medium text-slate-500 mb-2">Transcript</div>
+                <div class="max-h-32 overflow-y-auto space-y-2" id="transcriptMessages">
+                    <!-- Messages added by JS -->
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Header Tab -->
-            <div id="widget-tab-header" class="widget-tab-content p-6 hidden">
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Header Title</label>
-                        <input type="text" value="Telerenta Support" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Header Subtitle</label>
-                        <input type="text" value="Online • Typically replies in minutes" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Modal Title</label>
-                        <input type="text" value="How can we help?" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Start Button Text</label>
-                        <input type="text" value="Start Conversation" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Modal Description</label>
-                        <textarea rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">Welcome! Our AI assistant is here to help you 24/7.</textarea>
-                    </div>
-                </div>
-            </div>
+    <!-- Widget Toggle Button (when closed) -->
+    <button id="widgetToggleBtn" onclick="openWidgetPreview()" class="fixed bottom-6 right-6 w-14 h-14 rounded-full text-white shadow-lg hover:scale-105 transition z-50 hidden flex items-center justify-center" style="background-color: #3b82f6">
+        <i class="fas fa-phone text-lg"></i>
+    </button>
 
-            <!-- Chat Settings Tab -->
-            <div id="widget-tab-chat" class="widget-tab-content p-6 hidden">
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Input Placeholder</label>
-                        <input type="text" value="Type your message..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Send Button Label</label>
-                        <input type="text" value="Send" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="flex items-center gap-2 cursor-pointer">
+    <!-- Phone Numbers Page -->
                             <input type="checkbox" checked class="w-4 h-4 text-accent-600 rounded">
                             <span class="text-sm text-slate-700">Show function calls in chat</span>
                         </label>

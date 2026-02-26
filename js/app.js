@@ -1092,6 +1092,213 @@ function selectInsightsAssistant(id, name) {
     });
 }
 
+// ==========================================
+// WEB WIDGET PAGE
+// ==========================================
+
+let widgetConfig = {
+    primaryColor: '#3b82f6',
+    position: 'bottom-right',
+    title: 'Voice Assistant',
+    greeting: "Hello! I'm your AI assistant. Click the call button to start a voice conversation.",
+    showTranscript: true
+};
+
+let widgetCallState = 'idle'; // idle, connecting, connected, ended
+let widgetCallDuration = 0;
+let widgetCallTimer = null;
+let widgetMuted = false;
+let widgetTranscript = [];
+
+function setWidgetColor(color) {
+    widgetConfig.primaryColor = color;
+    $('#widgetColorPicker').val(color);
+    $('#colorPresets button').each(function() {
+        if ($(this).data('color') === color) {
+            $(this).addClass('border-slate-800 scale-110').removeClass('border-transparent');
+        } else if ($(this).data('color')) {
+            $(this).removeClass('border-slate-800 scale-110').addClass('border-transparent');
+        }
+    });
+    updateWidgetPreview();
+    updateEmbedCode();
+}
+
+function setWidgetPosition(position) {
+    widgetConfig.position = position;
+    const preview = $('#widgetPreview');
+    const toggleBtn = $('#widgetToggleBtn');
+    if (position === 'bottom-left') {
+        preview.removeClass('right-6').addClass('left-6');
+        toggleBtn.removeClass('right-6').addClass('left-6');
+    } else {
+        preview.removeClass('left-6').addClass('right-6');
+        toggleBtn.removeClass('left-6').addClass('right-6');
+    }
+    updateEmbedCode();
+}
+
+function updateWidgetConfig() {
+    widgetConfig.title = $('#widgetTitle').val();
+    widgetConfig.greeting = $('#widgetGreeting').val();
+    widgetConfig.showTranscript = $('#widgetShowTranscript').is(':checked');
+    updateWidgetPreview();
+    updateEmbedCode();
+}
+
+function updateWidgetPreview() {
+    const color = widgetConfig.primaryColor;
+    $('#widgetHeader, #widgetCallBtn, #widgetToggleBtn').css('background-color', color);
+    $('#widgetPreviewTitle').text(widgetConfig.title);
+    $('#widgetConnecting > div').first().css('background-color', color + '33');
+    $('#widgetConnecting .animate-ping').css('background-color', color);
+    
+    if (widgetConfig.showTranscript && widgetCallState !== 'idle') {
+        $('#widgetTranscript').removeClass('hidden');
+    } else {
+        $('#widgetTranscript').addClass('hidden');
+    }
+}
+
+function updateEmbedCode() {
+    const code = `<script src="https://cdn.aloro.ai/widget.js"><\/script>
+<script>
+  AloroVoice.init({
+    orgId: 'your-org-id',
+    assistantId: 'your-assistant-id',
+    primaryColor: '${widgetConfig.primaryColor}',
+    position: '${widgetConfig.position}',
+    greeting: '${widgetConfig.greeting.replace(/'/g, "\\'")}',
+    title: '${widgetConfig.title}',
+    showTranscript: ${widgetConfig.showTranscript}
+  });
+<\/script>`;
+    $('#widgetEmbedCode').text(code);
+}
+
+function copyWidgetEmbedCode() {
+    const code = $('#widgetEmbedCode').text();
+    navigator.clipboard.writeText(code);
+    const btn = $('#copyEmbedBtn');
+    btn.find('i').removeClass('fa-copy').addClass('fa-check text-green-500');
+    btn.find('span').text('Copied!');
+    setTimeout(() => {
+        btn.find('i').removeClass('fa-check text-green-500').addClass('fa-copy');
+        btn.find('span').text('Copy to Clipboard');
+    }, 2000);
+}
+
+function closeWidgetPreview() {
+    $('#widgetPreview').addClass('hidden');
+    $('#widgetToggleBtn').removeClass('hidden');
+}
+
+function openWidgetPreview() {
+    $('#widgetPreview').removeClass('hidden');
+    $('#widgetToggleBtn').addClass('hidden');
+}
+
+function startWidgetCall() {
+    widgetCallState = 'connecting';
+    $('#widgetIdle').addClass('hidden');
+    $('#widgetConnecting').removeClass('hidden');
+    
+    setTimeout(() => {
+        widgetCallState = 'connected';
+        widgetCallDuration = 0;
+        widgetTranscript = [{ speaker: 'agent', text: "Hi! Thanks for calling. How can I help you today?", time: '0:00' }];
+        
+        $('#widgetConnecting').addClass('hidden');
+        $('#widgetConnected').removeClass('hidden');
+        
+        if (widgetConfig.showTranscript) {
+            $('#widgetTranscript').removeClass('hidden');
+            renderTranscript();
+        }
+        
+        initAudioVisualizer();
+        widgetCallTimer = setInterval(() => {
+            widgetCallDuration++;
+            $('#callDuration').text(formatCallDuration(widgetCallDuration));
+        }, 1000);
+    }, 1500);
+}
+
+function endWidgetCall() {
+    widgetCallState = 'ended';
+    clearInterval(widgetCallTimer);
+    
+    $('#widgetConnected').addClass('hidden');
+    $('#widgetIdle').removeClass('hidden');
+    $('#widgetTranscript').addClass('hidden');
+    
+    widgetCallState = 'idle';
+    widgetCallDuration = 0;
+    widgetTranscript = [];
+}
+
+function resetWidgetDemo() {
+    clearInterval(widgetCallTimer);
+    widgetCallState = 'idle';
+    widgetCallDuration = 0;
+    widgetMuted = false;
+    widgetTranscript = [];
+    
+    $('#widgetIdle').removeClass('hidden');
+    $('#widgetConnecting, #widgetConnected, #widgetTranscript').addClass('hidden');
+    $('#widgetMuteBtn').removeClass('bg-red-100 text-red-500').addClass('bg-slate-200 text-slate-600');
+    $('#widgetMuteBtn i').removeClass('fa-microphone-slash').addClass('fa-microphone');
+    $('#callDuration').text('0:00');
+}
+
+function toggleWidgetMute() {
+    widgetMuted = !widgetMuted;
+    const btn = $('#widgetMuteBtn');
+    if (widgetMuted) {
+        btn.addClass('bg-red-100 text-red-500').removeClass('bg-slate-200 text-slate-600');
+        btn.find('i').removeClass('fa-microphone').addClass('fa-microphone-slash');
+        $('#callStatus').text('Muted');
+    } else {
+        btn.removeClass('bg-red-100 text-red-500').addClass('bg-slate-200 text-slate-600');
+        btn.find('i').removeClass('fa-microphone-slash').addClass('fa-microphone');
+        $('#callStatus').text('Listening...');
+    }
+}
+
+function formatCallDuration(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+function renderTranscript() {
+    let html = '';
+    widgetTranscript.forEach(msg => {
+        const align = msg.speaker === 'user' ? 'text-right' : 'text-left';
+        const bg = msg.speaker === 'user' ? 'bg-slate-200 text-slate-700' : 'bg-white border border-slate-200 text-slate-600';
+        html += `<div class="${align}"><span class="inline-block px-2 py-1 rounded ${bg}">${msg.text}</span></div>`;
+    });
+    $('#transcriptMessages').html(html);
+}
+
+function initAudioVisualizer() {
+    let html = '';
+    for (let i = 0; i < 12; i++) {
+        html += `<div class="w-1.5 rounded-full transition-all duration-100" style="background-color: ${widgetConfig.primaryColor}; height: 20px;"></div>`;
+    }
+    $('#audioVisualizer').html(html);
+    
+    // Animate bars
+    setInterval(() => {
+        if (widgetCallState === 'connected' && !widgetMuted) {
+            $('#audioVisualizer div').each(function() {
+                const height = 20 + Math.random() * 30;
+                $(this).css('height', height + 'px');
+            });
+        }
+    }, 100);
+}
+
 // Close dropdowns when clicking outside
 $(document).on('click', function(e) {
     if (!$(e.target).closest('#snippetCategoryDropdown, button[onclick="toggleSnippetCategoryDropdown()"]').length) {
